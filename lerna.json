@@ -1,0 +1,6 @@
+{
+  "packages": [
+    "modules/*"
+  ],
+  "version": "independent"
+}

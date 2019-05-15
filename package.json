@@ -1,0 +1,16 @@
+{
+  "name": "root",
+  "private": true,
+  "devDependencies": {
+    "lerna": "^3.13.1",
+    "prettier": "^1.17.0",
+    "prettylint": "^1.0.0",
+    "tslint": "^5.16.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-config-standard": "^8.0.1"
+  },
+  "scripts": {
+    "lint": "tslint \"./**/src/**/*.ts\" && tslint \"./**/__tests__/**/*.ts\" -c tslint.test.json && prettylint \"./**/*.ts\"",
+    "lint:fix": "tslint \"./**/src/**/*.ts\"; tslint \"./**/__tests__/**/*.ts\" -c tslint.test.json; prettier --write \"./**/*.ts\""
+  }
+}

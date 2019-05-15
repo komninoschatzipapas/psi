@@ -1,0 +1,43 @@
+{
+  "name": "interpreter",
+  "version": "1.0.0",
+  "description": "PSI interpreter",
+  "author": "komninoschat <komninoschat@gmail.com>",
+  "homepage": "https://github.com/komninoschat/psi#readme",
+  "license": "MIT",
+  "main": "lib/Interpreter.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/komninoschat/psi.git"
+  },
+  "scripts": {
+    "prepare": "tsc",
+    "test": "cross-env NODE_ENV=development mocha \"./__tests__/**/*.test.ts\" --opts=__tests__/mocha.opts",
+    "test-cover": "cross-env NODE_ENV=development nyc mocha \"./__tests__/**/*.test.ts\" -- --opts=__tests__/mocha.opts"
+  },
+  "bugs": {
+    "url": "https://github.com/komninoschat/psi/issues"
+  },
+  "dependencies": {
+    "ast": "*",
+    "data-types": "*"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^11.13.8",
+    "chai": "^4.2.0",
+    "cross-env": "^5.2.0",
+    "mocha": "^6.1.4",
+    "nyc": "^14.0.0",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.5"
+  }
+}

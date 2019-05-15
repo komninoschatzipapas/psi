@@ -1,0 +1,14 @@
+*.sw*
+desktop.ini
+.DS_Store
+node_modules
+coverage
+.nyc_output
+build
+config
+lib
+*-debug.log
+*-error.log
+dist
+tmp
+test.*

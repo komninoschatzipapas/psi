@@ -1,0 +1,14 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "build",
+    "declaration": true,
+    "strict": true,
+    "sourceMap": true,
+    "experimentalDecorators": true
+  },
+  "include": ["src/**/*.ts"]
+}
