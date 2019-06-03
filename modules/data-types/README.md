@@ -1,11 +1,2 @@
 # `data-types`
-
-> TODO: description
-
-## Usage
-
-```
-const dataTypes = require('data-types');
-
-// TODO: DEMONSTRATE API
-```
+This module defines the data types of PSI as well as the operations allowed onto them.
