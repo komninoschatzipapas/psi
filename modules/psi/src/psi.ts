@@ -28,10 +28,11 @@ class Psi extends Command {
     const lexer = new Lexer(sourceCode);
     const tree = new Parser(lexer).run();
     const baseScope = new BaseSymbolScope('root');
-    new SymbolBuilder(tree, baseScope).buildSymbols();
-    new TypeChecker(tree, baseScope).checkTypes();
+    new SymbolBuilder(tree, baseScope).run();
+    new TypeChecker(tree, baseScope).run();
     const interpreter = new Interpreter(tree);
     interpreter.run();
+    console.log(interpreter.globalScope);
   }
 }
 

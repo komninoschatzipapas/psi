@@ -6,13 +6,9 @@ import * as Types from 'data-types';
 export default class SymbolBuilder extends AST.ASTVisitor {
   private currentScope: SymbolScope;
 
-  constructor(private readonly ast: AST.AST, private readonly baseScope: BaseSymbolScope) {
+  constructor(protected readonly ast: AST.AST, private readonly baseScope: BaseSymbolScope) {
     super();
     this.currentScope = baseScope;
-  }
-
-  public buildSymbols() {
-    this.visit(this.ast);
   }
 
   public visitCompound(node: AST.CompoundAST) {

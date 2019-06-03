@@ -1,6 +1,7 @@
 import * as AST from './AST';
 
 export default abstract class ASTVisitor<T=unknown> {
+  protected readonly abstract ast: AST.AST;
   public abstract visitAssignment(node: AST.AssignmentAST): T;
   public abstract visitBlock(node: AST.BlockAST): T;
   public abstract visitCompound(node: AST.CompoundAST): T;
@@ -63,5 +64,9 @@ export default abstract class ASTVisitor<T=unknown> {
     } else {
       throw new Error('Unknown node type on visitor');
     }
-  } 
+  }
+
+  public run() {
+    return this.visit(this.ast);
+  }
 }

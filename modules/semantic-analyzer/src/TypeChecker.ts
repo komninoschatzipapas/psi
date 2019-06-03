@@ -6,13 +6,9 @@ import {expect} from 'chai';
 export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Types.DataType> {
   private currentScope: SymbolScope;
 
-  constructor(private ast: AST.AST, baseScope: BaseSymbolScope) {
+  constructor(protected readonly ast: AST.AST, baseScope: BaseSymbolScope) {
     super();
     this.currentScope = baseScope;
-  }
-
-  public checkTypes() {
-    this.visit(this.ast);
   }
 
   public visitIntegerConstant(node: AST.IntegerConstantAST) {

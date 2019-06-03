@@ -2,9 +2,9 @@ import * as Types from 'data-types';
 import * as AST from 'ast';
 
 export class Interpreter extends AST.ASTVisitor<Types.DataType> {
-  private globalScope: Map<string, Types.DataType>;
+  public globalScope: Map<string, Types.DataType>;
 
-  constructor(private ast: AST.AST) {
+  constructor(protected readonly ast: AST.AST) {
     super();
     this.globalScope = new Map();
   }
@@ -95,10 +95,5 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
 
   public visitProcedureDeclaration(node: AST.ProcedureDeclarationAST) {
     return new Types.Void();
-  }
-
-  public run() {
-    this.visit(this.ast);
-    console.log(this.globalScope);
   }
 }
