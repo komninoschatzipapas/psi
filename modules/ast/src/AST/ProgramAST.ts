@@ -1,6 +1,5 @@
 import {AST} from '.';
 import { BlockAST } from '.';
-import ASTVisitor from '../ASTVisitor';
 
 export default class ProgramAST extends AST {
   public readonly name: string;

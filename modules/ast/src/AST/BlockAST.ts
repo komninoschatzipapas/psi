@@ -1,5 +1,4 @@
 import {AST, VariableDeclarationAST, CompoundAST, ProcedureDeclarationAST} from '.';
-import ASTVisitor from '../ASTVisitor';
 
 export default class BlockAST extends AST {
   constructor(
@@ -7,7 +6,7 @@ export default class BlockAST extends AST {
     public compoundStatement: CompoundAST
   ) {
     super();
-    declarations.forEach((d) => this.children.push(d));
+    this.children.push(...declarations);
     this.children.push(compoundStatement);
   }
 }
