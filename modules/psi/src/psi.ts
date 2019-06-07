@@ -5,6 +5,7 @@ import {Parser} from 'parser';
 import {Interpreter} from 'interpreter';
 import {SymbolBuilder, TypeChecker} from 'semantic-analyzer';
 import {BaseSymbolScope} from 'symbol';
+import {RunnableChain} from 'ast';
 
 class Psi extends Command {
   static description = 'Interpret Pascal code'
@@ -28,9 +29,11 @@ class Psi extends Command {
     const lexer = new Lexer(sourceCode);
     const tree = new Parser(lexer).run();
     const baseScope = new BaseSymbolScope('root');
-    new SymbolBuilder(tree, baseScope).run();
-    new TypeChecker(tree, baseScope).run();
-    const interpreter = new Interpreter(tree);
+    new RunnableChain(
+      new SymbolBuilder(tree, baseScope),
+      new TypeChecker(tree, baseScope),
+    ).run();
+    let interpreter = new Interpreter(tree);
     interpreter.run();
     console.log(interpreter.globalScope);
   }

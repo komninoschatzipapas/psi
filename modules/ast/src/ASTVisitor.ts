@@ -1,6 +1,7 @@
 import * as AST from './AST';
+import Runnable from './Runnable';
 
-export default abstract class ASTVisitor<T=unknown> {
+export default abstract class ASTVisitor<T=unknown> implements Runnable<T> {
   protected readonly abstract ast: AST.AST;
   public abstract visitAssignment(node: AST.AssignmentAST): T;
   public abstract visitBlock(node: AST.BlockAST): T;

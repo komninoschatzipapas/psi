@@ -6,7 +6,6 @@ export default class BlockAST extends AST {
     public compoundStatement: CompoundAST
   ) {
     super();
-    this.children.push(...declarations);
-    this.children.push(compoundStatement);
+    this.addChild(...declarations, compoundStatement);
   }
 }

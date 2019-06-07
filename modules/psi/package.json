@@ -28,6 +28,7 @@
   "dependencies": {
     "@oclif/test": "^1",
     "@oclif/tslint": "^3",
+    "ast": "*",
     "lexer": "*",
     "parser": "*",
     "interpreter": "*",
