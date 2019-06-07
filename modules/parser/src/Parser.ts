@@ -34,10 +34,10 @@ export class Parser {
       if(this.currentToken instanceof Lexer.VariableToken) {     
         this.currentToken = this.eat(Lexer.VariableToken);
   
-        while(this.currentToken instanceof Lexer.IdToken) {
+        do {
           this.variableDeclaration().forEach((d) => declarations.push(d));
           this.currentToken = this.eat(Lexer.SemiToken);
-        }
+        } while(this.currentToken instanceof Lexer.IdToken);
       } else if(this.currentToken instanceof Lexer.ProcedureToken) {
         declarations.push(this.procedureDeclaration());
       }
@@ -47,13 +47,11 @@ export class Parser {
   }
 
   private variableDeclaration() {
-    let ids = [new AST.VariableAST(this.currentToken.value)];
-    this.currentToken = this.eat(Lexer.IdToken);
+    let ids = [this.variable()];
     
     while(this.currentToken instanceof Lexer.CommaToken) {
       this.currentToken = this.eat(Lexer.CommaToken);
-      ids.push(new AST.VariableAST(this.currentToken.value));
-      this.currentToken = this.eat(Lexer.IdToken);
+      ids.push(this.variable());
     }
 
     this.currentToken = this.eat(Lexer.ColonToken);
@@ -65,8 +63,7 @@ export class Parser {
 
   private procedureDeclaration() {
     this.currentToken = this.eat(Lexer.ProcedureToken);
-    const name = this.currentToken.value;
-    this.currentToken = this.eat(Lexer.IdToken);
+    const name = this.variable().name;
     let args: AST.VariableDeclarationAST[] = [];
     if(this.currentToken instanceof Lexer.OpeningParenthesisToken) {
       this.currentToken = this.eat(Lexer.OpeningParenthesisToken);
@@ -110,11 +107,9 @@ export class Parser {
     this.currentToken = this.eat(Lexer.ProgramToken);
     const programName = this.variable().name;
     this.currentToken = this.eat(Lexer.SemiToken);
-
     const blockNode = this.block();
-    const programNode = new AST.ProgramAST(programName, blockNode);
     this.currentToken = this.eat(Lexer.DotToken);
-    return programNode;
+    return new AST.ProgramAST(programName, blockNode);
   }
 
   private compoundStatement() {
@@ -182,21 +177,15 @@ export class Parser {
   private term() {
     let node = this.factor();
 
-    while(
-      this.currentToken instanceof Lexer.MultiplicationToken ||
-      this.currentToken instanceof Lexer.IntegerDivisionToken ||
-      this.currentToken instanceof Lexer.RealDivisionToken
-    ) {
-      if(this.currentToken instanceof Lexer.MultiplicationToken) {
-        this.currentToken = this.eat(Lexer.MultiplicationToken);
-        node = new AST.MultiplicationAST(node, this.factor())
-      } else if(this.currentToken instanceof Lexer.IntegerDivisionToken) {
-        this.currentToken = this.eat(Lexer.IntegerDivisionToken);
-        node = new AST.IntegerDivisionAST(node, this.factor())
-      } else {
-        this.currentToken = this.eat(Lexer.RealDivisionToken);
-        node = new AST.RealDivisionAST(node, this.factor())
-      }
+    if(this.currentToken instanceof Lexer.MultiplicationToken) {
+      this.currentToken = this.eat(Lexer.MultiplicationToken);
+      node = new AST.MultiplicationAST(node, this.term())
+    } else if(this.currentToken instanceof Lexer.IntegerDivisionToken) {
+      this.currentToken = this.eat(Lexer.IntegerDivisionToken);
+      node = new AST.IntegerDivisionAST(node, this.term())
+    } else if(this.currentToken instanceof Lexer.RealDivisionToken) {
+      this.currentToken = this.eat(Lexer.RealDivisionToken);
+      node = new AST.RealDivisionAST(node, this.term())
     }
 
     return node;
@@ -219,7 +208,7 @@ export class Parser {
       return new AST.RealConstantAST(value);
     } else if(this.currentToken instanceof Lexer.OpeningParenthesisToken) {
       this.currentToken = this.eat(Lexer.OpeningParenthesisToken);
-      const result = this.factor();
+      const result = this.expression();
       this.currentToken = this.eat(Lexer.ClosingParenthesisToken);
       return result;
     } else {
