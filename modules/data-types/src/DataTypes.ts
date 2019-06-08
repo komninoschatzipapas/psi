@@ -5,6 +5,8 @@ import Void from './Void';
 import Type from './Type';
 import IntegerType from './IntegerType';
 import RealType from './RealType';
+import Boolean from './Boolean';
+import BooleanType from './BooleanType';
 
 export {
   Integer,
@@ -13,5 +15,7 @@ export {
   Void,
   Type,
   IntegerType,
-  RealType
+  RealType,
+  Boolean,
+  BooleanType
 }

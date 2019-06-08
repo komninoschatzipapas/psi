@@ -48,6 +48,14 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
     return node.value;
   }
 
+  public visitTrue(node: AST.TrueAST) {
+    return new Types.Boolean(true);
+  }
+
+  public visitFalse(node: AST.FalseAST) {
+    return new Types.Boolean(false);
+  }
+
   public visitUnaryPlus(node: AST.UnaryPlusAST) {
     return this.visit(node.target).unaryPlus();
   }
@@ -95,6 +103,10 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
 
   public visitInteger(node: AST.IntegerAST) {
     return new Types.IntegerType();
+  }
+
+  public visitBoolean(node: AST.BooleanAST) {
+    return new Types.BooleanType();
   }
 
   public visitProcedureDeclaration(node: AST.ProcedureDeclarationAST) {

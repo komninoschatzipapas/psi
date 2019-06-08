@@ -98,6 +98,9 @@ export class Parser {
     } else if(this.currentToken instanceof Lexer.RealToken) {
       this.currentToken = this.eat(Lexer.RealToken);
       return new AST.RealAST();
+    } else if(this.currentToken instanceof Lexer.BooleanToken) {
+      this.currentToken = this.eat(Lexer.BooleanToken);
+      return new AST.BooleanAST();
     } else {
       throw new Error(`Unknown data type ${this.currentToken}`);
     }
@@ -214,6 +217,12 @@ export class Parser {
       const result = this.expression();
       this.currentToken = this.eat(Lexer.ClosingParenthesisToken);
       return result;
+    } else if(this.currentToken instanceof Lexer.TrueToken) {
+      this.currentToken = this.eat(Lexer.TrueToken);
+      return new AST.TrueAST();
+    } else if(this.currentToken instanceof Lexer.FalseToken) {
+      this.currentToken = this.eat(Lexer.FalseToken);
+      return new AST.FalseAST();
     } else {
       return this.variable();
     }

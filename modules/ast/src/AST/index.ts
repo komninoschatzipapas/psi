@@ -23,6 +23,9 @@ import IntegerConstantAST from './IntegerConstantAST';
 import RealConstantAST from './RealConstantAST';
 import ConstantAST from './ConstantAST';
 import ModAST from './ModAST';
+import TrueAST from './TrueAST';
+import FalseAST from './FalseAST';
+import BooleanAST from './BooleanAST';
 
 export {
   AST,
@@ -49,5 +52,8 @@ export {
   IntegerConstantAST,
   RealConstantAST,
   ConstantAST,
-  ModAST
+  ModAST,
+  TrueAST,
+  FalseAST,
+  BooleanAST
 }

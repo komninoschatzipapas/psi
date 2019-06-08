@@ -23,6 +23,9 @@ import SemiToken from './SemiToken';
 import VariableToken from './VariableToken';
 import ProcedureToken from './ProcedureToken';
 import ModToken from './ModToken';
+import TrueToken from './TrueToken';
+import FalseToken from './FalseToken';
+import BooleanToken from './BooleanToken';
 
 export {
   IToken,
@@ -49,5 +52,8 @@ export {
   SemiToken,
   VariableToken,
   ProcedureToken,
-  ModToken
+  ModToken,
+  TrueToken,
+  FalseToken,
+  BooleanToken
 }

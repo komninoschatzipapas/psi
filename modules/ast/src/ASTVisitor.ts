@@ -23,6 +23,8 @@ export default abstract class ASTVisitor<T=unknown> implements Runnable<T> {
   public abstract visitVariable(node: AST.VariableAST): T;
   public abstract visitVariableDeclaration(node: AST.VariableDeclarationAST): T;
   public abstract visitMod(node: AST.ModAST): T;
+  public abstract visitTrue(node: AST.TrueAST): T;
+  public abstract visitFalse(node: AST.FalseAST): T;
 
   public visit(node: AST.AST): T {
     if(node instanceof AST.AssignmentAST) {
@@ -65,6 +67,10 @@ export default abstract class ASTVisitor<T=unknown> implements Runnable<T> {
       return this.visitVariableDeclaration(node);
     } else if(node instanceof AST.ModAST) {
       return this.visitMod(node);
+    } else if(node instanceof AST.TrueAST) {
+      return this.visitTrue(node);
+    } else if(node instanceof AST.FalseAST) {
+      return this.visitFalse(node);
     } else {
       throw new Error('Unknown node type on visitor');
     }

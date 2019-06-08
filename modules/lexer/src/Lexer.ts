@@ -11,7 +11,10 @@ export class Lexer {
     ['DIV', () => new Token.IntegerDivisionToken()],
     ['INTEGER', () => new Token.IntegerToken()],
     ['REAL', () => new Token.RealToken()],
-    ['PROCEDURE', () => new Token.ProcedureToken()]
+    ['PROCEDURE', () => new Token.ProcedureToken()],
+    ['TRUE', () => new Token.TrueToken],
+    ['FALSE', () => new Token.FalseToken],
+    ['BOOLEAN', () => new Token.BooleanToken]
   ]);
 
   private readonly numberRegex = /^\d$/;

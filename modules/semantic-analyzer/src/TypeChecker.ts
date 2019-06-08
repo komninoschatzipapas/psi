@@ -19,6 +19,14 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
     return Types.Real;
   }
 
+  public visitTrue(node: AST.TrueAST) {
+    return Types.Boolean;
+  }
+
+  public visitFalse(node: AST.FalseAST) {
+    return Types.Boolean;
+  }
+
   public visitVariable(node: AST.VariableAST) {
     return this.currentScope.resolveThrow(node.name, VariableSymbol).type;
   }
@@ -110,11 +118,16 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
   public visitEmpty(node: AST.EmptyAST) {
     return Types.Void;
   }
+
   public visitInteger(node: AST.IntegerAST) {
     return Types.Void;
   }
   
   public visitReal(node: AST.RealAST) {
+    return Types.Void;
+  }
+
+  public visitBoolean(node: AST.BooleanAST) {
     return Types.Void;
   }
   
