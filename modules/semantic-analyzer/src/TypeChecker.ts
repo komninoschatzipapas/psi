@@ -120,15 +120,15 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
   }
 
   public visitInteger(node: AST.IntegerAST) {
-    return Types.Void;
+    return Types.IntegerType;
   }
   
   public visitReal(node: AST.RealAST) {
-    return Types.Void;
+    return Types.RealType;
   }
 
   public visitBoolean(node: AST.BooleanAST) {
-    return Types.Void;
+    return Types.BooleanType;
   }
   
   public visitVariableDeclaration(node: AST.VariableDeclarationAST) {
