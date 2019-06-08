@@ -81,13 +81,13 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
   public visitProgram(node: AST.ProgramAST) {
     this.currentScope = this.currentScope.children.getThrow(node.name);
     this.visit(node.block);
-    this.currentScope = (this.currentScope as LocalSymbolScope).parent;
+    this.currentScope = this.currentScope.getParentThrow();
     return Types.Void;
   }
   public visitProcedureDeclaration(node: AST.ProcedureDeclarationAST) {
     this.currentScope = this.currentScope.children.getThrow(node.name);
     this.visit(node.block);
-    this.currentScope = (this.currentScope as LocalSymbolScope).parent;
+    this.currentScope = this.currentScope.getParentThrow();
     return Types.Void;
   }
   public visitBlock(node: AST.BlockAST) {

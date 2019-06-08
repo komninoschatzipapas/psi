@@ -5,13 +5,24 @@ import LocalSymbolScope from './LocalSymbolScope';
 export default abstract class SymbolScope {
   private scope: CaseInsensitiveMap<string, PSISymbol>;
   public readonly children: ScopeChildren;
-  public abstract readonly parent: SymbolScope|null;
+  protected abstract readonly parent: SymbolScope|null;
   public readonly name: string;
 
   constructor(name: string) {
     this.scope = new CaseInsensitiveMap();
     this.children = new ScopeChildren();
     this.name = name;
+  }
+
+  public getParent() {
+    return this.parent;
+  }
+
+  public getParentThrow() {
+    if(!this.parent) {
+      throw new Error('Invalid scope tree configuration');
+    }
+    return this.parent;
   }
 
   public insert(symbol: PSISymbol) {

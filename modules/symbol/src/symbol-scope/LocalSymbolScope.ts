@@ -1,7 +1,7 @@
 import {SymbolScope} from ".";
 
 export default class LocalSymbolScope extends SymbolScope {
-  public readonly parent: SymbolScope;
+  protected readonly parent: SymbolScope;
 
   constructor(name: string, parent: SymbolScope) {
     super(name);
