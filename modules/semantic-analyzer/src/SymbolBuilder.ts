@@ -1,5 +1,5 @@
 import * as AST from 'ast';
-import { BaseSymbolScope, LocalSymbolScope, SymbolScope } from 'symbol';
+import { BaseSymbolScope, LocalSymbolScope, SymbolScope, ProgramSymbol } from 'symbol';
 import * as PSISymbol from 'symbol';
 import * as Types from 'data-types';
 
@@ -27,6 +27,7 @@ export default class SymbolBuilder extends AST.ASTVisitor {
   
   public visitProgram(node: AST.ProgramAST): void {
     this.currentScope = new LocalSymbolScope(node.name, this.currentScope);
+    this.currentScope.insert(new ProgramSymbol(node.name));
     this.visit(node.block);
     this.currentScope = (this.currentScope as LocalSymbolScope).parent;
   }
