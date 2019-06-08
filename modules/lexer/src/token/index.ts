@@ -22,6 +22,7 @@ import RealToken from './RealToken';
 import SemiToken from './SemiToken';
 import VariableToken from './VariableToken';
 import ProcedureToken from './ProcedureToken';
+import ModToken from './ModToken';
 
 export {
   IToken,
@@ -47,5 +48,6 @@ export {
   RealToken,
   SemiToken,
   VariableToken,
-  ProcedureToken
+  ProcedureToken,
+  ModToken
 }

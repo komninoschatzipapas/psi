@@ -105,4 +105,7 @@ export default class SymbolBuilder extends AST.ASTVisitor {
   public visitUnaryPlus(node: AST.UnaryPlusAST): void {
 
   }
+  public visitMod(node: AST.ModAST): void {
+
+  }
 }

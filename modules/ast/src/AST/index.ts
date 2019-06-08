@@ -22,6 +22,7 @@ import ProcedureDeclarationAST from './ProcedureDeclarationAST';
 import IntegerConstantAST from './IntegerConstantAST';
 import RealConstantAST from './RealConstantAST';
 import ConstantAST from './ConstantAST';
+import ModAST from './ModAST';
 
 export {
   AST,
@@ -47,5 +48,6 @@ export {
   ProcedureDeclarationAST,
   IntegerConstantAST,
   RealConstantAST,
-  ConstantAST
+  ConstantAST,
+  ModAST
 }

@@ -129,6 +129,9 @@ export class Lexer {
       } else if(this.currentCharacter == '*') {
         this.currentCharacter = this.advance();
         return new Token.MultiplicationToken();
+      } else if(this.currentCharacter == '%') {
+        this.currentCharacter = this.advance();
+        return new Token.ModToken();
       } else if(this.currentCharacter == '/') {
         this.currentCharacter = this.advance();
         return new Token.RealDivisionToken();

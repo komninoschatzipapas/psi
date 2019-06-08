@@ -63,6 +63,13 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
     return left;
   }
 
+  public visitMod(node: AST.ModAST) {
+    const left = this.visit(node.left);
+    const right = this.visit(node.right);
+    expect(left).to.be.eql(right);
+    return left;
+  }
+
   public visitPlus(node: AST.PlusAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);

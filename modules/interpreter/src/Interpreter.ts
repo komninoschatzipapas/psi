@@ -36,6 +36,10 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
     return this.visit(node.left).multiply(this.visit(node.right));
   }
 
+  public visitMod(node: AST.ModAST) {
+    return this.visit(node.left).mod(this.visit(node.right));
+  }
+
   public visitIntegerConstant(node: AST.IntegerConstantAST) {
     return node.value;
   }

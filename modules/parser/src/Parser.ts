@@ -186,6 +186,9 @@ export class Parser {
     } else if(this.currentToken instanceof Lexer.RealDivisionToken) {
       this.currentToken = this.eat(Lexer.RealDivisionToken);
       node = new AST.RealDivisionAST(node, this.term())
+    } else if(this.currentToken instanceof Lexer.ModToken) {
+      this.currentToken = this.eat(Lexer.ModToken);
+      node = new AST.ModAST(node, this.term());
     }
 
     return node;
