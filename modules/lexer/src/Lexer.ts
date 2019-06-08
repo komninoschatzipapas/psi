@@ -1,7 +1,6 @@
 import * as Token from './token';
 import CaseInsensitiveMap from 'case-insensitive-map';
 import * as Types from 'data-types';
-import { parse } from 'path';
 
 export class Lexer {
   protected readonly reservedKeywords = new CaseInsensitiveMap<string, () => Token.IToken>([
@@ -16,8 +15,8 @@ export class Lexer {
   ]);
 
   private readonly numberRegex = /^\d$/;
-  private readonly idFistCharacterRegex = /^[a-zA-Z_]$/;
-  private readonly idRegex = /^[a-zA-Z0-9_]$/;
+  private readonly idFistCharacterRegex = /^[a-zA-Z]$/;
+  private readonly idRegex = /^[a-zA-Z0-9]$/;
   private readonly whitespaceRegex = /^\s$/;
 
   private sourceCode: string;

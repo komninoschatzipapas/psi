@@ -9,7 +9,7 @@ compound_statement = "BEGIN" statement_list "END"
 statement_list = statement (";" statement)*
 statement = compound_statement | assignment_expression | empty
 assignment_expression = variable ":=" expression
-variable = ID
+variable = [a-zA-Z][a-zA-Z0-9]*
 empty =
 term = factor (("*" | "div" | "/") factor)*
 factor = INTEGER | "+" factor | "-" factor | "(" expression ")" | variable
