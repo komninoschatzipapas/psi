@@ -60,10 +60,16 @@ export class Lexer {
   }
 
   private comment() {
-    while(this.currentCharacter !== '}') {
+    while(
+      this.currentCharacter != '}' &&
+      (this.currentCharacter != '*' || this.peek() != ')')
+    ) {
+      if(this.currentCharacter === null) {
+        throw new Error('Could not find closing comment bracket');
+      }
       this.currentCharacter = this.advance();
     }
-    this.currentCharacter = this.advance();
+    this.currentCharacter = this.advance(this.currentCharacter == '}' ? 1 : 3);
   }
 
   private number() {
@@ -105,7 +111,7 @@ export class Lexer {
       if(this.currentCharacter.match(this.whitespaceRegex)) {
         this.whitespace();
         continue;
-      } else if(this.currentCharacter == '{') {
+      } else if(this.currentCharacter == '{' || (this.currentCharacter == '(' && this.peek() == '*')) {
         this.comment();
         continue;
       } else if(this.currentCharacter == ':' && this.peek() == '=') {
