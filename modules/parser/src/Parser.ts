@@ -1,7 +1,8 @@
 import * as Lexer from 'lexer';
 import * as AST from 'ast';
+import { Runnable }  from 'ast';
 
-export class Parser {
+export class Parser implements Runnable<void> {
   private currentToken: Lexer.IToken;
   private lexer: Lexer.Lexer;
 
@@ -231,6 +232,5 @@ export class Parser {
   public run() {
     let node = this.program();
     this.currentToken = this.eat(Lexer.EofToken);
-    return node;
   }
 }
