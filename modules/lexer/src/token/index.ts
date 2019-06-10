@@ -26,6 +26,12 @@ import ModToken from './ModToken';
 import TrueToken from './TrueToken';
 import FalseToken from './FalseToken';
 import BooleanToken from './BooleanToken';
+import EqualsToken from './EqualsToken';
+import NotEqualsToken from './NotEqualsToken';
+import GreaterThanToken from './GreaterThanToken';
+import LessThanToken from './LessThanToken';
+import GreaterEqualsToken from './GreaterEqualsToken';
+import LessEqualsToken from './LessEqualsToken';
 
 export {
   IToken,
@@ -55,5 +61,11 @@ export {
   ModToken,
   TrueToken,
   FalseToken,
-  BooleanToken
+  BooleanToken,
+  EqualsToken,
+  NotEqualsToken,
+  GreaterThanToken,
+  LessThanToken,
+  GreaterEqualsToken,
+  LessEqualsToken
 }

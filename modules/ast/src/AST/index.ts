@@ -26,6 +26,12 @@ import ModAST from './ModAST';
 import TrueAST from './TrueAST';
 import FalseAST from './FalseAST';
 import BooleanAST from './BooleanAST';
+import EqualsAST from './EqualsAST';
+import NotEqualsAST from './NotEqualsAST';
+import GreaterThanAST from './GreaterThanAST';
+import LessThanAST from './LessThanAST';
+import GreaterEqualsAST from './GreaterEqualsAST';
+import LessEqualsAST from './LessEqualsAST';
 
 export {
   AST,
@@ -55,5 +61,11 @@ export {
   ModAST,
   TrueAST,
   FalseAST,
-  BooleanAST
+  BooleanAST,
+  EqualsAST,
+  NotEqualsAST,
+  GreaterThanAST,
+  LessThanAST,
+  GreaterEqualsAST,
+  LessEqualsAST,
 }

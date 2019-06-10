@@ -25,6 +25,12 @@ export default abstract class ASTVisitor<T=unknown> implements Runnable<T> {
   public abstract visitMod(node: AST.ModAST): T;
   public abstract visitTrue(node: AST.TrueAST): T;
   public abstract visitFalse(node: AST.FalseAST): T;
+  public abstract visitEquals(node: AST.EqualsAST): T;
+  public abstract visitNotEquals(node: AST.NotEqualsAST): T;
+  public abstract visitGreaterThan(node: AST.GreaterThanAST): T;
+  public abstract visitLessThan(node: AST.LessThanAST): T;
+  public abstract visitGreaterEquals(node: AST.GreaterEqualsAST): T;
+  public abstract visitLessEquals(node: AST.LessEqualsAST): T;
 
   public visit(node: AST.AST): T {
     if(node instanceof AST.AssignmentAST) {
@@ -71,6 +77,18 @@ export default abstract class ASTVisitor<T=unknown> implements Runnable<T> {
       return this.visitTrue(node);
     } else if(node instanceof AST.FalseAST) {
       return this.visitFalse(node);
+    } else if(node instanceof AST.EqualsAST) {
+      return this.visitEquals(node);
+    } else if(node instanceof AST.NotEqualsAST) {
+      return this.visitNotEquals(node);
+    } else if(node instanceof AST.GreaterThanAST) {
+      return this.visitGreaterThan(node);
+    } else if(node instanceof AST.LessThanAST) {
+      return this.visitLessThan(node);
+    } else if(node instanceof AST.GreaterEqualsAST) {
+      return this.visitGreaterEquals(node);
+    } else if(node instanceof AST.LessEqualsAST) {
+      return this.visitLessEquals(node);
     } else {
       throw new Error('Unknown node type on visitor');
     }

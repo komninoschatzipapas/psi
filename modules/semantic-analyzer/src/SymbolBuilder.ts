@@ -119,4 +119,22 @@ export default class SymbolBuilder extends AST.ASTVisitor {
   public visitFalse(node: AST.FalseAST): void {
 
   }
+  public visitEquals(node: AST.EqualsAST): void {
+
+  }
+  public visitNotEquals(node: AST.NotEqualsAST): void {
+
+  }
+  public visitGreaterThan(node: AST.GreaterThanAST): void {
+
+  }
+  public visitLessThan(node: AST.LessThanAST): void {
+
+  }
+  public visitGreaterEquals(node: AST.GreaterEqualsAST): void {
+
+  }
+  public visitLessEquals(node: AST.LessEqualsAST): void {
+    
+  }
 }

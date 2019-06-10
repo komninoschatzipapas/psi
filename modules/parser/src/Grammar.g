@@ -11,5 +11,6 @@ statement = compound_statement | assignment_expression | empty
 assignment_expression = variable ":=" expression
 variable = [a-zA-Z][a-zA-Z0-9]*
 empty =
-term = factor (("*" | "div" | "/" | "%") factor)*
+term = comparison (("*" | "div" | "/" | "%") term)*
+comparison = factor (("=" | "<>" | "<" | ">" | "<=" | ">=") comparison)*
 factor = INTEGER | "+" factor | "-" factor | "(" expression ")" | variable | "TRUE" | "FALSE"

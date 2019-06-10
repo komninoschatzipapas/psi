@@ -2,7 +2,7 @@ import * as Lexer from 'lexer';
 import * as AST from 'ast';
 import { Runnable }  from 'ast';
 
-export class Parser implements Runnable<void> {
+export class Parser implements Runnable<AST.AST> {
   private currentToken: Lexer.IToken;
   private lexer: Lexer.Lexer;
 
@@ -179,7 +179,7 @@ export class Parser implements Runnable<void> {
   }
 
   private term() {
-    let node = this.factor();
+    let node = this.comparison();
 
     if(this.currentToken instanceof Lexer.MultiplicationToken) {
       this.currentToken = this.eat(Lexer.MultiplicationToken);
@@ -193,6 +193,32 @@ export class Parser implements Runnable<void> {
     } else if(this.currentToken instanceof Lexer.ModToken) {
       this.currentToken = this.eat(Lexer.ModToken);
       node = new AST.ModAST(node, this.term());
+    }
+
+    return node;
+  }
+
+  private comparison() {
+    let node = this.factor();
+
+    if(this.currentToken instanceof Lexer.EqualsToken) {
+      this.currentToken = this.eat(Lexer.EqualsToken);
+      node = new AST.EqualsAST(node, this.comparison());
+    } else if(this.currentToken instanceof Lexer.NotEqualsToken) {
+      this.currentToken = this.eat(Lexer.NotEqualsToken);
+      node = new AST.NotEqualsAST(node, this.comparison());
+    } else if(this.currentToken instanceof Lexer.GreaterThanToken) {
+      this.currentToken = this.eat(Lexer.GreaterThanToken);
+      node = new AST.GreaterThanAST(node, this.comparison());
+    } else if(this.currentToken instanceof Lexer.LessThanToken) {
+      this.currentToken = this.eat(Lexer.LessThanToken);
+      node = new AST.LessThanAST(node, this.comparison());
+    } else if(this.currentToken instanceof Lexer.GreaterEqualsToken) {
+      this.currentToken = this.eat(Lexer.GreaterEqualsToken);
+      node = new AST.GreaterEqualsAST(node, this.comparison());
+    } else if(this.currentToken instanceof Lexer.LessEqualsToken) {
+      this.currentToken = this.eat(Lexer.LessEqualsToken);
+      node = new AST.LessEqualsAST(node, this.comparison());
     }
 
     return node;
@@ -232,5 +258,6 @@ export class Parser implements Runnable<void> {
   public run() {
     let node = this.program();
     this.currentToken = this.eat(Lexer.EofToken);
+    return node;
   }
 }

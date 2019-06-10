@@ -85,6 +85,43 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
     return left;
   }
 
+  public visitEquals(node: AST.EqualsAST) {
+    const left = this.visit(node.left);
+    const right = this.visit(node.right);
+    expect(left).to.be.eql(right);
+    return Types.Boolean;
+  }
+  public visitNotEquals(node: AST.NotEqualsAST) {
+    const left = this.visit(node.left);
+    const right = this.visit(node.right);
+    expect(left).to.be.eql(right);
+    return Types.Boolean;
+  }
+  public visitGreaterThan(node: AST.GreaterThanAST) {
+    const left = this.visit(node.left);
+    const right = this.visit(node.right);
+    expect(left).to.be.eql(right);
+    return Types.Boolean;
+  }
+  public visitLessThan(node: AST.LessThanAST) {
+    const left = this.visit(node.left);
+    const right = this.visit(node.right);
+    expect(left).to.be.eql(right);
+    return Types.Boolean;
+  }
+  public visitGreaterEquals(node: AST.GreaterEqualsAST) {
+    const left = this.visit(node.left);
+    const right = this.visit(node.right);
+    expect(left).to.be.eql(right);
+    return Types.Boolean;
+  }
+  public visitLessEquals(node: AST.LessEqualsAST) {
+    const left = this.visit(node.left);
+    const right = this.visit(node.right);
+    expect(left).to.be.eql(right);
+    return Types.Boolean;
+  }
+
   public visitUnaryMinus(node: AST.UnaryMinusAST) {
     return this.visit(node.target);
   }

@@ -40,6 +40,25 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
     return this.visit(node.left).mod(this.visit(node.right));
   }
 
+  public visitEquals(node: AST.EqualsAST) {
+    return new Types.Boolean(this.visit(node.left).equals(this.visit(node.right)));
+  }
+  public visitNotEquals(node: AST.NotEqualsAST) {
+    return new Types.Boolean(this.visit(node.left).notEquals(this.visit(node.right)));
+  }
+  public visitGreaterThan(node: AST.GreaterThanAST) {
+    return new Types.Boolean(this.visit(node.left).greatherThan(this.visit(node.right)));
+  }
+  public visitLessThan(node: AST.LessThanAST) {
+    return new Types.Boolean(this.visit(node.left).lessThan(this.visit(node.right)));
+  }
+  public visitGreaterEquals(node: AST.GreaterEqualsAST) {
+    return new Types.Boolean(this.visit(node.left).greaterEqualsThan(this.visit(node.right)));
+  }
+  public visitLessEquals(node: AST.LessEqualsAST) {
+    return new Types.Boolean(this.visit(node.left).lessEqualsThan(this.visit(node.right)));
+  }
+
   public visitIntegerConstant(node: AST.IntegerConstantAST) {
     return node.value;
   }

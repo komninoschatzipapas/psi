@@ -153,6 +153,24 @@ export class Lexer {
       } else if(this.currentCharacter == ',') {
         this.currentCharacter = this.advance();
         return new Token.CommaToken();
+      } else if(this.currentCharacter == '=') {
+        this.currentCharacter = this.advance();
+        return new Token.EqualsToken();
+      } else if(this.currentCharacter == '<' && this.peek() == '>') {
+        this.currentCharacter = this.advance(2);
+        return new Token.NotEqualsToken();
+      } else if(this.currentCharacter == '>' && this.peek() == '=') {
+        this.currentCharacter = this.advance(2);
+        return new Token.GreaterEqualsToken();
+      } else if(this.currentCharacter == '<' && this.peek() == '=') {
+        this.currentCharacter = this.advance(2);
+        return new Token.LessEqualsToken();
+      } else if(this.currentCharacter == '>') {
+        this.currentCharacter = this.advance();
+        return new Token.GreaterThanToken();
+      } else if(this.currentCharacter == '<') {
+        this.currentCharacter = this.advance();
+        return new Token.LessThanToken();
       } else if(this.currentCharacter.match(this.numberRegex)) {
         return this.number();
       } else if(this.currentCharacter.match(this.idFistCharacterRegex)) {
