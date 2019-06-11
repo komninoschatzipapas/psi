@@ -16,7 +16,7 @@ export default class SymbolBuilder extends AST.ASTVisitor {
   }
 
   public visitVariable(node: AST.VariableAST): PSISymbol.PSISymbol {
-    const variableValue = this.currentScope.resolve(node.name, AST.VariableAST);
+    const variableValue = this.currentScope.resolve(node.name, PSISymbol.VariableSymbol);
 
     if(!variableValue) {
       throw new Error(`Variable ${node.name} used without being declared`);
