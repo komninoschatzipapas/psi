@@ -31,6 +31,7 @@ export default abstract class ASTVisitor<T=unknown> implements Runnable<T> {
   public abstract visitLessThan(node: AST.LessThanAST): T;
   public abstract visitGreaterEquals(node: AST.GreaterEqualsAST): T;
   public abstract visitLessEquals(node: AST.LessEqualsAST): T;
+  public abstract visitIf(node: AST.IfAST): T;
 
   public visit(node: AST.AST): T {
     if(node instanceof AST.AssignmentAST) {
@@ -89,6 +90,8 @@ export default abstract class ASTVisitor<T=unknown> implements Runnable<T> {
       return this.visitGreaterEquals(node);
     } else if(node instanceof AST.LessEqualsAST) {
       return this.visitLessEquals(node);
+    } else if(node instanceof AST.IfAST) {
+      return this.visitIf(node);
     } else {
       throw new Error('Unknown node type on visitor');
     }

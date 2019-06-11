@@ -1,6 +1,6 @@
 import * as Lexer from 'lexer';
 import * as AST from 'ast';
-import { Runnable }  from 'ast';
+import { Runnable, IfAST }  from 'ast';
 
 export class Parser implements Runnable<AST.AST> {
   private currentToken: Lexer.IToken;
@@ -17,6 +17,34 @@ export class Parser implements Runnable<AST.AST> {
     } else {
       throw new Error(`Expected type ${this.currentToken.constructor.name} to be ${type}`);
     }
+  }
+
+  // if = "IF" expression "THEN" statement
+  // if_statement = if ("ELSE" "IF" if)* ("ELSE" statement)+
+  private if() {
+    this.currentToken = this.eat(Lexer.IfToken);
+    const expr = this.expression();
+    this.currentToken = this.eat(Lexer.ThenToken);
+    const statement = this.statement();
+    return new IfAST(expr, statement);
+  }
+
+  private ifStatement() {
+    const firstIf = this.if();
+    let currentIf = firstIf;
+
+    while(this.currentToken instanceof Lexer.ElseToken) {
+      this.currentToken = this.eat(Lexer.ElseToken);
+      if(this.currentToken instanceof Lexer.IfToken) {
+        const newIf = this.if();
+        currentIf.addNext(newIf);
+        currentIf = newIf;
+      } else {
+        currentIf.addNext(this.statement());
+      }
+    }
+    
+    return firstIf;
   }
 
   private block() {
@@ -138,6 +166,8 @@ export class Parser implements Runnable<AST.AST> {
       return this.compoundStatement();
     } else if(this.currentToken instanceof Lexer.IdToken) {
       return this.assignmentExpression();
+    } else if(this.currentToken instanceof Lexer.IfToken) {
+      return this.ifStatement();
     } else {
       return this.empty();
     }

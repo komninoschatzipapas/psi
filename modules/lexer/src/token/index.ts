@@ -32,6 +32,9 @@ import GreaterThanToken from './GreaterThanToken';
 import LessThanToken from './LessThanToken';
 import GreaterEqualsToken from './GreaterEqualsToken';
 import LessEqualsToken from './LessEqualsToken';
+import IfToken from './IfToken';
+import ThenToken from './ThenToken';
+import ElseToken from './ElseToken';
 
 export {
   IToken,
@@ -67,5 +70,8 @@ export {
   GreaterThanToken,
   LessThanToken,
   GreaterEqualsToken,
-  LessEqualsToken
+  LessEqualsToken,
+  IfToken,
+  ThenToken,
+  ElseToken
 }

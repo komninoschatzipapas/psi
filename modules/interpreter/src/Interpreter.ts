@@ -131,4 +131,15 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   public visitProcedureDeclaration(node: AST.ProcedureDeclarationAST) {
     return new Types.Void();
   }
+
+  public visitIf(node: AST.IfAST) {
+    if(this.visit(node.condition).toBoolean()) {
+      this.visit(node.statement);
+    } else {
+      if(node.next) {
+        this.visit(node.next);
+      }
+    }
+    return new Types.Void();
+  }
 }

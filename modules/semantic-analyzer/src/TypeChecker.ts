@@ -150,6 +150,10 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
     node.children.forEach(this.visit.bind(this));
     return Types.Void;
   }
+  public visitIf(node: AST.IfAST) {
+    node.children.forEach(this.visit.bind(this));
+    return Types.Void;
+  }
 
   
   public visitEmpty(node: AST.EmptyAST) {

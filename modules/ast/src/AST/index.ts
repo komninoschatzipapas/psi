@@ -32,6 +32,7 @@ import GreaterThanAST from './GreaterThanAST';
 import LessThanAST from './LessThanAST';
 import GreaterEqualsAST from './GreaterEqualsAST';
 import LessEqualsAST from './LessEqualsAST';
+import IfAST from './IfAST';
 
 export {
   AST,
@@ -68,4 +69,5 @@ export {
   LessThanAST,
   GreaterEqualsAST,
   LessEqualsAST,
+  IfAST
 }

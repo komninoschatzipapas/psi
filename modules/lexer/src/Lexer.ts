@@ -14,7 +14,10 @@ export class Lexer {
     ['PROCEDURE', () => new Token.ProcedureToken()],
     ['TRUE', () => new Token.TrueToken],
     ['FALSE', () => new Token.FalseToken],
-    ['BOOLEAN', () => new Token.BooleanToken]
+    ['BOOLEAN', () => new Token.BooleanToken],
+    ['IF', () => new Token.IfToken()],
+    ['THEN', () => new Token.ThenToken()],
+    ['ELSE', () => new Token.ElseToken()]
   ]);
 
   private readonly numberRegex = /^\d$/;

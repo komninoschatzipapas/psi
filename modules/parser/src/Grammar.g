@@ -1,3 +1,5 @@
+if = "IF" expression "THEN" statement
+if_statement = if ("ELSE" if)* ("ELSE" statement)+
 block = declarations compound_statement
 declarations = ("VAR" (variable_declaration ";")+ | procedure_declaration)*
 variable_declaration = variable ("," variable)* ":" type
@@ -7,7 +9,7 @@ type = "INTEGER" | "REAL" | "BOOLEAN"
 program = "PROGRAM" variable ";" block "."
 compound_statement = "BEGIN" statement_list "END"
 statement_list = statement (";" statement)*
-statement = compound_statement | assignment_expression | empty
+statement = compound_statement | assignment_expression | if_statement | empty
 assignment_expression = variable ":=" expression
 variable = [a-zA-Z][a-zA-Z0-9]*
 empty =

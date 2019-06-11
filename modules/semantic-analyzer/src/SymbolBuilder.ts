@@ -137,4 +137,7 @@ export default class SymbolBuilder extends AST.ASTVisitor {
   public visitLessEquals(node: AST.LessEqualsAST): void {
     node.children.forEach(this.visit.bind(this));
   }
+  public visitIf(node: AST.IfAST): void {
+    node.children.forEach(this.visit.bind(this));
+  }
 }
