@@ -64,6 +64,9 @@ empty
   :
   ;
 
+expression
+  : term (("+" | "-") expression)*
+
 term
   : comparison (("*" | "div" | "/" | "%") term)*
   ;

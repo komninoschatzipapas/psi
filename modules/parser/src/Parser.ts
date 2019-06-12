@@ -185,17 +185,12 @@ export class Parser implements Runnable<AST.AST> {
   private expression() {
     let node = this.term();
 
-    while(
-      this.currentToken instanceof Lexer.PlusToken ||
-      this.currentToken instanceof Lexer.MinusToken
-    ) {
-      if(this.currentToken instanceof Lexer.PlusToken) {
-        this.currentToken = this.eat(Lexer.PlusToken);
-        node = new AST.PlusAST(node, this.term())
-      } else {
-        this.currentToken = this.eat(Lexer.MinusToken);
-        node = new AST.MinusAST(node, this.term())
-      }
+    if(this.currentToken instanceof Lexer.PlusToken) {
+      this.currentToken = this.eat(Lexer.PlusToken);
+      node = new AST.PlusAST(node, this.expression())
+    } else if(this.currentToken instanceof Lexer.MinusToken) {
+      this.currentToken = this.eat(Lexer.MinusToken);
+      node = new AST.MinusAST(node, this.expression())
     }
 
     return node;
