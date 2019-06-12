@@ -19,6 +19,10 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
     return Types.Real;
   }
 
+  public visitCharConstant(node: AST.CharConstantAST) {
+    return Types.Char;
+  }
+
   public visitTrue(node: AST.TrueAST) {
     return Types.Boolean;
   }
@@ -170,6 +174,10 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
 
   public visitBoolean(node: AST.BooleanAST) {
     return Types.BooleanType;
+  }
+
+  public visitChar(node: AST.CharAST) {
+    return Types.CharType;
   }
   
   public visitVariableDeclaration(node: AST.VariableDeclarationAST) {

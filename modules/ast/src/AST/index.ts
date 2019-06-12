@@ -33,6 +33,8 @@ import LessThanAST from './LessThanAST';
 import GreaterEqualsAST from './GreaterEqualsAST';
 import LessEqualsAST from './LessEqualsAST';
 import IfAST from './IfAST';
+import CharAST from './CharAST';
+import CharConstantAST from './CharConstantAST';
 
 export {
   AST,
@@ -69,5 +71,7 @@ export {
   LessThanAST,
   GreaterEqualsAST,
   LessEqualsAST,
-  IfAST
+  IfAST,
+  CharAST,
+  CharConstantAST
 }

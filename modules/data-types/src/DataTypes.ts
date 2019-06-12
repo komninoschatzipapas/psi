@@ -7,6 +7,8 @@ import IntegerType from './IntegerType';
 import RealType from './RealType';
 import Boolean from './Boolean';
 import BooleanType from './BooleanType';
+import Char from './Char';
+import CharType from './CharType';
 
 export {
   Integer,
@@ -17,5 +19,7 @@ export {
   IntegerType,
   RealType,
   Boolean,
-  BooleanType
+  BooleanType,
+  Char,
+  CharType
 }

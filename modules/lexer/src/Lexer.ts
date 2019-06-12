@@ -17,7 +17,8 @@ export class Lexer {
     ['BOOLEAN', () => new Token.BooleanToken],
     ['IF', () => new Token.IfToken()],
     ['THEN', () => new Token.ThenToken()],
-    ['ELSE', () => new Token.ElseToken()]
+    ['ELSE', () => new Token.ElseToken()],
+    ['CHAR', () => new Token.CharToken()]
   ]);
 
   private readonly numberRegex = /^\d$/;
@@ -112,7 +113,20 @@ export class Lexer {
     }
   }
 
-  public getNextToken() {
+  private characterConstant() {
+    if(this.currentCharacter === null) {
+      throw new Error('Invalid character constant');
+    }
+    const character = this.currentCharacter;
+    this.currentCharacter = this.advance();
+    if(this.currentCharacter != '\'') {
+      throw new Error('Invalid character constant');
+    }
+    this.currentCharacter = this.advance();
+    return new Token.CharConstantToken(new Types.Char(character));
+  }
+
+  public getNextToken(): Token.IToken {
     while(this.currentCharacter != null) {
       if(this.currentCharacter.match(this.whitespaceRegex)) {
         this.whitespace();
@@ -174,6 +188,9 @@ export class Lexer {
       } else if(this.currentCharacter == '<') {
         this.currentCharacter = this.advance();
         return new Token.LessThanToken();
+      } else if(this.currentCharacter == '\'') {
+        this.currentCharacter = this.advance();
+        return this.characterConstant();
       } else if(this.currentCharacter.match(this.numberRegex)) {
         return this.number();
       } else if(this.currentCharacter.match(this.idFistCharacterRegex)) {

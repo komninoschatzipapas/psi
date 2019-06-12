@@ -67,6 +67,10 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
     return node.value;
   }
 
+  public visitCharConstant(node: AST.CharConstantAST) {
+    return node.value;
+  }
+
   public visitTrue(node: AST.TrueAST) {
     return new Types.Boolean(true);
   }
@@ -126,6 +130,10 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
 
   public visitBoolean(node: AST.BooleanAST) {
     return new Types.BooleanType();
+  }
+
+  public visitChar(node: AST.CharAST) {
+    return new Types.CharType();
   }
 
   public visitProcedureDeclaration(node: AST.ProcedureDeclarationAST) {

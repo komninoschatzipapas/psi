@@ -46,6 +46,8 @@ export default class SymbolBuilder extends AST.ASTVisitor {
       symbol = new PSISymbol.VariableSymbol(node.variable.name, Types.Real);
     } else if(node.type instanceof AST.BooleanAST) {
       symbol = new PSISymbol.VariableSymbol(node.variable.name, Types.Boolean);
+    } else if(node.type instanceof AST.CharAST) {
+      symbol = new PSISymbol.VariableSymbol(node.variable.name, Types.Char);
     } else throw new Error('Unknown data type');
 
     this.currentScope.insert(symbol);
@@ -138,6 +140,12 @@ export default class SymbolBuilder extends AST.ASTVisitor {
     node.children.forEach(this.visit.bind(this));
   }
   public visitIf(node: AST.IfAST): void {
+    node.children.forEach(this.visit.bind(this));
+  }
+  public visitChar(node: AST.CharAST): void {
+    node.children.forEach(this.visit.bind(this));
+  }
+  public visitCharConstant(node: AST.CharConstantAST): void {
     node.children.forEach(this.visit.bind(this));
   }
 }

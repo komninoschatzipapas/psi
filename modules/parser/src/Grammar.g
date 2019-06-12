@@ -30,6 +30,7 @@ type
   : "INTEGER"
   | "REAL"
   | "BOOLEAN"
+  | "CHAR"
   ;
 
 program
@@ -79,4 +80,8 @@ factor
   | variable
   | "TRUE"
   | "FALSE"
+  | character_constant
   ;
+
+character_constant
+  : "'" UTF16_CHARACTER "'"

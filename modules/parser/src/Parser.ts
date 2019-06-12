@@ -130,6 +130,9 @@ export class Parser implements Runnable<AST.AST> {
     } else if(this.currentToken instanceof Lexer.BooleanToken) {
       this.currentToken = this.eat(Lexer.BooleanToken);
       return new AST.BooleanAST();
+    } else if(this.currentToken instanceof Lexer.CharToken) {
+      this.currentToken = this.eat(Lexer.CharToken);
+      return new AST.CharAST();
     } else {
       throw new Error(`Unknown data type ${this.currentToken}`);
     }
@@ -280,6 +283,10 @@ export class Parser implements Runnable<AST.AST> {
     } else if(this.currentToken instanceof Lexer.FalseToken) {
       this.currentToken = this.eat(Lexer.FalseToken);
       return new AST.FalseAST();
+    } else if(this.currentToken instanceof Lexer.CharConstantToken) {
+      const character = this.currentToken.value;
+      this.currentToken = this.eat(Lexer.CharConstantToken);
+      return new AST.CharConstantAST(character);
     } else {
       return this.variable();
     }

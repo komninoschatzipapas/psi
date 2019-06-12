@@ -35,6 +35,8 @@ import LessEqualsToken from './LessEqualsToken';
 import IfToken from './IfToken';
 import ThenToken from './ThenToken';
 import ElseToken from './ElseToken';
+import CharToken from './CharToken';
+import CharConstantToken from './CharConstantToken';
 
 export {
   IToken,
@@ -73,5 +75,7 @@ export {
   LessEqualsToken,
   IfToken,
   ThenToken,
-  ElseToken
+  ElseToken,
+  CharToken,
+  CharConstantToken
 }
