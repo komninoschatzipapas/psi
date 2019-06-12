@@ -3,7 +3,7 @@ if
   ;
 
 if_statement
-  : if ("ELSE" if)* ("ELSE" statement)+
+  : if ("ELSE" if)* ("ELSE" statement)?
   ;
 
 block
