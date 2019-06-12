@@ -18,7 +18,10 @@ export class Lexer {
     ['IF', () => new Token.IfToken()],
     ['THEN', () => new Token.ThenToken()],
     ['ELSE', () => new Token.ElseToken()],
-    ['CHAR', () => new Token.CharToken()]
+    ['CHAR', () => new Token.CharToken()],
+    ['AND', () => new Token.AndToken()],
+    ['OR', () => new Token.OrToken()],
+    ['NOT', () => new Token.NotToken()]
   ]);
 
   private readonly numberRegex = /^\d$/;

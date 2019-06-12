@@ -35,6 +35,9 @@ import LessEqualsAST from './LessEqualsAST';
 import IfAST from './IfAST';
 import CharAST from './CharAST';
 import CharConstantAST from './CharConstantAST';
+import AndAST from './AndAST';
+import OrAST from './OrAST';
+import NotAST from './NotAST';
 
 export {
   AST,
@@ -73,5 +76,8 @@ export {
   LessEqualsAST,
   IfAST,
   CharAST,
-  CharConstantAST
+  CharConstantAST,
+  AndAST,
+  OrAST,
+  NotAST
 }

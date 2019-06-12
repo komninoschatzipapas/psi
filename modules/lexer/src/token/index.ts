@@ -37,6 +37,9 @@ import ThenToken from './ThenToken';
 import ElseToken from './ElseToken';
 import CharToken from './CharToken';
 import CharConstantToken from './CharConstantToken';
+import AndToken from './AndToken';
+import OrToken from './OrToken';
+import NotToken from './NotToken';
 
 export {
   IToken,
@@ -77,5 +80,8 @@ export {
   ThenToken,
   ElseToken,
   CharToken,
-  CharConstantToken
+  CharConstantToken,
+  AndToken,
+  OrToken,
+  NotToken
 }

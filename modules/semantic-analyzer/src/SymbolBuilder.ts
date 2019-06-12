@@ -148,4 +148,13 @@ export default class SymbolBuilder extends AST.ASTVisitor {
   public visitCharConstant(node: AST.CharConstantAST): void {
     node.children.forEach(this.visit.bind(this));
   }
+  public visitAnd(node: AST.AndAST): void {
+    node.children.forEach(this.visit.bind(this));
+  }
+  public visitOr(node: AST.OrAST): void {
+    node.children.forEach(this.visit.bind(this));
+  }
+  public visitNot(node: AST.NotAST): void {
+    node.children.forEach(this.visit.bind(this));
+  }
 }

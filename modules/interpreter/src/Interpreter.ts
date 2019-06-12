@@ -150,4 +150,14 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
     }
     return new Types.Void();
   }
+
+  public visitAnd(node: AST.AndAST) {
+    return new Types.Boolean(this.visit(node.left).toBoolean() && this.visit(node.right).toBoolean());
+  }
+  public visitOr(node: AST.OrAST) {
+    return new Types.Boolean(this.visit(node.left).toBoolean() || this.visit(node.right).toBoolean());
+  }
+  public visitNot(node: AST.NotAST) {
+    return new Types.Boolean(!this.visit(node.target).toBoolean());
+  }
 }

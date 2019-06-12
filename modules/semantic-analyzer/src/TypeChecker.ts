@@ -125,6 +125,22 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
     expect(left).to.be.eql(right);
     return Types.Boolean;
   }
+  public visitAnd(node: AST.AndAST) {
+    const left = this.visit(node.left);
+    const right = this.visit(node.right);
+    expect(left).to.be.eql(right);
+    return Types.Boolean;
+  }
+  public visitOr(node: AST.OrAST) {
+    const left = this.visit(node.left);
+    const right = this.visit(node.right);
+    expect(left).to.be.eql(right);
+    return Types.Boolean;
+  }
+
+  public visitNot(node: AST.NotAST) {
+    return Types.Boolean;
+  }
 
   public visitUnaryMinus(node: AST.UnaryMinusAST) {
     return this.visit(node.target);

@@ -65,10 +65,10 @@ empty
   ;
 
 expression
-  : term (("+" | "-") expression)*
+  : term (("+" | "-" | "OR") expression)*
 
 term
-  : comparison (("*" | "div" | "/" | "%") term)*
+  : comparison (("*" | "div" | "/" | "%" | "AND") term)*
   ;
 
 comparison:
@@ -84,6 +84,7 @@ factor
   | "TRUE"
   | "FALSE"
   | character_constant
+  | "NOT" factor
   ;
 
 character_constant

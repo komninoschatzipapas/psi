@@ -191,6 +191,9 @@ export class Parser implements Runnable<AST.AST> {
     } else if(this.currentToken instanceof Lexer.MinusToken) {
       this.currentToken = this.eat(Lexer.MinusToken);
       node = new AST.MinusAST(node, this.expression())
+    } else if(this.currentToken instanceof Lexer.OrToken) {
+      this.currentToken = this.eat(Lexer.OrToken);
+      node = new AST.OrAST(node, this.expression())
     }
 
     return node;
@@ -221,6 +224,9 @@ export class Parser implements Runnable<AST.AST> {
     } else if(this.currentToken instanceof Lexer.ModToken) {
       this.currentToken = this.eat(Lexer.ModToken);
       node = new AST.ModAST(node, this.term());
+    } else if(this.currentToken instanceof Lexer.AndToken) {
+      this.currentToken = this.eat(Lexer.AndToken);
+      node = new AST.AndAST(node, this.term());
     }
 
     return node;
@@ -281,7 +287,10 @@ export class Parser implements Runnable<AST.AST> {
     } else if(this.currentToken instanceof Lexer.CharConstantToken) {
       const character = this.currentToken.value;
       this.currentToken = this.eat(Lexer.CharConstantToken);
-      return new AST.CharConstantAST(character);
+      return new AST.CharConstantAST(character); 
+    } else if(this.currentToken instanceof Lexer.NotToken) {
+      this.currentToken = this.eat(Lexer.NotToken);
+      return new AST.NotAST(this.factor());
     } else {
       return this.variable();
     }
