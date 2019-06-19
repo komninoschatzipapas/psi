@@ -40,9 +40,4 @@ export default abstract class Type extends DataType {
   public unaryMinus(): DataType {
     throw new Error('Cannot execute operations with type type');
   }
-  public toBoolean(): boolean {
-    throw new Error('Cannot execute operations with type type');
-  }
 }
-
-Type.toString = () => 'Type';

@@ -47,9 +47,4 @@ export default class Integer extends DataType {
   public unaryMinus(): Integer {
     return new Integer(-this.value);
   }
-  public toBoolean(): boolean {
-    return Boolean(this.value);
-  }
 }
-
-Integer.toString = () => 'Integer';

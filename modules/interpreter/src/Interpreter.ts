@@ -141,7 +141,8 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   public visitIf(node: AST.IfAST) {
-    if(this.visit(node.condition).toBoolean()) {
+    const condition = this.visit(node.condition);
+    if(condition == Types.Boolean.true) {
       this.visit(node.statement);
     } else {
       if(node.next) {
@@ -152,12 +153,13 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   public visitAnd(node: AST.AndAST) {
-    return new Types.Boolean(this.visit(node.left).toBoolean() && this.visit(node.right).toBoolean());
+    return new Types.Boolean(this.visit(node.left) == Types.Boolean.true && this.visit(node.right) == Types.Boolean.true);
   }
   public visitOr(node: AST.OrAST) {
-    return new Types.Boolean(this.visit(node.left).toBoolean() || this.visit(node.right).toBoolean());
+    return new Types.Boolean(this.visit(node.left) == Types.Boolean.true || this.visit(node.right) == Types.Boolean.true);
   }
   public visitNot(node: AST.NotAST) {
-    return new Types.Boolean(!this.visit(node.target).toBoolean());
+    const target = this.visit(node.target);
+    return target == Types.Boolean.true ? Types.Boolean.false : Types.Boolean.true;
   }
 }

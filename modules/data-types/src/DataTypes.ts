@@ -21,5 +21,5 @@ export {
   Boolean,
   BooleanType,
   Char,
-  CharType
+  CharType,
 }

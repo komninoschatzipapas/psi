@@ -40,9 +40,4 @@ export default class Void extends DataType {
   public unaryMinus(): DataType {
     throw new Error('Cannot execute operations with void type');
   }
-  public toBoolean(): boolean {
-    throw new Error('Cannot execute operations with void type');
-  }
 }
-
-Void.toString = () => 'Void';

@@ -1,8 +1,16 @@
 import DataType from "./DataType";
 
 export default class Boolean extends DataType {
+  public static readonly true: Boolean = new Boolean(true);
+  public static readonly false: Boolean = new Boolean(false);
+
   constructor(private readonly boolean: boolean) {
     super();
+    if(boolean == true) {
+      return Boolean.true;
+    } else {
+      return Boolean.false;
+    }
   }
 
   public add(right: DataType): DataType {
@@ -44,9 +52,4 @@ export default class Boolean extends DataType {
   public unaryMinus(): DataType {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public toBoolean(): boolean {
-    return this.boolean;
-  }
 }
-
-Boolean.toString = () => 'Boolean';

@@ -15,5 +15,4 @@ export default abstract class DataType {
   public abstract greaterEqualsThan(right: DataType): boolean;
   public abstract unaryPlus(): DataType;
   public abstract unaryMinus(): DataType;
-  public abstract toBoolean(): boolean;
 }

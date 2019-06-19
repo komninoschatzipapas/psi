@@ -44,9 +44,4 @@ export default class Real extends DataType {
   public unaryMinus(): Real {
     return new Real(-this.value);
   }
-  public toBoolean(): boolean {
-    return Boolean(this.value);
-  }
 }
-
-Real.toString = () => 'Real';

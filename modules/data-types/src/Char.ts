@@ -48,7 +48,4 @@ export default class Char extends DataType {
   public unaryMinus(): DataType {
     throw new Error('Cannot execute this operator with the Char type');
   }
-  public toBoolean(): boolean {
-    throw new Error('Cannot execute this operator with the Char type');
-  }
 }
