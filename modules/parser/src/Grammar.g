@@ -87,5 +87,8 @@ factor
   | "NOT" factor
   ;
 
+call
+  : variable "(" (variable ("," variable)* )? ")"
+
 character_constant
   : "'" UTF16_CHARACTER "'"

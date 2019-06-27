@@ -38,6 +38,7 @@ import CharConstantAST from './CharConstantAST';
 import AndAST from './AndAST';
 import OrAST from './OrAST';
 import NotAST from './NotAST';
+import CallAST from './CallAST';
 
 export {
   AST,
@@ -79,5 +80,6 @@ export {
   CharConstantAST,
   AndAST,
   OrAST,
-  NotAST
+  NotAST,
+  CallAST
 }

@@ -129,6 +129,15 @@ export class Lexer {
     return new Token.CharConstantToken(new Types.Char(character));
   }
 
+  public peekNextToken(): Token.IToken {
+    const oldPosition = this.position;
+    const oldCurrentCharacter = this.currentCharacter;
+    const token = this.getNextToken();
+    this.position = oldPosition;
+    this.currentCharacter = oldCurrentCharacter;
+    return token;
+  }
+
   public getNextToken(): Token.IToken {
     while(this.currentCharacter != null) {
       if(this.currentCharacter.match(this.whitespaceRegex)) {

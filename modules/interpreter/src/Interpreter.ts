@@ -3,10 +3,12 @@ import * as AST from 'ast';
 
 export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   public globalScope: Map<string, Types.DataType>;
+  public fn: Map<string, AST.BlockAST>;
 
   constructor(protected readonly ast: AST.AST) {
     super();
     this.globalScope = new Map();
+    this.fn = new Map();
   }
 
   public visitAssignment(node: AST.AssignmentAST) {
@@ -137,6 +139,7 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   public visitProcedureDeclaration(node: AST.ProcedureDeclarationAST) {
+    this.fn.set(node.name, node.block);
     return new Types.Void();
   }
 
@@ -161,5 +164,13 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   public visitNot(node: AST.NotAST) {
     const target = this.visit(node.target);
     return target == Types.Boolean.true ? Types.Boolean.false : Types.Boolean.true;
+  }
+
+  public visitCall(node: AST.CallAST) {
+    const fn = this.fn.get(node.name);
+    if(!fn) throw new Error();
+
+    this.visit(fn);
+    return new Types.Void();
   }
 }

@@ -19,8 +19,10 @@ export class Parser implements Runnable<AST.AST> {
     }
   }
 
-  // if = "IF" expression "THEN" statement
-  // if_statement = if ("ELSE" "IF" if)* ("ELSE" statement)+
+  private peek() {
+    return this.lexer.peekNextToken();
+  }
+
   private if() {
     this.currentToken = this.eat(Lexer.IfToken);
     const expr = this.expression();
@@ -167,6 +169,8 @@ export class Parser implements Runnable<AST.AST> {
   private statement(): AST.AST {
     if(this.currentToken instanceof Lexer.BeginToken) {
       return this.compoundStatement();
+    } else if(this.currentToken instanceof Lexer.IdToken && this.peek() instanceof Lexer.OpeningParenthesisToken) {
+      return this.call();
     } else if(this.currentToken instanceof Lexer.IdToken) {
       return this.assignmentExpression();
     } else if(this.currentToken instanceof Lexer.IfToken) {
@@ -294,6 +298,21 @@ export class Parser implements Runnable<AST.AST> {
     } else {
       return this.variable();
     }
+  }
+
+  private call() {
+    const name = this.variable().name;
+    this.currentToken = this.eat(Lexer.OpeningParenthesisToken);
+    const args: AST.AST[] = [];
+    if(!(this.currentToken instanceof Lexer.ClosingParenthesisToken)) {
+      args.push(this.expression());
+      while(this.currentToken instanceof Lexer.CommaToken) {
+        this.currentToken = this.eat(Lexer.CommaToken);
+        args.push(this.expression());
+      }
+    }
+    this.currentToken = this.eat(Lexer.ClosingParenthesisToken);
+    return new AST.CallAST(name, args);
   }
 
   public run() {

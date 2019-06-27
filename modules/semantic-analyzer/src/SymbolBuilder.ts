@@ -67,6 +67,10 @@ export default class SymbolBuilder extends AST.ASTVisitor {
     this.currentScope = this.currentScope.getParentThrow();
   }
 
+  public visitCall(node: AST.CallAST) {
+    this.currentScope.resolveThrow(node.name, PSISymbol.ProcedureSymbol);
+  }
+
   public visitAssignment(node: AST.AssignmentAST): void {
     node.children.forEach(this.visit.bind(this));
   }

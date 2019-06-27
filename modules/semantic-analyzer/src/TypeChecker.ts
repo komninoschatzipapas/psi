@@ -199,4 +199,8 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
   public visitVariableDeclaration(node: AST.VariableDeclarationAST) {
     return Types.Void;
   }
+
+  public visitCall(node: AST.CallAST) {
+    return Types.Void;
+  }
 }
