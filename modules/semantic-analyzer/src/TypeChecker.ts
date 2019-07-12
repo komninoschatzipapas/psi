@@ -32,7 +32,7 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
   }
 
   public visitVariable(node: AST.VariableAST) {
-    return this.currentScope.resolveThrow(node.name, VariableSymbol).type;
+    return this.currentScope.resolve(node.name, VariableSymbol)!.type;
   }
 
   public visitAssignment(node: AST.AssignmentAST) {
@@ -151,15 +151,15 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
   }
 
   public visitProgram(node: AST.ProgramAST) {
-    this.currentScope = this.currentScope.children.getThrow(node.name);
+    this.currentScope = this.currentScope.children.get(node.name)!;
     this.visit(node.block);
-    this.currentScope = this.currentScope.getParentThrow();
+    this.currentScope = this.currentScope.getParent()!;
     return Types.Void;
   }
   public visitProcedureDeclaration(node: AST.ProcedureDeclarationAST) {
-    this.currentScope = this.currentScope.children.getThrow(node.name);
+    this.currentScope = this.currentScope.children.get(node.name)!;
     this.visit(node.block);
-    this.currentScope = this.currentScope.getParentThrow();
+    this.currentScope = this.currentScope.getParent()!;
     return Types.Void;
   }
   public visitBlock(node: AST.BlockAST) {

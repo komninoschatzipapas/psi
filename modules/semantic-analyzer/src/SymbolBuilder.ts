@@ -29,7 +29,7 @@ export default class SymbolBuilder extends AST.ASTVisitor {
     this.currentScope = new LocalSymbolScope(node.name, this.currentScope);
     this.currentScope.insert(new ProgramSymbol(node.name));
     this.visit(node.block);
-    this.currentScope = this.currentScope.getParentThrow();
+    this.currentScope = this.currentScope.getParent()!;
   }
 
   public visitBlock(node: AST.BlockAST) {
@@ -58,17 +58,17 @@ export default class SymbolBuilder extends AST.ASTVisitor {
     this.currentScope = new LocalSymbolScope(node.name, this.currentScope);
     const argSymbols = node.args.map(arg => this.visitVariableDeclaration(arg));
 
-    this.currentScope.getParentThrow().insert(new PSISymbol.ProcedureSymbol(
+    this.currentScope.getParent()!.insert(new PSISymbol.ProcedureSymbol(
       node.name,
       argSymbols
     ));
 
     this.visit(node.block);
-    this.currentScope = this.currentScope.getParentThrow();
+    this.currentScope = this.currentScope.getParent()!;
   }
 
   public visitCall(node: AST.CallAST) {
-    this.currentScope.resolveThrow(node.name, PSISymbol.ProcedureSymbol);
+    this.currentScope.resolve(node.name, PSISymbol.ProcedureSymbol)!;
   }
 
   public visitAssignment(node: AST.AssignmentAST): void {

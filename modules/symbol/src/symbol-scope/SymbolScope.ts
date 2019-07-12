@@ -18,13 +18,6 @@ export default abstract class SymbolScope {
     return this.parent;
   }
 
-  public getParentThrow() {
-    if(!this.parent) {
-      throw new Error('Invalid scope tree configuration');
-    }
-    return this.parent;
-  }
-
   public insert(symbol: PSISymbol) {
     if(this.has(symbol)) {
       throw new Error(`Cannot reinitialize symbol ${symbol.name}`);
@@ -47,15 +40,6 @@ export default abstract class SymbolScope {
       return null;
     }
   }
-
-  public resolveThrow<T extends PSISymbol>(name: string, symbolType: new (...a: any[]) => T): T {
-    const result = this.resolve(name, symbolType);
-    if(result) {
-      return result;
-    } else {
-      throw new Error(`Cannot find symbol ${symbolType}:${name}`);
-    }
-  }
 }
 
 class ScopeChildren {
@@ -75,15 +59,6 @@ class ScopeChildren {
       return childScope;
     } else {
       return null;
-    }
-  }
-
-  public getThrow(scopeName: string): LocalSymbolScope {
-    const result = this.get(scopeName);
-    if(result) {
-      return result;
-    } else {
-      throw new Error(`Cannot find scope ${scopeName}`);
     }
   }
 }
