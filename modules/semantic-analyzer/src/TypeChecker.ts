@@ -1,6 +1,6 @@
 import * as AST from 'ast';
 import * as Types from 'data-types';
-import {BaseSymbolScope, LocalSymbolScope, SymbolScope, VariableSymbol} from 'symbol'; 
+import {BaseSymbolScope, LocalSymbolScope, SymbolScope, VariableSymbol, ProcedureSymbol} from 'symbol';
 import {expect} from 'chai';
 
 export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Types.DataType> {
@@ -175,7 +175,7 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
     return Types.Void;
   }
 
-  
+
   public visitEmpty(node: AST.EmptyAST) {
     return Types.Void;
   }
@@ -183,7 +183,7 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
   public visitInteger(node: AST.IntegerAST) {
     return Types.IntegerType;
   }
-  
+
   public visitReal(node: AST.RealAST) {
     return Types.RealType;
   }
@@ -195,12 +195,15 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
   public visitChar(node: AST.CharAST) {
     return Types.CharType;
   }
-  
+
   public visitVariableDeclaration(node: AST.VariableDeclarationAST) {
     return Types.Void;
   }
 
   public visitCall(node: AST.CallAST) {
+    this.currentScope.resolve(node.name, ProcedureSymbol)!.args.forEach((arg, i) => {
+      expect(arg.type).to.be.eql(this.visit(node.args[i]));
+    })
     return Types.Void;
   }
 }

@@ -4,9 +4,9 @@ export default class Boolean extends DataType {
   public static readonly true: Boolean = new Boolean(true);
   public static readonly false: Boolean = new Boolean(false);
 
-  constructor(private readonly boolean: boolean) {
+  constructor(private readonly value: boolean) {
     super();
-    if(boolean == true) {
+    if(value == true) {
       return Boolean.true;
     } else {
       return Boolean.false;

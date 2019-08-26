@@ -24,7 +24,7 @@ export default class SymbolBuilder extends AST.ASTVisitor {
       return variableValue;
     }
   }
-  
+
   public visitProgram(node: AST.ProgramAST): void {
     this.currentScope = new LocalSymbolScope(node.name, this.currentScope);
     this.currentScope.insert(new ProgramSymbol(node.name));
@@ -68,7 +68,12 @@ export default class SymbolBuilder extends AST.ASTVisitor {
   }
 
   public visitCall(node: AST.CallAST) {
-    this.currentScope.resolve(node.name, PSISymbol.ProcedureSymbol)!;
+    const procedure = this.currentScope.resolve(node.name, PSISymbol.ProcedureSymbol);
+    if(!procedure) {
+      throw new Error('Could not find procedure');
+    } else if(node.args.length != procedure.args.length) {
+      throw new Error('Invalid procedure arguments length');
+    }
   }
 
   public visitAssignment(node: AST.AssignmentAST): void {
