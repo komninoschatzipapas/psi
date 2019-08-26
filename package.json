@@ -2,10 +2,10 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "lerna": "^3.13.1",
-    "prettier": "^1.17.0",
+    "lerna": "^3.16.4",
+    "prettier": "^1.18.2",
     "prettylint": "^1.0.0",
-    "tslint": "^5.16.0",
+    "tslint": "^5.19.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-config-standard": "^8.0.1"
   },
