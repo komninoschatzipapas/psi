@@ -1,7 +1,6 @@
-interface CaseInsensitiveMap<T, U> extends Map<T, U> {} 
-class CaseInsensitiveMap<T, U> {
-  constructor(entries?: Array<[T, U]> | Iterable<[T, U]>) {
-    return Reflect.construct(Map, arguments, CaseInsensitiveMap);
+class CaseInsensitiveMap<T, U> extends Map<T, U> {
+  constructor(entries?: readonly (readonly [T, U])[] | null | undefined) {
+    super(entries)
   }
 
   public set(key: T, value: U): this {
