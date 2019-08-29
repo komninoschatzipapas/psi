@@ -26,8 +26,10 @@
     "url": "https://github.com/komninoschat/psi/issues"
   },
   "dependencies": {
+    "case-insensitive-map": "*",
     "ast": "*",
-    "data-types": "*"
+    "data-types": "*",
+    "symbol": "*"
   },
   "devDependencies": {
     "@types/chai": "^4.2.0",

@@ -1,20 +1,26 @@
 import * as Types from 'data-types';
 import * as AST from 'ast';
+import { SymbolScope, BaseSymbolScope, LocalSymbolScope } from 'symbol';
 
 export class Interpreter extends AST.ASTVisitor<Types.DataType> {
-  public globalScope: Map<string, Types.DataType>;
-  public fn: Map<string, AST.BlockAST>;
+  public scope: SymbolScope;
 
-  constructor(protected readonly ast: AST.AST) {
+  constructor(protected readonly ast: AST.AST, baseScope: BaseSymbolScope) {
     super();
-    this.globalScope = new Map();
-    this.fn = new Map();
+    this.scope = baseScope;
+  }
+
+  private withNewScope<T>(name: string, fn: (scope: LocalSymbolScope) => T) {
+    const scope = this.scope = this.scope.children.get(name)!;
+    const result = fn(scope);
+    this.scope = this.scope.getParent()!;
+    return result;
   }
 
   public visitAssignment(node: AST.AssignmentAST) {
     const variableNode = node.left as AST.VariableAST;
     const variableValue = this.visit(node.right);
-    this.globalScope.set(variableNode.name, variableValue);
+    this.scope.changeValue(variableNode.name, variableValue); // FIX: go to higher scopes
     return new Types.Void();
   }
 
@@ -95,9 +101,9 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   public visitVariable(node: AST.VariableAST) {
-    const variableValue = this.globalScope.get(node.name);
+    const variableValue = this.scope.resolveValue(node.name);
 
-    if(variableValue === undefined) {
+    if(!variableValue) {
       throw new Error(`Variable '${node.name}' is not in scope`);
     }
 
@@ -109,7 +115,9 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   public visitProgram(node: AST.ProgramAST) {
-    return this.visit(node.block);
+    return this.withNewScope(node.name, () => {
+      return this.visit(node.block);
+    })
   }
 
   public visitBlock(node: AST.BlockAST) {
@@ -139,7 +147,14 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   public visitProcedureDeclaration(node: AST.ProcedureDeclarationAST) {
-    this.fn.set(node.name, node.block);
+    this.scope.changeValue(node.name, new Types.Procedure((args) => {
+      this.withNewScope(node.name, (scope) => {
+        node.args.map(arg => arg.variable.name).forEach((argName, i) => {
+          scope.changeValue(argName, args[i]);
+        });
+        this.visit(node.block);
+      });
+    }));
     return new Types.Void();
   }
 
@@ -167,10 +182,9 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   public visitCall(node: AST.CallAST) {
-    const fn = this.fn.get(node.name);
-    if(!fn) throw new Error();
+    const args = node.args.map(arg => this.visit(arg));
+    this.scope.resolveValue(node.name, Types.Procedure)!.call(args);
 
-    this.visit(fn);
     return new Types.Void();
   }
 }

@@ -9,6 +9,8 @@ import Boolean from './Boolean';
 import BooleanType from './BooleanType';
 import Char from './Char';
 import CharType from './CharType';
+import Procedure from './Procedure';
+import ProcedureType from './ProcedureType';
 
 export {
   Integer,
@@ -22,4 +24,6 @@ export {
   BooleanType,
   Char,
   CharType,
+  Procedure,
+  ProcedureType
 }

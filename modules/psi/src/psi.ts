@@ -33,9 +33,9 @@ class Psi extends Command {
       new SymbolBuilder(tree, baseScope),
       new TypeChecker(tree, baseScope),
     ).run();
-    let interpreter = new Interpreter(tree);
+    let interpreter = new Interpreter(tree, baseScope);
     interpreter.run();
-    console.log(interpreter.globalScope);
+    console.log((interpreter.scope.children as any).values().next().value.value);
   }
 }
 
