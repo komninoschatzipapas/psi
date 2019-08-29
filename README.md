@@ -31,3 +31,5 @@ This is a Work-in-Progress ISO 7185 Pascal interpreter I am building in order to
   * Less or Equal than (<=)
   * Greater than (>)
   * Greater or Equal than (>=)
+
+**WARNING:** The current version of the interpreter does not feature type promotion meaning that using `1` as an if condition for example will result in an error since `1` is strictly not a boolean.
