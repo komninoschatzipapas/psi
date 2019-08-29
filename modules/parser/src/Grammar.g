@@ -23,7 +23,7 @@ procedure_declaration
   ;
 
 procedure_parameters
-  : (variable_declaration (";" variable_declaration)*)*
+  : (variable_declaration (";" variable_declaration)*)?
   ;
 
 type
