@@ -13,7 +13,7 @@ This is a Work-in-Progress ISO 7185 Pascal interpreter I am building in order to
   * If
   * Else If
   * Else
-* Number Operators
+* Numerical Operators
   * Addition (+)
   * Subtraction (-)
   * Multiplication (*)
