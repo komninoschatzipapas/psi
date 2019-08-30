@@ -1,5 +1,5 @@
 import {IToken} from '.';
 
-export default class GreatherEqualsToken implements IToken {
+export default class greaterEqualsToken implements IToken {
   public readonly value: null = null;
 }

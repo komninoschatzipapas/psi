@@ -29,7 +29,7 @@ export default class Real extends DataType {
   public lessThan(right: Real): boolean {
     return this.value < right.value;
   }
-  public greatherThan(right: Real): boolean {
+  public greaterThan(right: Real): boolean {
     return this.value > right.value;
   }
   public lessEqualsThan(right: Real): boolean {

@@ -56,7 +56,7 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
     return new Types.Boolean(this.visit(node.left).notEquals(this.visit(node.right)));
   }
   public visitGreaterThan(node: AST.GreaterThanAST) {
-    return new Types.Boolean(this.visit(node.left).greatherThan(this.visit(node.right)));
+    return new Types.Boolean(this.visit(node.left).greaterThan(this.visit(node.right)));
   }
   public visitLessThan(node: AST.LessThanAST) {
     return new Types.Boolean(this.visit(node.left).lessThan(this.visit(node.right)));
@@ -199,7 +199,7 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
         this.visit(node.statement);
       }
     } else {
-      while(this.visit(variable).greatherThan(this.visit(node.finalValue))) {
+      while(this.visit(variable).greaterThan(this.visit(node.finalValue))) {
         this.visit(new AST.AssignmentAST(variable, new AST.MinusAST(variable, new IntegerConstantAST(new Types.Integer(1)))));
         this.visit(node.statement);
       }

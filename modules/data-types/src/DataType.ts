@@ -10,7 +10,7 @@ export default abstract class DataType {
     return !this.equals(right);
   }
   public abstract lessThan(right: DataType): boolean;
-  public abstract greatherThan(right: DataType): boolean;
+  public abstract greaterThan(right: DataType): boolean;
   public abstract lessEqualsThan(right: DataType): boolean;
   public abstract greaterEqualsThan(right: DataType): boolean;
   public abstract unaryPlus(): DataType;

@@ -25,7 +25,7 @@ export default abstract class Type extends DataType {
   public lessThan(right: DataType): boolean {
     throw new Error('Cannot execute operations with type type');
   }
-  public greatherThan(right: DataType): boolean {
+  public greaterThan(right: DataType): boolean {
     throw new Error('Cannot execute operations with type type');
   }
   public lessEqualsThan(right: DataType): boolean {

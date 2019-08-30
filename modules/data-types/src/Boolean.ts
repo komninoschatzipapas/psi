@@ -37,7 +37,7 @@ export default class Boolean extends DataType {
   public lessThan(right: DataType): boolean {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public greatherThan(right: DataType): boolean {
+  public greaterThan(right: DataType): boolean {
     throw new Error('Cannot execute operation with boolean type');
   }
   public lessEqualsThan(right: DataType): boolean {

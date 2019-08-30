@@ -32,7 +32,7 @@ export default class Integer extends DataType {
   public lessThan(right: Integer): boolean {
     return this.value < right.value;
   }
-  public greatherThan(right: Integer): boolean {
+  public greaterThan(right: Integer): boolean {
     return this.value > right.value;
   }
   public lessEqualsThan(right: Integer): boolean {

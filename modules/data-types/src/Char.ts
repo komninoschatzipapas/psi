@@ -33,7 +33,7 @@ export default class Char extends DataType {
   public lessThan(right: Char): boolean {
     return this.value < right.value;
   }
-  public greatherThan(right: Char): boolean {
+  public greaterThan(right: Char): boolean {
     return this.value > right.value;
   }
   public lessEqualsThan(right: Char): boolean {
