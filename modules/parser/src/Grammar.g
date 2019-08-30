@@ -1,3 +1,7 @@
+for_loop
+  : "FOR" assignment_expression ("TO"|"DOWNTO") expression "DO" statement
+  ;
+
 if
   : "IF" expression "THEN" statement
   ;
@@ -49,6 +53,7 @@ statement
   : compound_statement
   | assignment_expression
   | if_statement
+  | for_loop
   | empty
   ;
 

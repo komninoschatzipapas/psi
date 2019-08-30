@@ -39,6 +39,7 @@ import AndAST from './AndAST';
 import OrAST from './OrAST';
 import NotAST from './NotAST';
 import CallAST from './CallAST';
+import ForAST from './ForAST';
 
 export {
   AST,
@@ -81,5 +82,6 @@ export {
   AndAST,
   OrAST,
   NotAST,
-  CallAST
+  CallAST,
+  ForAST
 }

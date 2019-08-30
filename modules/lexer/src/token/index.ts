@@ -40,6 +40,10 @@ import CharConstantToken from './CharConstantToken';
 import AndToken from './AndToken';
 import OrToken from './OrToken';
 import NotToken from './NotToken';
+import ForToken from './ForToken';
+import ToToken from './ToToken';
+import DownToToken from './DownToToken';
+import DoToken from './DoToken';
 
 export {
   IToken,
@@ -83,5 +87,9 @@ export {
   CharConstantToken,
   AndToken,
   OrToken,
-  NotToken
+  NotToken,
+  ForToken,
+  ToToken,
+  DownToToken,
+  DoToken
 }

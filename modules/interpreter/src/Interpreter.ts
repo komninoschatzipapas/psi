@@ -1,6 +1,7 @@
 import * as Types from 'data-types';
 import * as AST from 'ast';
 import { SymbolScope, BaseSymbolScope, LocalSymbolScope } from 'symbol';
+import { IntegerConstantAST } from 'ast';
 
 export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   public scope: SymbolScope;
@@ -185,6 +186,24 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
     const args = node.args.map(arg => this.visit(arg));
     this.scope.resolveValue(node.name, Types.Procedure)!.call(args);
 
+    return new Types.Void();
+  }
+
+  public visitFor(node: AST.ForAST) {
+    const variable = node.assignment.left;
+    this.visitAssignment(node.assignment);
+    this.visit(node.statement);
+    if(node.increment) {
+      while(this.visit(variable).lessThan(this.visit(node.finalValue))) {
+        this.visit(new AST.AssignmentAST(variable, new AST.PlusAST(variable, new IntegerConstantAST(new Types.Integer(1)))));
+        this.visit(node.statement);
+      }
+    } else {
+      while(this.visit(variable).greatherThan(this.visit(node.finalValue))) {
+        this.visit(new AST.AssignmentAST(variable, new AST.MinusAST(variable, new IntegerConstantAST(new Types.Integer(1)))));
+        this.visit(node.statement);
+      }
+    }
     return new Types.Void();
   }
 }

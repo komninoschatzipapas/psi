@@ -1,8 +1,8 @@
 import * as Lexer from 'lexer';
 import * as AST from 'ast';
-import { Runnable, IfAST }  from 'ast';
+import * as Types from 'data-types';
 
-export class Parser implements Runnable<AST.AST> {
+export class Parser implements AST.Runnable<AST.AST> {
   private currentToken: Lexer.IToken;
   private lexer: Lexer.Lexer;
 
@@ -23,12 +23,31 @@ export class Parser implements Runnable<AST.AST> {
     return this.lexer.peekNextToken();
   }
 
+  private for() {
+    this.currentToken = this.eat(Lexer.ForToken);
+    const assignment = this.assignmentExpression();
+    let increment: Types.Boolean;
+    if(this.currentToken instanceof Lexer.ToToken) {
+      increment = new Types.Boolean(true);
+      this.currentToken = this.eat(Lexer.ToToken);
+    } else if(this.currentToken instanceof Lexer.DownToToken) {
+      increment = new Types.Boolean(false);
+      this.currentToken = this.eat(Lexer.DownToToken);
+    } else {
+      throw new Error('Expected To/DownTo token after for');
+    }
+    const finalValue = this.expression();
+    this.currentToken = this.eat(Lexer.DoToken);
+    const statement = this.statement();
+    return new AST.ForAST(assignment, increment, finalValue, statement);
+  }
+
   private if() {
     this.currentToken = this.eat(Lexer.IfToken);
     const expr = this.expression();
     this.currentToken = this.eat(Lexer.ThenToken);
     const statement = this.statement();
-    return new IfAST(expr, statement);
+    return new AST.IfAST(expr, statement);
   }
 
   private ifStatement() {
@@ -175,6 +194,8 @@ export class Parser implements Runnable<AST.AST> {
       return this.assignmentExpression();
     } else if(this.currentToken instanceof Lexer.IfToken) {
       return this.ifStatement();
+    } else if(this.currentToken instanceof Lexer.ForToken) {
+      return this.for();
     } else {
       return this.empty();
     }

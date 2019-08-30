@@ -38,6 +38,7 @@ export default abstract class ASTVisitor<T=unknown> implements Runnable<T> {
   public abstract visitOr(node: AST.OrAST): T;
   public abstract visitNot(node: AST.NotAST): T;
   public abstract visitCall(node: AST.CallAST): T;
+  public abstract visitFor(node: AST.ForAST): T;
 
   public visit(node: AST.AST): T {
     if(node instanceof AST.AssignmentAST) {
@@ -110,6 +111,8 @@ export default abstract class ASTVisitor<T=unknown> implements Runnable<T> {
       return this.visitNot(node);
     } else if(node instanceof AST.CallAST) {
       return this.visitCall(node);
+    } else if(node instanceof AST.ForAST) {
+      return this.visitFor(node);
     } else {
       throw new Error('Unknown node type on visitor');
     }

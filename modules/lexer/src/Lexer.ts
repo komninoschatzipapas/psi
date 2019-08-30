@@ -21,7 +21,11 @@ export class Lexer {
     ['CHAR', () => new Token.CharToken()],
     ['AND', () => new Token.AndToken()],
     ['OR', () => new Token.OrToken()],
-    ['NOT', () => new Token.NotToken()]
+    ['NOT', () => new Token.NotToken()],
+    ['FOR', () => new Token.ForToken()],
+    ['TO', () => new Token.ToToken()],
+    ['DOWNTO', () => new Token.DownToToken()],
+    ['DO', () => new Token.DoToken()],
   ]);
 
   private readonly numberRegex = /^\d$/;
