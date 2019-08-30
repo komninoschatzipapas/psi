@@ -206,4 +206,11 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
     }
     return new Types.Void();
   }
+
+  public visitWhile(node: AST.WhileAST) {
+    while(this.visit(node.condition) == Types.Boolean.true) {
+      this.visit(node.statement);
+    }
+    return new Types.Void();
+  }
 }

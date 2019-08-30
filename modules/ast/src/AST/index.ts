@@ -40,6 +40,7 @@ import OrAST from './OrAST';
 import NotAST from './NotAST';
 import CallAST from './CallAST';
 import ForAST from './ForAST';
+import WhileAST from './WhileAST';
 
 export {
   AST,
@@ -83,5 +84,6 @@ export {
   OrAST,
   NotAST,
   CallAST,
-  ForAST
+  ForAST,
+  WhileAST
 }

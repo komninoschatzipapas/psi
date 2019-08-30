@@ -1,3 +1,6 @@
+while_loop
+  : "WHILE" expression "DO" statement
+
 for_loop
   : "FOR" assignment_expression ("TO"|"DOWNTO") expression "DO" statement
   ;
@@ -54,6 +57,7 @@ statement
   | assignment_expression
   | if_statement
   | for_loop
+  | while_loop
   | empty
   ;
 

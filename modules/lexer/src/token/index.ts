@@ -44,6 +44,7 @@ import ForToken from './ForToken';
 import ToToken from './ToToken';
 import DownToToken from './DownToToken';
 import DoToken from './DoToken';
+import WhileToken from './WhileToken';
 
 export {
   IToken,
@@ -91,5 +92,6 @@ export {
   ForToken,
   ToToken,
   DownToToken,
-  DoToken
+  DoToken,
+  WhileToken
 }

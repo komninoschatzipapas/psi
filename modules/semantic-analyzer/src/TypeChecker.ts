@@ -210,4 +210,7 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
   public visitFor(node: AST.ForAST) {
     return Types.Void;
   }
+  public visitWhile(node: AST.WhileAST) {
+    return Types.Void;
+  }
 }

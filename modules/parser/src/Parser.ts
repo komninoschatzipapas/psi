@@ -23,6 +23,14 @@ export class Parser implements AST.Runnable<AST.AST> {
     return this.lexer.peekNextToken();
   }
 
+  private while() {
+    this.currentToken = this.eat(Lexer.WhileToken);
+    const condition = this.expression();
+    this.currentToken = this.eat(Lexer.DoToken);
+    const statement = this.statement();
+    return new AST.WhileAST(condition, statement);
+  }
+
   private for() {
     this.currentToken = this.eat(Lexer.ForToken);
     const assignment = this.assignmentExpression();
@@ -196,6 +204,8 @@ export class Parser implements AST.Runnable<AST.AST> {
       return this.ifStatement();
     } else if(this.currentToken instanceof Lexer.ForToken) {
       return this.for();
+    } else if(this.currentToken instanceof Lexer.WhileToken) {
+      return this.while();
     } else {
       return this.empty();
     }
