@@ -172,4 +172,7 @@ export default class SymbolBuilder extends AST.ASTVisitor {
   public visitWhile(node: AST.WhileAST): void {
     node.children.forEach(this.visit.bind(this));
   }
+  public visitRepeat(node: AST.RepeatAST): void {
+    node.children.forEach(this.visit.bind(this));
+  }
 }

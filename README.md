@@ -16,6 +16,7 @@ This is a Work-in-Progress ISO 7185 Pascal interpreter I am building in order to
 * Loops
   * For...Do
   * While...Do
+  * Repeat...Until
 * Numerical Operators
   * Addition (+)
   * Subtraction (-)

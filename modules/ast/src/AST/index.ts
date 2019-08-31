@@ -41,6 +41,7 @@ import NotAST from './NotAST';
 import CallAST from './CallAST';
 import ForAST from './ForAST';
 import WhileAST from './WhileAST';
+import RepeatAST from './RepeatAST';
 
 export {
   AST,
@@ -85,5 +86,6 @@ export {
   NotAST,
   CallAST,
   ForAST,
-  WhileAST
+  WhileAST,
+  RepeatAST
 }

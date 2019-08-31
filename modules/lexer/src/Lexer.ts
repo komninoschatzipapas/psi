@@ -26,7 +26,9 @@ export class Lexer {
     ['TO', () => new Token.ToToken()],
     ['DOWNTO', () => new Token.DownToToken()],
     ['DO', () => new Token.DoToken()],
-    ['WHILE', () => new Token.WhileToken()]
+    ['WHILE', () => new Token.WhileToken()],
+    ['REPEAT', () => new Token.RepeatToken()],
+    ['UNTIL', () => new Token.UntilToken()]
   ]);
 
   private readonly numberRegex = /^\d$/;

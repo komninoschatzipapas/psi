@@ -1,3 +1,6 @@
+repeat_loop
+  : "REPEAT" statement_list "UNTIL" expression
+
 while_loop
   : "WHILE" expression "DO" statement
 

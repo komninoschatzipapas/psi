@@ -213,4 +213,11 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
     }
     return new Types.Void();
   }
+
+  public visitRepeat(node: AST.RepeatAST) {
+    do {
+      node.statements.forEach(this.visit.bind(this));
+    } while(this.visit(node.condition) == Types.Boolean.false);
+    return new Types.Void();
+  }
 }
