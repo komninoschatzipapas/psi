@@ -161,7 +161,7 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
 
   public visitIf(node: AST.IfAST) {
     const condition = this.visit(node.condition);
-    if(condition == Types.Boolean.true) {
+    if(condition.equals(Types.Boolean.true)) {
       this.visit(node.statement);
     } else {
       if(node.next) {
@@ -172,14 +172,14 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   public visitAnd(node: AST.AndAST) {
-    return new Types.Boolean(this.visit(node.left) == Types.Boolean.true && this.visit(node.right) == Types.Boolean.true);
+    return new Types.Boolean(this.visit(node.left).equals(Types.Boolean.true) && this.visit(node.right).equals(Types.Boolean.true));
   }
   public visitOr(node: AST.OrAST) {
-    return new Types.Boolean(this.visit(node.left) == Types.Boolean.true || this.visit(node.right) == Types.Boolean.true);
+    return new Types.Boolean(this.visit(node.left).equals(Types.Boolean.true) || this.visit(node.right).equals(Types.Boolean.true));
   }
   public visitNot(node: AST.NotAST) {
     const target = this.visit(node.target);
-    return target == Types.Boolean.true ? Types.Boolean.false : Types.Boolean.true;
+    return target.equals(Types.Boolean.true) ? Types.Boolean.false : Types.Boolean.true;
   }
 
   public visitCall(node: AST.CallAST) {
@@ -208,7 +208,7 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   public visitWhile(node: AST.WhileAST) {
-    while(this.visit(node.condition) == Types.Boolean.true) {
+    while(this.visit(node.condition).equals(Types.Boolean.true)) {
       this.visit(node.statement);
     }
     return new Types.Void();
@@ -217,7 +217,7 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   public visitRepeat(node: AST.RepeatAST) {
     do {
       node.statements.forEach(this.visit.bind(this));
-    } while(this.visit(node.condition) == Types.Boolean.false);
+    } while(this.visit(node.condition).equals(Types.Boolean.false));
     return new Types.Void();
   }
 }

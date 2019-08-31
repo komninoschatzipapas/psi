@@ -31,8 +31,8 @@ export default class Boolean extends DataType {
   public mod(right: DataType): DataType {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public equals(right: DataType): boolean {
-    throw new Error('Cannot execute operation with boolean type');
+  public equals(right: Boolean): boolean {
+    return this.value == right.value;
   }
   public lessThan(right: DataType): boolean {
     throw new Error('Cannot execute operation with boolean type');
