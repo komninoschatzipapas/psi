@@ -3,8 +3,8 @@ This is a Work-in-Progress ISO 7185 Pascal interpreter I am building in order to
 
 ### Currently supports:
 * Data types
-  * Integer
-  * Real
+  * Integer (Does not support scientific notation)
+  * Real (Does not support scientific notation)
   * Boolean
   * Char
 * Variables
