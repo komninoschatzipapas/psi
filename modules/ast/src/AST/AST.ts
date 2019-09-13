@@ -1,6 +1,6 @@
 export default abstract class AST {
   private readonly _children: AST[] = [];
-  public parent: AST|null = null;
+  public parent: AST | null = null;
 
   get children() {
     return this._children;
@@ -14,12 +14,12 @@ export default abstract class AST {
   }
 
   public replace(node: AST) {
-    if(this.parent === null) {
+    if (this.parent === null) {
       throw new Error('Invalid tree configuration');
     }
     const index = this.parent._children.findIndex((node) => node === this);
 
-    if(index == -1) {
+    if (index == -1) {
       throw new Error('Invalid tree configuration');
     }
 

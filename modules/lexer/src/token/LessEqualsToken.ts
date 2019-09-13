@@ -1,5 +1,5 @@
-import {IToken} from '.';
+import { Token } from '.';
 
-export default class LessEqualsToken implements IToken {
+export default class LessEqualsToken implements Token {
   public readonly value: null = null;
 }

@@ -1,5 +1,5 @@
-import {IToken} from '.';
+import { Token } from '.';
 
-export default class RealToken implements IToken {
+export default class RealToken implements Token {
   public readonly value: null = null;
 }

@@ -1,5 +1,5 @@
-import {AST} from '.';
-import { VariableAST, TypeAST} from '.';
+import { AST } from '.';
+import { VariableAST, TypeAST } from '.';
 
 export default class VariableDeclarationAST extends AST {
   public readonly type: TypeAST;

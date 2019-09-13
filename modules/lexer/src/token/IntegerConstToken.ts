@@ -1,10 +1,10 @@
-import {IToken} from '.';
+import { Token } from '.';
 import * as Types from 'data-types';
 
-export default class IntegerConstToken implements IToken {
-  public readonly value: Types.Integer;
+export default class IntegerConstToken implements Token {
+  public readonly value: Types.PSIInteger;
 
-  constructor(value: Types.Integer) {
+  constructor(value: Types.PSIInteger) {
     this.value = value;
   }
 }

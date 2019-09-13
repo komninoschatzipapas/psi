@@ -1,5 +1,3 @@
-import { AST } from ".";
+import { AST } from '.';
 
-export default class TrueAST extends AST {
-  
-}
+export default class TrueAST extends AST {}

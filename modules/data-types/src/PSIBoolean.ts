@@ -1,55 +1,55 @@
-import DataType from "./DataType";
+import PSIDataType from './PSIDataType';
 
-export default class Boolean extends DataType {
-  public static readonly true: Boolean = new Boolean(true);
-  public static readonly false: Boolean = new Boolean(false);
+export default class PSIBoolean extends PSIDataType {
+  public static readonly true: PSIBoolean = new PSIBoolean(true);
+  public static readonly false: PSIBoolean = new PSIBoolean(false);
 
   constructor(private readonly value: boolean) {
     super();
-    if(value == true) {
-      return Boolean.true;
+    if (value == true) {
+      return PSIBoolean.true;
     } else {
-      return Boolean.false;
+      return PSIBoolean.false;
     }
   }
 
-  public add(right: DataType): DataType {
+  public add(right: PSIDataType): PSIDataType {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public subtract(right: DataType): DataType {
+  public subtract(right: PSIDataType): PSIDataType {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public multiply(right: DataType): DataType {
+  public multiply(right: PSIDataType): PSIDataType {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public divide(right: DataType): DataType {
+  public divide(right: PSIDataType): PSIDataType {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public integerDivide(right: DataType): DataType {
+  public integerDivide(right: PSIDataType): PSIDataType {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public mod(right: DataType): DataType {
+  public mod(right: PSIDataType): PSIDataType {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public equals(right: Boolean): boolean {
+  public equals(right: PSIBoolean): boolean {
     return this.value == right.value;
   }
-  public lessThan(right: DataType): boolean {
+  public lessThan(right: PSIDataType): boolean {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public greaterThan(right: DataType): boolean {
+  public greaterThan(right: PSIDataType): boolean {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public lessEqualsThan(right: DataType): boolean {
+  public lessEqualsThan(right: PSIDataType): boolean {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public greaterEqualsThan(right: DataType): boolean {
+  public greaterEqualsThan(right: PSIDataType): boolean {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public unaryPlus(): DataType {
+  public unaryPlus(): PSIDataType {
     throw new Error('Cannot execute operation with boolean type');
   }
-  public unaryMinus(): DataType {
+  public unaryMinus(): PSIDataType {
     throw new Error('Cannot execute operation with boolean type');
   }
 }

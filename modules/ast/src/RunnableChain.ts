@@ -1,4 +1,4 @@
-import Runnable from "./Runnable";
+import Runnable from './Runnable';
 
 export default class RunnableChain implements Runnable<void> {
   private chain: Runnable<any>[];

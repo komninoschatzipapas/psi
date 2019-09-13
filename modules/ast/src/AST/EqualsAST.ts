@@ -1,5 +1,3 @@
-import {BinaryAST} from '.';
+import { BinaryAST } from '.';
 
-export default class EqualsAST extends BinaryAST {
-
-}
+export default class EqualsAST extends BinaryAST {}

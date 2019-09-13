@@ -1,5 +1,3 @@
-import {BinaryAST} from '.';
+import { BinaryAST } from '.';
 
-export default class AndAST extends BinaryAST {
-
-}
+export default class AndAST extends BinaryAST {}

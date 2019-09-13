@@ -1,5 +1,3 @@
-import TypeAST from "./TypeAST";
+import TypeAST from './TypeAST';
 
-export default class RealAST extends TypeAST {
-
-}
+export default class RealAST extends TypeAST {}

@@ -1,5 +1,3 @@
-import {AST} from '.';
+import { AST } from '.';
 
-export default abstract class TypeAST extends AST {
-
-}
+export default abstract class TypeAST extends AST {}

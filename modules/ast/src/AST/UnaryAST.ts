@@ -1,5 +1,4 @@
-import {AST} from '.';
-
+import { AST } from '.';
 
 export default abstract class UnaryAST extends AST {
   constructor(public target: AST) {

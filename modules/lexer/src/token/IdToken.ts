@@ -1,6 +1,6 @@
-import {IToken} from '.';
+import { Token } from '.';
 
-export default class IdToken implements IToken {
+export default class IdToken implements Token {
   public readonly value: string;
 
   constructor(id: string) {

@@ -1,48 +1,47 @@
-import { DataType } from "./DataTypes";
+import { PSIDataType } from './PSIDataTypes';
 
-export default class Procedure extends DataType {
-
-  constructor(public readonly call: (args: DataType[]) => void) {
+export default class PSIProcedure extends PSIDataType {
+  constructor(public readonly call: (args: PSIDataType[]) => void) {
     super();
   }
 
-  public add(right: DataType): DataType {
+  public add(right: PSIDataType): PSIDataType {
     throw new Error('Cannot execute operations with procedure type');
   }
-  public subtract(right: DataType): DataType {
+  public subtract(right: PSIDataType): PSIDataType {
     throw new Error('Cannot execute operations with procedure type');
   }
-  public multiply(right: DataType): DataType {
+  public multiply(right: PSIDataType): PSIDataType {
     throw new Error('Cannot execute operations with procedure type');
   }
-  public divide(right: DataType): DataType {
+  public divide(right: PSIDataType): PSIDataType {
     throw new Error('Cannot execute operations with procedure type');
   }
-  public integerDivide(right: DataType): DataType {
+  public integerDivide(right: PSIDataType): PSIDataType {
     throw new Error('Cannot execute operations with procedure type');
   }
-  public mod(right: DataType): DataType {
+  public mod(right: PSIDataType): PSIDataType {
     throw new Error('Cannot execute operations with procedure type');
   }
-  public equals(right: DataType): boolean {
+  public equals(right: PSIDataType): boolean {
     throw new Error('Cannot execute operations with procedure type');
   }
-  public lessThan(right: DataType): boolean {
+  public lessThan(right: PSIDataType): boolean {
     throw new Error('Cannot execute operations with procedure type');
   }
-  public greaterThan(right: DataType): boolean {
+  public greaterThan(right: PSIDataType): boolean {
     throw new Error('Cannot execute operations with procedure type');
   }
-  public lessEqualsThan(right: DataType): boolean {
+  public lessEqualsThan(right: PSIDataType): boolean {
     throw new Error('Cannot execute operations with procedure type');
   }
-  public greaterEqualsThan(right: DataType): boolean {
+  public greaterEqualsThan(right: PSIDataType): boolean {
     throw new Error('Cannot execute operations with procedure type');
   }
-  public unaryPlus(): DataType {
+  public unaryPlus(): PSIDataType {
     throw new Error('Cannot execute operations with procedure type');
   }
-  public unaryMinus(): DataType {
+  public unaryMinus(): PSIDataType {
     throw new Error('Cannot execute operations with procedure type');
   }
 }

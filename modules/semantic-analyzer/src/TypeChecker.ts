@@ -1,9 +1,17 @@
 import * as AST from 'ast';
 import * as Types from 'data-types';
-import {BaseSymbolScope, LocalSymbolScope, SymbolScope, VariableSymbol, ProcedureSymbol} from 'symbol';
-import {expect} from 'chai';
+import {
+  BaseSymbolScope,
+  LocalSymbolScope,
+  SymbolScope,
+  VariableSymbol,
+  ProcedureSymbol
+} from 'symbol';
+import { expect } from 'chai';
 
-export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Types.DataType> {
+export default class TypeChecker extends AST.ASTVisitor<
+  new (...a: any[]) => Types.PSIDataType
+> {
   private currentScope: SymbolScope;
 
   constructor(protected readonly ast: AST.AST, baseScope: BaseSymbolScope) {
@@ -12,23 +20,23 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
   }
 
   public visitIntegerConstant(node: AST.IntegerConstantAST) {
-    return Types.Integer;
+    return Types.PSIInteger;
   }
 
   public visitRealConstant(node: AST.RealConstantAST) {
-    return Types.Real;
+    return Types.PSIReal;
   }
 
   public visitCharConstant(node: AST.CharConstantAST) {
-    return Types.Char;
+    return Types.PSIChar;
   }
 
   public visitTrue(node: AST.TrueAST) {
-    return Types.Boolean;
+    return Types.PSIBoolean;
   }
 
   public visitFalse(node: AST.FalseAST) {
-    return Types.Boolean;
+    return Types.PSIBoolean;
   }
 
   public visitVariable(node: AST.VariableAST) {
@@ -47,18 +55,18 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    expect(left).to.be.eql(Types.Integer);
-    expect(right).to.be.eql(Types.Integer);
-    return Types.Integer;
+    expect(left).to.be.eql(Types.PSIInteger);
+    expect(right).to.be.eql(Types.PSIInteger);
+    return Types.PSIInteger;
   }
 
   public visitRealDivision(node: AST.RealDivisionAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    expect(left).to.be.eql(Types.Real);
-    expect(right).to.be.eql(Types.Real);
-    return Types.Real;
+    expect(left).to.be.eql(Types.PSIReal);
+    expect(right).to.be.eql(Types.PSIReal);
+    return Types.PSIReal;
   }
 
   public visitMinus(node: AST.MinusAST) {
@@ -93,53 +101,53 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
     const left = this.visit(node.left);
     const right = this.visit(node.right);
     expect(left).to.be.eql(right);
-    return Types.Boolean;
+    return Types.PSIBoolean;
   }
   public visitNotEquals(node: AST.NotEqualsAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
     expect(left).to.be.eql(right);
-    return Types.Boolean;
+    return Types.PSIBoolean;
   }
   public visitGreaterThan(node: AST.GreaterThanAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
     expect(left).to.be.eql(right);
-    return Types.Boolean;
+    return Types.PSIBoolean;
   }
   public visitLessThan(node: AST.LessThanAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
     expect(left).to.be.eql(right);
-    return Types.Boolean;
+    return Types.PSIBoolean;
   }
   public visitGreaterEquals(node: AST.GreaterEqualsAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
     expect(left).to.be.eql(right);
-    return Types.Boolean;
+    return Types.PSIBoolean;
   }
   public visitLessEquals(node: AST.LessEqualsAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
     expect(left).to.be.eql(right);
-    return Types.Boolean;
+    return Types.PSIBoolean;
   }
   public visitAnd(node: AST.AndAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
     expect(left).to.be.eql(right);
-    return Types.Boolean;
+    return Types.PSIBoolean;
   }
   public visitOr(node: AST.OrAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
     expect(left).to.be.eql(right);
-    return Types.Boolean;
+    return Types.PSIBoolean;
   }
 
   public visitNot(node: AST.NotAST) {
-    return Types.Boolean;
+    return Types.PSIBoolean;
   }
 
   public visitUnaryMinus(node: AST.UnaryMinusAST) {
@@ -154,66 +162,67 @@ export default class TypeChecker extends AST.ASTVisitor<new (...a: any[]) => Typ
     this.currentScope = this.currentScope.children.get(node.name)!;
     this.visit(node.block);
     this.currentScope = this.currentScope.getParent()!;
-    return Types.Void;
+    return Types.PSIVoid;
   }
   public visitProcedureDeclaration(node: AST.ProcedureDeclarationAST) {
     this.currentScope = this.currentScope.children.get(node.name)!;
     this.visit(node.block);
     this.currentScope = this.currentScope.getParent()!;
-    return Types.Void;
+    return Types.PSIVoid;
   }
   public visitBlock(node: AST.BlockAST) {
     this.visit(node.compoundStatement);
-    return Types.Void;
+    return Types.PSIVoid;
   }
   public visitCompound(node: AST.CompoundAST) {
     node.children.forEach(this.visit.bind(this));
-    return Types.Void;
+    return Types.PSIVoid;
   }
   public visitIf(node: AST.IfAST) {
     node.children.forEach(this.visit.bind(this));
-    return Types.Void;
+    return Types.PSIVoid;
   }
 
-
   public visitEmpty(node: AST.EmptyAST) {
-    return Types.Void;
+    return Types.PSIVoid;
   }
 
   public visitInteger(node: AST.IntegerAST) {
-    return Types.IntegerType;
+    return Types.PSIIntegerType;
   }
 
   public visitReal(node: AST.RealAST) {
-    return Types.RealType;
+    return Types.PSIRealType;
   }
 
   public visitBoolean(node: AST.BooleanAST) {
-    return Types.BooleanType;
+    return Types.PSIBooleanType;
   }
 
   public visitChar(node: AST.CharAST) {
-    return Types.CharType;
+    return Types.PSICharType;
   }
 
   public visitVariableDeclaration(node: AST.VariableDeclarationAST) {
-    return Types.Void;
+    return Types.PSIVoid;
   }
 
   public visitCall(node: AST.CallAST) {
-    this.currentScope.resolve(node.name, ProcedureSymbol)!.args.forEach((arg, i) => {
-      expect(arg.type).to.be.eql(this.visit(node.args[i]));
-    })
-    return Types.Void;
+    this.currentScope
+      .resolve(node.name, ProcedureSymbol)!
+      .args.forEach((arg, i) => {
+        expect(arg.type).to.be.eql(this.visit(node.args[i]));
+      });
+    return Types.PSIVoid;
   }
 
   public visitFor(node: AST.ForAST) {
-    return Types.Void;
+    return Types.PSIVoid;
   }
   public visitWhile(node: AST.WhileAST) {
-    return Types.Void;
+    return Types.PSIVoid;
   }
   public visitRepeat(node: AST.RepeatAST) {
-    return Types.Void;
+    return Types.PSIVoid;
   }
 }

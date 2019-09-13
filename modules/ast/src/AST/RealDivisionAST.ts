@@ -1,5 +1,3 @@
-import {BinaryAST, AST} from '.';
+import { BinaryAST } from '.';
 
-export default class RealDivisonAST extends BinaryAST {
-
-}
+export default class RealDivisonAST extends BinaryAST {}

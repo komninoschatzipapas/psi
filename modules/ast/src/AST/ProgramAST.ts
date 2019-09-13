@@ -1,4 +1,4 @@
-import {AST} from '.';
+import { AST } from '.';
 import { BlockAST } from '.';
 
 export default class ProgramAST extends AST {

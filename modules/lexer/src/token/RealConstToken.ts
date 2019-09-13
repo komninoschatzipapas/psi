@@ -1,10 +1,10 @@
-import {IToken} from '.';
+import { Token } from '.';
 import * as Types from 'data-types';
 
-export default class RealConstToken implements IToken {
-  public readonly value: Types.Real;
+export default class RealConstToken implements Token {
+  public readonly value: Types.PSIReal;
 
-  constructor(value: Types.Real) {
+  constructor(value: Types.PSIReal) {
     this.value = value;
   }
 }

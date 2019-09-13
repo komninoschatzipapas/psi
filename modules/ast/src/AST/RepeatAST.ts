@@ -1,4 +1,4 @@
-import {AST} from '.';
+import { AST } from '.';
 
 export default class RepeatAST extends AST {
   constructor(

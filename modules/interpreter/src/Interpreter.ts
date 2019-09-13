@@ -3,7 +3,7 @@ import * as AST from 'ast';
 import { SymbolScope, BaseSymbolScope, LocalSymbolScope } from 'symbol';
 import { IntegerConstantAST } from 'ast';
 
-export class Interpreter extends AST.ASTVisitor<Types.DataType> {
+export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
   public scope: SymbolScope;
 
   constructor(protected readonly ast: AST.AST, baseScope: BaseSymbolScope) {
@@ -12,7 +12,7 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   private withNewScope<T>(name: string, fn: (scope: LocalSymbolScope) => T) {
-    const scope = this.scope = this.scope.children.get(name)!;
+    const scope = (this.scope = this.scope.children.get(name)!);
     const result = fn(scope);
     this.scope = this.scope.getParent()!;
     return result;
@@ -22,7 +22,7 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
     const variableNode = node.left as AST.VariableAST;
     const variableValue = this.visit(node.right);
     this.scope.changeValue(variableNode.name, variableValue); // FIX: go to higher scopes
-    return new Types.Void();
+    return new Types.PSIVoid();
   }
 
   public visitPlus(node: AST.PlusAST) {
@@ -50,22 +50,34 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   public visitEquals(node: AST.EqualsAST) {
-    return new Types.Boolean(this.visit(node.left).equals(this.visit(node.right)));
+    return new Types.PSIBoolean(
+      this.visit(node.left).equals(this.visit(node.right))
+    );
   }
   public visitNotEquals(node: AST.NotEqualsAST) {
-    return new Types.Boolean(this.visit(node.left).notEquals(this.visit(node.right)));
+    return new Types.PSIBoolean(
+      this.visit(node.left).notEquals(this.visit(node.right))
+    );
   }
   public visitGreaterThan(node: AST.GreaterThanAST) {
-    return new Types.Boolean(this.visit(node.left).greaterThan(this.visit(node.right)));
+    return new Types.PSIBoolean(
+      this.visit(node.left).greaterThan(this.visit(node.right))
+    );
   }
   public visitLessThan(node: AST.LessThanAST) {
-    return new Types.Boolean(this.visit(node.left).lessThan(this.visit(node.right)));
+    return new Types.PSIBoolean(
+      this.visit(node.left).lessThan(this.visit(node.right))
+    );
   }
   public visitGreaterEquals(node: AST.GreaterEqualsAST) {
-    return new Types.Boolean(this.visit(node.left).greaterEqualsThan(this.visit(node.right)));
+    return new Types.PSIBoolean(
+      this.visit(node.left).greaterEqualsThan(this.visit(node.right))
+    );
   }
   public visitLessEquals(node: AST.LessEqualsAST) {
-    return new Types.Boolean(this.visit(node.left).lessEqualsThan(this.visit(node.right)));
+    return new Types.PSIBoolean(
+      this.visit(node.left).lessEqualsThan(this.visit(node.right))
+    );
   }
 
   public visitIntegerConstant(node: AST.IntegerConstantAST) {
@@ -81,11 +93,11 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   public visitTrue(node: AST.TrueAST) {
-    return new Types.Boolean(true);
+    return new Types.PSIBoolean(true);
   }
 
   public visitFalse(node: AST.FalseAST) {
-    return new Types.Boolean(false);
+    return new Types.PSIBoolean(false);
   }
 
   public visitUnaryPlus(node: AST.UnaryPlusAST) {
@@ -98,13 +110,13 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
 
   public visitCompound(node: AST.CompoundAST) {
     node.children.forEach(this.visit.bind(this));
-    return new Types.Void();
+    return new Types.PSIVoid();
   }
 
   public visitVariable(node: AST.VariableAST) {
     const variableValue = this.scope.resolveValue(node.name);
 
-    if(!variableValue) {
+    if (!variableValue) {
       throw new Error(`Variable '${node.name}' is not in scope`);
     }
 
@@ -112,112 +124,141 @@ export class Interpreter extends AST.ASTVisitor<Types.DataType> {
   }
 
   public visitEmpty(node: AST.EmptyAST) {
-    return new Types.Void();
+    return new Types.PSIVoid();
   }
 
   public visitProgram(node: AST.ProgramAST) {
     return this.withNewScope(node.name, () => {
       return this.visit(node.block);
-    })
+    });
   }
 
   public visitBlock(node: AST.BlockAST) {
     node.declarations.forEach(this.visit.bind(this));
     this.visit(node.compoundStatement);
-    return new Types.Void();
+    return new Types.PSIVoid();
   }
 
   public visitVariableDeclaration(node: AST.VariableDeclarationAST) {
-    return new Types.Void();
+    return new Types.PSIVoid();
   }
 
   public visitReal(node: AST.RealAST) {
-    return new Types.RealType();
+    return new Types.PSIRealType();
   }
 
   public visitInteger(node: AST.IntegerAST) {
-    return new Types.IntegerType();
+    return new Types.PSIIntegerType();
   }
 
   public visitBoolean(node: AST.BooleanAST) {
-    return new Types.BooleanType();
+    return new Types.PSIBooleanType();
   }
 
   public visitChar(node: AST.CharAST) {
-    return new Types.CharType();
+    return new Types.PSICharType();
   }
 
   public visitProcedureDeclaration(node: AST.ProcedureDeclarationAST) {
-    this.scope.changeValue(node.name, new Types.Procedure((args) => {
-      this.withNewScope(node.name, (scope) => {
-        node.args.map(arg => arg.variable.name).forEach((argName, i) => {
-          scope.changeValue(argName, args[i]);
+    this.scope.changeValue(
+      node.name,
+      new Types.PSIProcedure((args) => {
+        this.withNewScope(node.name, (scope) => {
+          node.args
+            .map((arg) => arg.variable.name)
+            .forEach((argName, i) => {
+              scope.changeValue(argName, args[i]);
+            });
+          this.visit(node.block);
         });
-        this.visit(node.block);
-      });
-    }));
-    return new Types.Void();
+      })
+    );
+    return new Types.PSIVoid();
   }
 
   public visitIf(node: AST.IfAST) {
     const condition = this.visit(node.condition);
-    if(condition.equals(Types.Boolean.true)) {
+    if (condition.equals(Types.PSIBoolean.true)) {
       this.visit(node.statement);
     } else {
-      if(node.next) {
+      if (node.next) {
         this.visit(node.next);
       }
     }
-    return new Types.Void();
+    return new Types.PSIVoid();
   }
 
   public visitAnd(node: AST.AndAST) {
-    return new Types.Boolean(this.visit(node.left).equals(Types.Boolean.true) && this.visit(node.right).equals(Types.Boolean.true));
+    return new Types.PSIBoolean(
+      this.visit(node.left).equals(Types.PSIBoolean.true) &&
+        this.visit(node.right).equals(Types.PSIBoolean.true)
+    );
   }
   public visitOr(node: AST.OrAST) {
-    return new Types.Boolean(this.visit(node.left).equals(Types.Boolean.true) || this.visit(node.right).equals(Types.Boolean.true));
+    return new Types.PSIBoolean(
+      this.visit(node.left).equals(Types.PSIBoolean.true) ||
+        this.visit(node.right).equals(Types.PSIBoolean.true)
+    );
   }
   public visitNot(node: AST.NotAST) {
     const target = this.visit(node.target);
-    return target.equals(Types.Boolean.true) ? Types.Boolean.false : Types.Boolean.true;
+    return target.equals(Types.PSIBoolean.true)
+      ? Types.PSIBoolean.false
+      : Types.PSIBoolean.true;
   }
 
   public visitCall(node: AST.CallAST) {
-    const args = node.args.map(arg => this.visit(arg));
-    this.scope.resolveValue(node.name, Types.Procedure)!.call(args);
+    const args = node.args.map((arg) => this.visit(arg));
+    this.scope.resolveValue(node.name, Types.PSIProcedure)!.call(args);
 
-    return new Types.Void();
+    return new Types.PSIVoid();
   }
 
   public visitFor(node: AST.ForAST) {
     const variable = node.assignment.left;
     this.visitAssignment(node.assignment);
     this.visit(node.statement);
-    if(node.increment) {
-      while(this.visit(variable).lessThan(this.visit(node.finalValue))) {
-        this.visit(new AST.AssignmentAST(variable, new AST.PlusAST(variable, new IntegerConstantAST(new Types.Integer(1)))));
+    if (node.increment) {
+      while (this.visit(variable).lessThan(this.visit(node.finalValue))) {
+        this.visit(
+          new AST.AssignmentAST(
+            variable,
+            new AST.PlusAST(
+              variable,
+              new IntegerConstantAST(new Types.PSIInteger(1))
+            )
+          )
+        );
         this.visit(node.statement);
       }
     } else {
-      while(this.visit(variable).greaterThan(this.visit(node.finalValue))) {
-        this.visit(new AST.AssignmentAST(variable, new AST.MinusAST(variable, new IntegerConstantAST(new Types.Integer(1)))));
+      while (this.visit(variable).greaterThan(this.visit(node.finalValue))) {
+        this.visit(
+          new AST.AssignmentAST(
+            variable,
+            new AST.MinusAST(
+              variable,
+              new IntegerConstantAST(new Types.PSIInteger(1))
+            )
+          )
+        );
         this.visit(node.statement);
       }
     }
-    return new Types.Void();
+    return new Types.PSIVoid();
   }
 
   public visitWhile(node: AST.WhileAST) {
-    while(this.visit(node.condition).equals(Types.Boolean.true)) {
+    while (this.visit(node.condition).equals(Types.PSIBoolean.true)) {
       this.visit(node.statement);
     }
-    return new Types.Void();
+    return new Types.PSIVoid();
   }
 
   public visitRepeat(node: AST.RepeatAST) {
     do {
       node.statements.forEach(this.visit.bind(this));
-    } while(this.visit(node.condition).equals(Types.Boolean.false));
-    return new Types.Void();
+    } while (this.visit(node.condition).equals(Types.PSIBoolean.false));
+    return new Types.PSIVoid();
   }
 }

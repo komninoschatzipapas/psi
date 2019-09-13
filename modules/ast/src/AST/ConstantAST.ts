@@ -1,5 +1,3 @@
-import { AST } from ".";
+import { AST } from '.';
 
-export default abstract class ConstantAST extends AST {
-
-}
+export default abstract class ConstantAST extends AST {}

@@ -1,5 +1,5 @@
-import {IToken} from '.';
+import { Token } from '.';
 
-export default class CommaToken implements IToken {
+export default class CommaToken implements Token {
   public readonly value: null = null;
 }

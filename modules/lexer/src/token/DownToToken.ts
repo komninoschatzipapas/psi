@@ -1,5 +1,5 @@
-import {IToken} from '.';
+import { Token } from '.';
 
-export default class DownToToken implements IToken {
+export default class DownToToken implements Token {
   public readonly value: null = null;
 }

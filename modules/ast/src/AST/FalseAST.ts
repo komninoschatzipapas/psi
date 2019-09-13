@@ -1,5 +1,3 @@
-import { AST } from ".";
+import { AST } from '.';
 
-export default class FalseAST extends AST {
-  
-}
+export default class FalseAST extends AST {}

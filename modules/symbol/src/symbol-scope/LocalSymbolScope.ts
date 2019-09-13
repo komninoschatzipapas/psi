@@ -1,4 +1,4 @@
-import {SymbolScope} from ".";
+import { SymbolScope } from '.';
 
 export default class LocalSymbolScope extends SymbolScope {
   protected readonly parent: SymbolScope;

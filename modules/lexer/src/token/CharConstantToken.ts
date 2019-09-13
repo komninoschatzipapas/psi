@@ -1,8 +1,6 @@
-import {IToken} from '.';
+import { Token } from '.';
 import * as Types from 'data-types';
 
-export default class CharConstantToken implements IToken {
-  constructor(public readonly value: Types.Char) {
-
-  }
+export default class CharConstantToken implements Token {
+  constructor(public readonly value: Types.PSIChar) {}
 }

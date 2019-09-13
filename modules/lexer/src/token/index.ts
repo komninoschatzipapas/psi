@@ -1,4 +1,4 @@
-import IToken from './Token';
+import Token from './Token';
 import AssignToken from './AssignToken';
 import BeginToken from './BeginToken';
 import ClosingParenthesisToken from './ClosingParenthesisToken';
@@ -49,7 +49,7 @@ import RepeatToken from './RepeatToken';
 import UntilToken from './UntilToken';
 
 export {
-  IToken,
+  Token,
   AssignToken,
   BeginToken,
   ClosingParenthesisToken,
@@ -98,4 +98,4 @@ export {
   WhileToken,
   RepeatToken,
   UntilToken
-}
+};

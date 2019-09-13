@@ -1,5 +1,3 @@
-import { UnaryAST } from ".";
+import { UnaryAST } from '.';
 
-export default class NotAST extends UnaryAST {
-
-}
+export default class NotAST extends UnaryAST {}

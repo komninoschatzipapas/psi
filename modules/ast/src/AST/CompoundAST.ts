@@ -1,4 +1,4 @@
-import {AST} from '.';
+import { AST } from '.';
 
 export default class CompoundAST extends AST {
   constructor(children: AST[]) {
