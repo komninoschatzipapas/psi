@@ -3,10 +3,10 @@ This is a Work-in-Progress ISO 7185 Pascal interpreter I am building in order to
 
 ### Currently supports:
 * Data types
-  * PSIInteger (Does not support scientific notation)
-  * PSIReal (Does not support scientific notation)
+  * Integer (Does not support scientific notation)
+  * Real (Does not support scientific notation)
   * Boolean
-  * PSIChar
+  * Char
 * Variables
 * Procedures
 * Flow Control
@@ -22,7 +22,7 @@ This is a Work-in-Progress ISO 7185 Pascal interpreter I am building in order to
   * Subtraction (-)
   * Multiplication (*)
   * Division (div)
-  * PSIInteger Division (/)
+  * Integer Division (/)
   * Modulus (mod)
 * Logical Operators
   * AND
