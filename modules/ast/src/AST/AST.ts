@@ -13,7 +13,7 @@ export default abstract class AST {
     });
   }
 
-  public replace(node: AST) {
+  public replace(node: AST): AST {
     if (this.parent === null) {
       throw new Error('Invalid tree configuration');
     }
@@ -25,5 +25,6 @@ export default abstract class AST {
 
     this.parent._children[index] = node;
     this.parent = null;
+    return this;
   }
 }
