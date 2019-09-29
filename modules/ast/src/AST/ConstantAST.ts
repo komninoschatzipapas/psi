@@ -1,3 +1,5 @@
 import { AST } from '.';
-
-export default abstract class ConstantAST extends AST {}
+import { PSIDataType } from 'data-types';
+export default abstract class ConstantAST extends AST {
+  public abstract readonly value: PSIDataType;
+}
