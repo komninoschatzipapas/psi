@@ -87,5 +87,5 @@ export {
   CallAST,
   ForAST,
   WhileAST,
-  RepeatAST
+  RepeatAST,
 };

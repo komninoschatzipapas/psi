@@ -14,7 +14,7 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
   public abstract visitMultiplication(node: AST.MultiplicationAST): T;
   public abstract visitPlus(node: AST.PlusAST): T;
   public abstract visitProcedureDeclaration(
-    node: AST.ProcedureDeclarationAST
+    node: AST.ProcedureDeclarationAST,
   ): T;
   public abstract visitProgram(node: AST.ProgramAST): T;
   public abstract visitReal(node: AST.RealAST): T;

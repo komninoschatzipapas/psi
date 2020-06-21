@@ -7,7 +7,7 @@ export default class ForAST extends AST {
     public readonly assignment: AssignmentAST,
     public readonly increment: Types.PSIBoolean,
     public readonly finalValue: AST,
-    public readonly statement: AST
+    public readonly statement: AST,
   ) {
     super();
     this.addChild(assignment, finalValue, statement);

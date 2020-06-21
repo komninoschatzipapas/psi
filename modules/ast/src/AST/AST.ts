@@ -7,7 +7,7 @@ export default abstract class AST {
   }
 
   public addChild(...children: AST[]) {
-    children.forEach((child) => {
+    children.forEach(child => {
       child.parent = this;
       this._children.push(child);
     });
@@ -17,7 +17,7 @@ export default abstract class AST {
     if (this.parent === null) {
       throw new Error('Invalid tree configuration');
     }
-    const index = this.parent._children.findIndex((node) => node === this);
+    const index = this.parent._children.findIndex(node => node === this);
 
     if (index == -1) {
       throw new Error('Invalid tree configuration');

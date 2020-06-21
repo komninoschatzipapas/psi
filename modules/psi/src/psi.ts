@@ -12,15 +12,15 @@ class Psi extends Command {
 
   static flags = {
     version: flags.version({ char: 'v' }),
-    help: flags.help({ char: 'h' })
+    help: flags.help({ char: 'h' }),
   };
 
   static args = [
     {
       name: 'file',
       required: true,
-      description: 'Input file path'
-    }
+      description: 'Input file path',
+    },
   ];
 
   async run() {
@@ -31,12 +31,12 @@ class Psi extends Command {
     const baseScope = new BaseSymbolScope('root');
     new RunnableChain(
       new SymbolBuilder(tree, baseScope),
-      new TypeChecker(tree, baseScope)
+      new TypeChecker(tree, baseScope),
     ).run();
     const interpreter = new Interpreter(tree, baseScope);
     interpreter.run();
     console.log(
-      (interpreter.scope.children as any).values().next().value.value
+      (interpreter.scope.children as any).values().next().value.value,
     );
   }
 }

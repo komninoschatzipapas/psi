@@ -97,5 +97,5 @@ export {
   DoToken,
   WhileToken,
   RepeatToken,
-  UntilToken
+  UntilToken,
 };

@@ -6,7 +6,7 @@ export default class ProcedureDeclarationAST extends AST {
   constructor(
     name: string,
     public args: VariableDeclarationAST[],
-    public block: BlockAST
+    public block: BlockAST,
   ) {
     super();
     this.name = name;

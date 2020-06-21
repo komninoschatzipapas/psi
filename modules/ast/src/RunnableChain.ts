@@ -8,6 +8,6 @@ export default class RunnableChain implements Runnable<void> {
   }
 
   run() {
-    this.chain.forEach((runnable) => runnable.run());
+    this.chain.forEach(runnable => runnable.run());
   }
 }

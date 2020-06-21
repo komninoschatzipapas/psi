@@ -16,7 +16,7 @@ export class Parser implements AST.Runnable<AST.AST> {
       return this.lexer.getNextToken();
     } else {
       throw new Error(
-        `Expected type ${this.currentToken.constructor.name} to be ${type}`
+        `Expected type ${this.currentToken.constructor.name} to be ${type}`,
       );
     }
   }
@@ -95,7 +95,8 @@ export class Parser implements AST.Runnable<AST.AST> {
   private declarations() {
     const declarations: (
       | AST.VariableDeclarationAST
-      | AST.ProcedureDeclarationAST)[] = [];
+      | AST.ProcedureDeclarationAST
+    )[] = [];
 
     while (
       this.currentToken instanceof Lexer.VariableToken ||
@@ -105,7 +106,7 @@ export class Parser implements AST.Runnable<AST.AST> {
         this.currentToken = this.eat(Lexer.VariableToken);
 
         do {
-          this.variableDeclaration().forEach((d) => declarations.push(d));
+          this.variableDeclaration().forEach(d => declarations.push(d));
           this.currentToken = this.eat(Lexer.SemiToken);
         } while (this.currentToken instanceof Lexer.IdToken);
       } else if (this.currentToken instanceof Lexer.ProcedureToken) {
@@ -128,7 +129,7 @@ export class Parser implements AST.Runnable<AST.AST> {
 
     const type = this.type();
 
-    return ids.map((id) => new AST.VariableDeclarationAST(id, type));
+    return ids.map(id => new AST.VariableDeclarationAST(id, type));
   }
 
   private procedureDeclaration() {
@@ -155,7 +156,7 @@ export class Parser implements AST.Runnable<AST.AST> {
 
     while (this.currentToken instanceof Lexer.SemiToken) {
       this.currentToken = this.eat(Lexer.SemiToken);
-      this.variableDeclaration().forEach((d) => args.push(d));
+      this.variableDeclaration().forEach(d => args.push(d));
     }
 
     return args;

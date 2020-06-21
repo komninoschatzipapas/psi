@@ -34,7 +34,7 @@ export default abstract class SymbolScope {
 
   public resolveValue<T extends PSIDataType>(
     name: string,
-    type?: new (...a: any[]) => T
+    type?: new (...a: any[]) => T,
   ): T | null {
     const result = this.value.get(name);
     if (result && type ? result instanceof type : true) {
@@ -79,7 +79,7 @@ export default abstract class SymbolScope {
 
   public resolve<T extends PSISymbol>(
     name: string,
-    symbolType?: new (...a: any[]) => T
+    symbolType?: new (...a: any[]) => T,
   ): T | null {
     const result = this.scope.get(name);
     if (result && (symbolType ? result instanceof symbolType : true)) {

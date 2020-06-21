@@ -31,7 +31,7 @@ export class Lexer {
     ['DO', () => new Token.DoToken()],
     ['WHILE', () => new Token.WhileToken()],
     ['REPEAT', () => new Token.RepeatToken()],
-    ['UNTIL', () => new Token.UntilToken()]
+    ['UNTIL', () => new Token.UntilToken()],
   ]);
 
   private readonly numberRegex = /^\d$/;
@@ -119,7 +119,7 @@ export class Lexer {
       return new Token.RealConstToken(new Types.PSIReal(parseFloat(number)));
     } else {
       return new Token.IntegerConstToken(
-        new Types.PSIInteger(parseInt(number))
+        new Types.PSIInteger(parseInt(number)),
       );
     }
   }

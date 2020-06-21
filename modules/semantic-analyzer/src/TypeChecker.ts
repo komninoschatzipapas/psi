@@ -5,7 +5,7 @@ import {
   LocalSymbolScope,
   SymbolScope,
   VariableSymbol,
-  ProcedureSymbol
+  ProcedureSymbol,
 } from 'symbol';
 import { expect } from 'chai';
 

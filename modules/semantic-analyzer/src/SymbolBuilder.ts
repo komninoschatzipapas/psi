@@ -3,7 +3,7 @@ import {
   BaseSymbolScope,
   LocalSymbolScope,
   SymbolScope,
-  ProgramSymbol
+  ProgramSymbol,
 } from 'symbol';
 import * as PSISymbol from 'symbol';
 import * as Types from 'data-types';
@@ -13,7 +13,7 @@ export default class SymbolBuilder extends AST.ASTVisitor {
 
   constructor(
     protected readonly ast: AST.AST,
-    private readonly baseScope: BaseSymbolScope
+    private readonly baseScope: BaseSymbolScope,
   ) {
     super();
     this.currentScope = baseScope;
@@ -26,7 +26,7 @@ export default class SymbolBuilder extends AST.ASTVisitor {
   public visitVariable(node: AST.VariableAST): PSISymbol.PSISymbol {
     const variableValue = this.currentScope.resolve(
       node.name,
-      PSISymbol.VariableSymbol
+      PSISymbol.VariableSymbol,
     );
 
     if (!variableValue) {
@@ -49,21 +49,21 @@ export default class SymbolBuilder extends AST.ASTVisitor {
   }
 
   public visitVariableDeclaration(
-    node: AST.VariableDeclarationAST
+    node: AST.VariableDeclarationAST,
   ): PSISymbol.VariableSymbol {
     let symbol: PSISymbol.VariableSymbol;
 
     if (node.type instanceof AST.IntegerAST) {
       symbol = new PSISymbol.VariableSymbol(
         node.variable.name,
-        Types.PSIInteger
+        Types.PSIInteger,
       );
     } else if (node.type instanceof AST.RealAST) {
       symbol = new PSISymbol.VariableSymbol(node.variable.name, Types.PSIReal);
     } else if (node.type instanceof AST.BooleanAST) {
       symbol = new PSISymbol.VariableSymbol(
         node.variable.name,
-        Types.PSIBoolean
+        Types.PSIBoolean,
       );
     } else if (node.type instanceof AST.CharAST) {
       symbol = new PSISymbol.VariableSymbol(node.variable.name, Types.PSIChar);
@@ -75,9 +75,7 @@ export default class SymbolBuilder extends AST.ASTVisitor {
 
   public visitProcedureDeclaration(node: AST.ProcedureDeclarationAST): void {
     this.currentScope = new LocalSymbolScope(node.name, this.currentScope);
-    const argSymbols = node.args.map((arg) =>
-      this.visitVariableDeclaration(arg)
-    );
+    const argSymbols = node.args.map(arg => this.visitVariableDeclaration(arg));
 
     this.currentScope
       .getParent()!
@@ -90,7 +88,7 @@ export default class SymbolBuilder extends AST.ASTVisitor {
   public visitCall(node: AST.CallAST) {
     const procedure = this.currentScope.resolve(
       node.name,
-      PSISymbol.ProcedureSymbol
+      PSISymbol.ProcedureSymbol,
     );
     if (!procedure) {
       throw new Error('Could not find procedure');
