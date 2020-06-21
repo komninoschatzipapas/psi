@@ -1,22 +1,22 @@
 import { PSIDataType } from './PSIDataTypes';
 
 export default abstract class PSIType extends PSIDataType {
-  public add(right: PSIDataType): PSIDataType {
+  public add(right: PSIDataType): PSIType {
     throw new Error('Cannot execute operations with type type');
   }
-  public subtract(right: PSIDataType): PSIDataType {
+  public subtract(right: PSIDataType): PSIType {
     throw new Error('Cannot execute operations with type type');
   }
-  public multiply(right: PSIDataType): PSIDataType {
+  public multiply(right: PSIDataType): PSIType {
     throw new Error('Cannot execute operations with type type');
   }
-  public divide(right: PSIDataType): PSIDataType {
+  public divide(right: PSIDataType): PSIType {
     throw new Error('Cannot execute operations with type type');
   }
-  public integerDivide(right: PSIDataType): PSIDataType {
+  public integerDivide(right: PSIDataType): PSIType {
     throw new Error('Cannot execute operations with type type');
   }
-  public mod(right: PSIDataType): PSIDataType {
+  public mod(right: PSIDataType): PSIType {
     throw new Error('Cannot execute operations with type type');
   }
   public equals(right: PSIDataType): boolean {
@@ -34,10 +34,10 @@ export default abstract class PSIType extends PSIDataType {
   public greaterEqualsThan(right: PSIDataType): boolean {
     throw new Error('Cannot execute operations with type type');
   }
-  public unaryPlus(): PSIDataType {
+  public unaryPlus(): PSIType {
     throw new Error('Cannot execute operations with type type');
   }
-  public unaryMinus(): PSIDataType {
+  public unaryMinus(): PSIType {
     throw new Error('Cannot execute operations with type type');
   }
 }

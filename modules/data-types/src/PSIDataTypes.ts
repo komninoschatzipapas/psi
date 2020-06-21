@@ -25,5 +25,5 @@ export {
   PSIChar,
   PSICharType,
   PSIProcedure,
-  PSIProcedureType
+  PSIProcedureType,
 };

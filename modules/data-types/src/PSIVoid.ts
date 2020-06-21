@@ -1,22 +1,22 @@
 import { PSIDataType } from './PSIDataTypes';
 
 export default class PSIVoid extends PSIDataType {
-  public add(right: PSIDataType): PSIDataType {
+  public add(right: PSIDataType): PSIVoid {
     throw new Error('Cannot execute operations with void type');
   }
-  public subtract(right: PSIDataType): PSIDataType {
+  public subtract(right: PSIDataType): PSIVoid {
     throw new Error('Cannot execute operations with void type');
   }
-  public multiply(right: PSIDataType): PSIDataType {
+  public multiply(right: PSIDataType): PSIVoid {
     throw new Error('Cannot execute operations with void type');
   }
-  public divide(right: PSIDataType): PSIDataType {
+  public divide(right: PSIDataType): PSIVoid {
     throw new Error('Cannot execute operations with void type');
   }
-  public integerDivide(right: PSIDataType): PSIDataType {
+  public integerDivide(right: PSIDataType): PSIVoid {
     throw new Error('Cannot execute operations with void type');
   }
-  public mod(right: PSIDataType): PSIDataType {
+  public mod(right: PSIDataType): PSIVoid {
     throw new Error('Cannot execute operations with void type');
   }
   public equals(right: PSIDataType): boolean {
@@ -34,10 +34,10 @@ export default class PSIVoid extends PSIDataType {
   public greaterEqualsThan(right: PSIDataType): boolean {
     throw new Error('Cannot execute operations with void type');
   }
-  public unaryPlus(): PSIDataType {
+  public unaryPlus(): PSIVoid {
     throw new Error('Cannot execute operations with void type');
   }
-  public unaryMinus(): PSIDataType {
+  public unaryMinus(): PSIVoid {
     throw new Error('Cannot execute operations with void type');
   }
 }
