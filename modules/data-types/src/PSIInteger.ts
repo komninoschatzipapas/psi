@@ -1,5 +1,5 @@
 import PSIDataType from './PSIDataType';
-import PSIError, { DebugInfoProvider } from 'error';
+import PSIError, { DebugInfoProviderLike } from 'error';
 
 export default class PSIInteger extends PSIDataType {
   constructor(private value: number) {
@@ -7,25 +7,25 @@ export default class PSIInteger extends PSIDataType {
   }
 
   public add(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIInteger,
   ): PSIInteger {
     return new PSIInteger(this.value + right.value);
   }
   public subtract(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIInteger,
   ): PSIInteger {
     return new PSIInteger(this.value - right.value);
   }
   public multiply(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIInteger,
   ): PSIInteger {
     return new PSIInteger(this.value * right.value);
   }
   public divide(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIInteger,
   ): PSIInteger {
     throw new PSIError(
@@ -34,43 +34,43 @@ export default class PSIInteger extends PSIDataType {
     );
   }
   public integerDivide(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIInteger,
   ): PSIInteger {
     return new PSIInteger(Math.trunc(this.value / right.value));
   }
   public mod(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIInteger,
   ): PSIInteger {
     return new PSIInteger(this.value % right.value);
   }
   public equals(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIInteger,
   ): boolean {
     return this.value == right.value;
   }
   public lessThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIInteger,
   ): boolean {
     return this.value < right.value;
   }
   public greaterThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIInteger,
   ): boolean {
     return this.value > right.value;
   }
   public lessEqualsThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIInteger,
   ): boolean {
     return this.value <= right.value;
   }
   public greaterEqualsThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIInteger,
   ): boolean {
     return this.value >= right.value;

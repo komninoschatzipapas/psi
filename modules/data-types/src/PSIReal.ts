@@ -1,31 +1,38 @@
 import PSIDataType from './PSIDataType';
-import PSIError, { DebugInfoProvider } from 'error';
+
+import PSIError, { DebugInfoProviderLike } from 'error';
 
 export default class PSIReal extends PSIDataType {
   constructor(private value: number) {
     super();
   }
 
-  public add(debugInfoProvider: DebugInfoProvider, right: PSIReal): PSIReal {
+  public add(
+    debugInfoProvider: DebugInfoProviderLike,
+    right: PSIReal,
+  ): PSIReal {
     return new PSIReal(this.value + right.value);
   }
   public subtract(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIReal,
   ): PSIReal {
     return new PSIReal(this.value - right.value);
   }
   public multiply(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIReal,
   ): PSIReal {
     return new PSIReal(this.value * right.value);
   }
-  public divide(debugInfoProvider: DebugInfoProvider, right: PSIReal): PSIReal {
+  public divide(
+    debugInfoProvider: DebugInfoProviderLike,
+    right: PSIReal,
+  ): PSIReal {
     return new PSIReal(this.value / right.value);
   }
   public integerDivide(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIReal,
   ): PSIReal {
     throw new PSIError(
@@ -33,32 +40,38 @@ export default class PSIReal extends PSIDataType {
       'Cannot use this operator with PSIReal types',
     );
   }
-  public mod(debugInfoProvider: DebugInfoProvider, right: PSIReal): PSIReal {
+  public mod(
+    debugInfoProvider: DebugInfoProviderLike,
+    right: PSIReal,
+  ): PSIReal {
     return new PSIReal(this.value % right.value);
   }
-  public equals(debugInfoProvider: DebugInfoProvider, right: PSIReal): boolean {
+  public equals(
+    debugInfoProvider: DebugInfoProviderLike,
+    right: PSIReal,
+  ): boolean {
     return this.value == right.value;
   }
   public lessThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIReal,
   ): boolean {
     return this.value < right.value;
   }
   public greaterThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIReal,
   ): boolean {
     return this.value > right.value;
   }
   public lessEqualsThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIReal,
   ): boolean {
     return this.value <= right.value;
   }
   public greaterEqualsThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIReal,
   ): boolean {
     return this.value >= right.value;

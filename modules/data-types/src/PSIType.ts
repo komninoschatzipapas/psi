@@ -1,15 +1,18 @@
 import { PSIDataType } from './PSIDataTypes';
-import PSIError, { DebugInfoProvider } from 'error';
+import PSIError, { DebugInfoProviderLike } from 'error';
 
 export default abstract class PSIType extends PSIDataType {
-  public add(debugInfoProvider: DebugInfoProvider, right: PSIType): PSIType {
+  public add(
+    debugInfoProvider: DebugInfoProviderLike,
+    right: PSIType,
+  ): PSIType {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with type type',
     );
   }
   public subtract(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIType,
   ): PSIType {
     throw new PSIError(
@@ -18,7 +21,7 @@ export default abstract class PSIType extends PSIDataType {
     );
   }
   public multiply(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIType,
   ): PSIType {
     throw new PSIError(
@@ -26,14 +29,17 @@ export default abstract class PSIType extends PSIDataType {
       'Cannot execute operation with type type',
     );
   }
-  public divide(debugInfoProvider: DebugInfoProvider, right: PSIType): PSIType {
+  public divide(
+    debugInfoProvider: DebugInfoProviderLike,
+    right: PSIType,
+  ): PSIType {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with type type',
     );
   }
   public integerDivide(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIType,
   ): PSIType {
     throw new PSIError(
@@ -41,20 +47,26 @@ export default abstract class PSIType extends PSIDataType {
       'Cannot execute operation with type type',
     );
   }
-  public mod(debugInfoProvider: DebugInfoProvider, right: PSIType): PSIType {
+  public mod(
+    debugInfoProvider: DebugInfoProviderLike,
+    right: PSIType,
+  ): PSIType {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with type type',
     );
   }
-  public equals(debugInfoProvider: DebugInfoProvider, right: PSIType): boolean {
+  public equals(
+    debugInfoProvider: DebugInfoProviderLike,
+    right: PSIType,
+  ): boolean {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with type type',
     );
   }
   public lessThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIType,
   ): boolean {
     throw new PSIError(
@@ -63,7 +75,7 @@ export default abstract class PSIType extends PSIDataType {
     );
   }
   public greaterThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIType,
   ): boolean {
     throw new PSIError(
@@ -72,7 +84,7 @@ export default abstract class PSIType extends PSIDataType {
     );
   }
   public lessEqualsThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIType,
   ): boolean {
     throw new PSIError(
@@ -81,7 +93,7 @@ export default abstract class PSIType extends PSIDataType {
     );
   }
   public greaterEqualsThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIType,
   ): boolean {
     throw new PSIError(
@@ -89,13 +101,13 @@ export default abstract class PSIType extends PSIDataType {
       'Cannot execute operation with type type',
     );
   }
-  public unaryPlus(debugInfoProvider: DebugInfoProvider): PSIType {
+  public unaryPlus(debugInfoProvider: DebugInfoProviderLike): PSIType {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with type type',
     );
   }
-  public unaryMinus(debugInfoProvider: DebugInfoProvider): PSIType {
+  public unaryMinus(debugInfoProvider: DebugInfoProviderLike): PSIType {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with type type',

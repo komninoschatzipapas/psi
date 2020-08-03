@@ -1,5 +1,5 @@
 import { PSIDataType } from './PSIDataTypes';
-import PSIError, { DebugInfoProvider } from 'error';
+import PSIError, { DebugInfoProviderLike } from 'error';
 
 export default class PSIProcedure extends PSIDataType {
   constructor(public readonly call: (args: PSIDataType[]) => void) {
@@ -7,7 +7,7 @@ export default class PSIProcedure extends PSIDataType {
   }
 
   public add(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIProcedure,
   ): PSIDataType {
     throw new PSIError(
@@ -16,7 +16,7 @@ export default class PSIProcedure extends PSIDataType {
     );
   }
   public subtract(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIProcedure,
   ): PSIDataType {
     throw new PSIError(
@@ -25,7 +25,7 @@ export default class PSIProcedure extends PSIDataType {
     );
   }
   public multiply(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIProcedure,
   ): PSIDataType {
     throw new PSIError(
@@ -34,7 +34,7 @@ export default class PSIProcedure extends PSIDataType {
     );
   }
   public divide(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIProcedure,
   ): PSIDataType {
     throw new PSIError(
@@ -43,7 +43,7 @@ export default class PSIProcedure extends PSIDataType {
     );
   }
   public integerDivide(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIProcedure,
   ): PSIDataType {
     throw new PSIError(
@@ -52,7 +52,7 @@ export default class PSIProcedure extends PSIDataType {
     );
   }
   public mod(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIProcedure,
   ): PSIDataType {
     throw new PSIError(
@@ -61,7 +61,7 @@ export default class PSIProcedure extends PSIDataType {
     );
   }
   public equals(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIProcedure,
   ): boolean {
     throw new PSIError(
@@ -70,7 +70,7 @@ export default class PSIProcedure extends PSIDataType {
     );
   }
   public lessThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIProcedure,
   ): boolean {
     throw new PSIError(
@@ -79,7 +79,7 @@ export default class PSIProcedure extends PSIDataType {
     );
   }
   public greaterThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIProcedure,
   ): boolean {
     throw new PSIError(
@@ -88,7 +88,7 @@ export default class PSIProcedure extends PSIDataType {
     );
   }
   public lessEqualsThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIProcedure,
   ): boolean {
     throw new PSIError(
@@ -97,7 +97,7 @@ export default class PSIProcedure extends PSIDataType {
     );
   }
   public greaterEqualsThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIProcedure,
   ): boolean {
     throw new PSIError(
@@ -105,13 +105,13 @@ export default class PSIProcedure extends PSIDataType {
       'Cannot execute operation with procedure type',
     );
   }
-  public unaryPlus(debugInfoProvider: DebugInfoProvider): PSIDataType {
+  public unaryPlus(debugInfoProvider: DebugInfoProviderLike): PSIDataType {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with procedure type',
     );
   }
-  public unaryMinus(debugInfoProvider: DebugInfoProvider): PSIDataType {
+  public unaryMinus(debugInfoProvider: DebugInfoProviderLike): PSIDataType {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with procedure type',

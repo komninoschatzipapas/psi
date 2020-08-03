@@ -1,5 +1,5 @@
 import PSIDataType from './PSIDataType';
-import PSIError, { DebugInfoProvider } from 'error';
+import PSIError, { DebugInfoProviderLike } from 'error';
 
 export default class PSIBoolean extends PSIDataType {
   public static readonly true: PSIBoolean = new PSIBoolean(true);
@@ -15,7 +15,7 @@ export default class PSIBoolean extends PSIDataType {
   }
 
   public add(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIDataType,
   ): PSIDataType {
     throw new PSIError(
@@ -24,7 +24,7 @@ export default class PSIBoolean extends PSIDataType {
     );
   }
   public subtract(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIDataType,
   ): PSIDataType {
     throw new PSIError(
@@ -33,7 +33,7 @@ export default class PSIBoolean extends PSIDataType {
     );
   }
   public multiply(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIDataType,
   ): PSIDataType {
     throw new PSIError(
@@ -42,7 +42,7 @@ export default class PSIBoolean extends PSIDataType {
     );
   }
   public divide(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIDataType,
   ): PSIDataType {
     throw new PSIError(
@@ -51,7 +51,7 @@ export default class PSIBoolean extends PSIDataType {
     );
   }
   public integerDivide(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIDataType,
   ): PSIDataType {
     throw new PSIError(
@@ -60,7 +60,7 @@ export default class PSIBoolean extends PSIDataType {
     );
   }
   public mod(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIDataType,
   ): PSIDataType {
     throw new PSIError(
@@ -72,7 +72,7 @@ export default class PSIBoolean extends PSIDataType {
     return this.value == right.value;
   }
   public lessThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIDataType,
   ): boolean {
     throw new PSIError(
@@ -81,7 +81,7 @@ export default class PSIBoolean extends PSIDataType {
     );
   }
   public greaterThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIDataType,
   ): boolean {
     throw new PSIError(
@@ -90,7 +90,7 @@ export default class PSIBoolean extends PSIDataType {
     );
   }
   public lessEqualsThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIDataType,
   ): boolean {
     throw new PSIError(
@@ -99,7 +99,7 @@ export default class PSIBoolean extends PSIDataType {
     );
   }
   public greaterEqualsThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIDataType,
   ): boolean {
     throw new PSIError(
@@ -107,13 +107,13 @@ export default class PSIBoolean extends PSIDataType {
       'Cannot execute operation with boolean type',
     );
   }
-  public unaryPlus(debugInfoProvider: DebugInfoProvider): PSIDataType {
+  public unaryPlus(debugInfoProvider: DebugInfoProviderLike): PSIDataType {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with boolean type',
     );
   }
-  public unaryMinus(debugInfoProvider: DebugInfoProvider): PSIDataType {
+  public unaryMinus(debugInfoProvider: DebugInfoProviderLike): PSIDataType {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with boolean type',

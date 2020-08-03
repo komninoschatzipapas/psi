@@ -1,15 +1,18 @@
 import { PSIDataType } from './PSIDataTypes';
-import PSIError, { DebugInfoProvider } from 'error';
+import PSIError, { DebugInfoProviderLike } from 'error';
 
 export default class PSIVoid extends PSIDataType {
-  public add(debugInfoProvider: DebugInfoProvider, right: PSIVoid): PSIVoid {
+  public add(
+    debugInfoProvider: DebugInfoProviderLike,
+    right: PSIVoid,
+  ): PSIVoid {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with void type',
     );
   }
   public subtract(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIVoid,
   ): PSIVoid {
     throw new PSIError(
@@ -18,7 +21,7 @@ export default class PSIVoid extends PSIDataType {
     );
   }
   public multiply(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIVoid,
   ): PSIVoid {
     throw new PSIError(
@@ -26,14 +29,17 @@ export default class PSIVoid extends PSIDataType {
       'Cannot execute operation with void type',
     );
   }
-  public divide(debugInfoProvider: DebugInfoProvider, right: PSIVoid): PSIVoid {
+  public divide(
+    debugInfoProvider: DebugInfoProviderLike,
+    right: PSIVoid,
+  ): PSIVoid {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with void type',
     );
   }
   public integerDivide(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIVoid,
   ): PSIVoid {
     throw new PSIError(
@@ -41,20 +47,26 @@ export default class PSIVoid extends PSIDataType {
       'Cannot execute operation with void type',
     );
   }
-  public mod(debugInfoProvider: DebugInfoProvider, right: PSIVoid): PSIVoid {
+  public mod(
+    debugInfoProvider: DebugInfoProviderLike,
+    right: PSIVoid,
+  ): PSIVoid {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with void type',
     );
   }
-  public equals(debugInfoProvider: DebugInfoProvider, right: PSIVoid): boolean {
+  public equals(
+    debugInfoProvider: DebugInfoProviderLike,
+    right: PSIVoid,
+  ): boolean {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with void type',
     );
   }
   public lessThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIVoid,
   ): boolean {
     throw new PSIError(
@@ -63,7 +75,7 @@ export default class PSIVoid extends PSIDataType {
     );
   }
   public greaterThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIVoid,
   ): boolean {
     throw new PSIError(
@@ -72,7 +84,7 @@ export default class PSIVoid extends PSIDataType {
     );
   }
   public lessEqualsThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIVoid,
   ): boolean {
     throw new PSIError(
@@ -81,7 +93,7 @@ export default class PSIVoid extends PSIDataType {
     );
   }
   public greaterEqualsThan(
-    debugInfoProvider: DebugInfoProvider,
+    debugInfoProvider: DebugInfoProviderLike,
     right: PSIVoid,
   ): boolean {
     throw new PSIError(
@@ -89,13 +101,13 @@ export default class PSIVoid extends PSIDataType {
       'Cannot execute operation with void type',
     );
   }
-  public unaryPlus(debugInfoProvider: DebugInfoProvider): PSIVoid {
+  public unaryPlus(debugInfoProvider: DebugInfoProviderLike): PSIVoid {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with void type',
     );
   }
-  public unaryMinus(debugInfoProvider: DebugInfoProvider): PSIVoid {
+  public unaryMinus(debugInfoProvider: DebugInfoProviderLike): PSIVoid {
     throw new PSIError(
       debugInfoProvider,
       'Cannot execute operation with void type',
