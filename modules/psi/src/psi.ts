@@ -33,7 +33,7 @@ function formatError(sourceCode: string, fileName: string, error: PSIError) {
       chalk.bold(
         chalk.blueBright(
           `^`.repeat(
-            error.end.characterPosition - error.start.characterPosition,
+            error.end.characterPosition - error.start.characterPosition || 1,
           ),
         ),
       ) +
