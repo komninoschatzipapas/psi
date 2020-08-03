@@ -8,9 +8,8 @@
     "declaration": true,
     "strict": true,
     "sourceMap": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "esModuleInterop": true
   },
-  "include": [
-    "modules/**/src/**/*.ts"
-  ]
+  "include": ["modules/**/src/**/*.ts"]
 }

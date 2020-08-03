@@ -1,5 +1,5 @@
 import { Token } from '.';
 
-export default class ColonToken implements Token {
+export default class ColonToken extends Token {
   public readonly value: null = null;
 }

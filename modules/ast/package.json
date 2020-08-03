@@ -26,7 +26,8 @@
     "url": "https://github.com/komninoschat/psi/issues"
   },
   "dependencies": {
-    "data-types": "*"
+    "data-types": "*",
+    "error": "*"
   },
   "devDependencies": {
     "@types/chai": "^4.2.0",

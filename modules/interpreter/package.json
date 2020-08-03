@@ -29,7 +29,8 @@
     "case-insensitive-map": "*",
     "ast": "*",
     "data-types": "*",
-    "symbol": "*"
+    "symbol": "*",
+    "error": "*"
   },
   "devDependencies": {
     "@types/chai": "^4.2.0",

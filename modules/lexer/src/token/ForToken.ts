@@ -1,5 +1,5 @@
 import { Token } from '.';
 
-export default class ForToken implements Token {
+export default class ForToken extends Token {
   public readonly value: null = null;
 }

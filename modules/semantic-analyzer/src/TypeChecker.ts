@@ -2,15 +2,14 @@ import * as AST from 'ast';
 import * as Types from 'data-types';
 import {
   BaseSymbolScope,
-  LocalSymbolScope,
   SymbolScope,
   VariableSymbol,
   ProcedureSymbol,
 } from 'symbol';
-import { expect } from 'chai';
+import { assertEquality } from 'error';
 
 export default class TypeChecker extends AST.ASTVisitor<
-  new (...a: any[]) => Types.PSIDataType
+  new (..._: any[]) => Types.PSIDataType
 > {
   private currentScope: SymbolScope;
 
@@ -47,7 +46,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    expect(left).to.be.eql(right);
+    assertEquality(node, left, right, 'Expected operands to be of same type');
     return left;
   }
 
@@ -55,8 +54,8 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    expect(left).to.be.eql(Types.PSIInteger);
-    expect(right).to.be.eql(Types.PSIInteger);
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return Types.PSIInteger;
   }
 
@@ -64,85 +63,109 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    expect(left).to.be.eql(Types.PSIReal);
-    expect(right).to.be.eql(Types.PSIReal);
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return Types.PSIReal;
   }
 
   public visitMinus(node: AST.MinusAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
-    expect(left).to.be.eql(right);
+
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return left;
   }
 
   public visitMultiplication(node: AST.MultiplicationAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
-    expect(left).to.be.eql(right);
+
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return left;
   }
 
   public visitMod(node: AST.ModAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
-    expect(left).to.be.eql(right);
+
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return left;
   }
 
   public visitPlus(node: AST.PlusAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
-    expect(left).to.be.eql(right);
+
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return left;
   }
 
   public visitEquals(node: AST.EqualsAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
-    expect(left).to.be.eql(right);
+
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return Types.PSIBoolean;
   }
   public visitNotEquals(node: AST.NotEqualsAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
-    expect(left).to.be.eql(right);
+
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return Types.PSIBoolean;
   }
   public visitGreaterThan(node: AST.GreaterThanAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
-    expect(left).to.be.eql(right);
+
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return Types.PSIBoolean;
   }
   public visitLessThan(node: AST.LessThanAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
-    expect(left).to.be.eql(right);
+
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return Types.PSIBoolean;
   }
   public visitGreaterEquals(node: AST.GreaterEqualsAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
-    expect(left).to.be.eql(right);
+
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return Types.PSIBoolean;
   }
   public visitLessEquals(node: AST.LessEqualsAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
-    expect(left).to.be.eql(right);
+
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return Types.PSIBoolean;
   }
   public visitAnd(node: AST.AndAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
-    expect(left).to.be.eql(right);
+
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return Types.PSIBoolean;
   }
   public visitOr(node: AST.OrAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
-    expect(left).to.be.eql(right);
+
+    assertEquality(node, left, right, 'Expected operands to be of same type');
+
     return Types.PSIBoolean;
   }
 
@@ -211,7 +234,14 @@ export default class TypeChecker extends AST.ASTVisitor<
     this.currentScope
       .resolve(node.name, ProcedureSymbol)!
       .args.forEach((arg, i) => {
-        expect(arg.type).to.be.eql(this.visit(node.args[i]));
+        const declarationType = this.visit(node.args[i]);
+
+        assertEquality(
+          node,
+          arg.type,
+          declarationType,
+          `Expected argument ${arg.name} to be of type ${declarationType.constructor.name}`,
+        );
       });
     return Types.PSIVoid;
   }

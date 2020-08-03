@@ -1,51 +1,94 @@
 import { PSIDataType } from './PSIDataTypes';
+import PSIError, { DebugInfoProvider } from 'error';
 
 export default class PSIChar extends PSIDataType {
   private value: number;
   constructor(value: string) {
     super();
-    if (value.length != 1) {
-      throw new Error('Invalid character length');
-    }
     this.value = value.charCodeAt(0);
   }
-  public add(right: PSIChar): PSIChar {
-    throw new Error('Cannot execute this operator with the PSIChar type');
+  public add(debugInfoProvider: DebugInfoProvider, right: PSIChar): PSIChar {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute this operator with the PSIChar type',
+    );
   }
-  public subtract(right: PSIChar): PSIChar {
-    throw new Error('Cannot execute this operator with the PSIChar type');
+  public subtract(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIChar,
+  ): PSIChar {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute this operator with the PSIChar type',
+    );
   }
-  public multiply(right: PSIChar): PSIChar {
-    throw new Error('Cannot execute this operator with the PSIChar type');
+  public multiply(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIChar,
+  ): PSIChar {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute this operator with the PSIChar type',
+    );
   }
-  public divide(right: PSIChar): PSIChar {
-    throw new Error('Cannot execute this operator with the PSIChar type');
+  public divide(debugInfoProvider: DebugInfoProvider, right: PSIChar): PSIChar {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute this operator with the PSIChar type',
+    );
   }
-  public integerDivide(right: PSIChar): PSIChar {
-    throw new Error('Cannot execute this operator with the PSIChar type');
+  public integerDivide(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIChar,
+  ): PSIChar {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute this operator with the PSIChar type',
+    );
   }
-  public mod(right: PSIChar): PSIChar {
-    throw new Error('Cannot execute this operator with the PSIChar type');
+  public mod(debugInfoProvider: DebugInfoProvider, right: PSIChar): PSIChar {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute this operator with the PSIChar type',
+    );
   }
-  public equals(right: PSIChar): boolean {
+  public equals(debugInfoProvider: DebugInfoProvider, right: PSIChar): boolean {
     return this.value == right.value;
   }
-  public lessThan(right: PSIChar): boolean {
+  public lessThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIChar,
+  ): boolean {
     return this.value < right.value;
   }
-  public greaterThan(right: PSIChar): boolean {
+  public greaterThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIChar,
+  ): boolean {
     return this.value > right.value;
   }
-  public lessEqualsThan(right: PSIChar): boolean {
+  public lessEqualsThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIChar,
+  ): boolean {
     return this.value <= right.value;
   }
-  public greaterEqualsThan(right: PSIChar): boolean {
+  public greaterEqualsThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIChar,
+  ): boolean {
     return this.value >= right.value;
   }
-  public unaryPlus(): PSIDataType {
-    throw new Error('Cannot execute this operator with the PSIChar type');
+  public unaryPlus(debugInfoProvider: DebugInfoProvider): PSIDataType {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute this operator with the PSIChar type',
+    );
   }
-  public unaryMinus(): PSIDataType {
-    throw new Error('Cannot execute this operator with the PSIChar type');
+  public unaryMinus(debugInfoProvider: DebugInfoProvider): PSIDataType {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute this operator with the PSIChar type',
+    );
   }
 }

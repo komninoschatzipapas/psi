@@ -1,41 +1,66 @@
 import PSIDataType from './PSIDataType';
+import PSIError, { DebugInfoProvider } from 'error';
 
 export default class PSIReal extends PSIDataType {
   constructor(private value: number) {
     super();
   }
 
-  public add(right: PSIReal): PSIReal {
+  public add(debugInfoProvider: DebugInfoProvider, right: PSIReal): PSIReal {
     return new PSIReal(this.value + right.value);
   }
-  public subtract(right: PSIReal): PSIReal {
+  public subtract(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIReal,
+  ): PSIReal {
     return new PSIReal(this.value - right.value);
   }
-  public multiply(right: PSIReal): PSIReal {
+  public multiply(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIReal,
+  ): PSIReal {
     return new PSIReal(this.value * right.value);
   }
-  public divide(right: PSIReal): PSIReal {
+  public divide(debugInfoProvider: DebugInfoProvider, right: PSIReal): PSIReal {
     return new PSIReal(this.value / right.value);
   }
-  public integerDivide(right: PSIReal): PSIReal {
-    throw new Error('Cannot use this operator with PSIReal types');
+  public integerDivide(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIReal,
+  ): PSIReal {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot use this operator with PSIReal types',
+    );
   }
-  public mod(right: PSIReal): PSIReal {
+  public mod(debugInfoProvider: DebugInfoProvider, right: PSIReal): PSIReal {
     return new PSIReal(this.value % right.value);
   }
-  public equals(right: PSIReal): boolean {
+  public equals(debugInfoProvider: DebugInfoProvider, right: PSIReal): boolean {
     return this.value == right.value;
   }
-  public lessThan(right: PSIReal): boolean {
+  public lessThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIReal,
+  ): boolean {
     return this.value < right.value;
   }
-  public greaterThan(right: PSIReal): boolean {
+  public greaterThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIReal,
+  ): boolean {
     return this.value > right.value;
   }
-  public lessEqualsThan(right: PSIReal): boolean {
+  public lessEqualsThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIReal,
+  ): boolean {
     return this.value <= right.value;
   }
-  public greaterEqualsThan(right: PSIReal): boolean {
+  public greaterEqualsThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIReal,
+  ): boolean {
     return this.value >= right.value;
   }
   public unaryPlus(): PSIReal {

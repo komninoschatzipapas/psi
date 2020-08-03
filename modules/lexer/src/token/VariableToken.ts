@@ -1,5 +1,5 @@
 import { Token } from '.';
 
-export default class VariableToken implements Token {
+export default class VariableToken extends Token {
   public readonly value: null = null;
 }

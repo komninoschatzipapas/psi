@@ -1,5 +1,5 @@
 import { Token } from '.';
 
-export default class IntegerDivisionToken implements Token {
+export default class IntegerDivisionToken extends Token {
   public readonly value: null = null;
 }

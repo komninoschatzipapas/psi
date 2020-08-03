@@ -1,43 +1,104 @@
 import { PSIDataType } from './PSIDataTypes';
+import PSIError, { DebugInfoProvider } from 'error';
 
 export default abstract class PSIType extends PSIDataType {
-  public add(right: PSIDataType): PSIType {
-    throw new Error('Cannot execute operations with type type');
+  public add(debugInfoProvider: DebugInfoProvider, right: PSIType): PSIType {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
-  public subtract(right: PSIDataType): PSIType {
-    throw new Error('Cannot execute operations with type type');
+  public subtract(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIType,
+  ): PSIType {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
-  public multiply(right: PSIDataType): PSIType {
-    throw new Error('Cannot execute operations with type type');
+  public multiply(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIType,
+  ): PSIType {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
-  public divide(right: PSIDataType): PSIType {
-    throw new Error('Cannot execute operations with type type');
+  public divide(debugInfoProvider: DebugInfoProvider, right: PSIType): PSIType {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
-  public integerDivide(right: PSIDataType): PSIType {
-    throw new Error('Cannot execute operations with type type');
+  public integerDivide(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIType,
+  ): PSIType {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
-  public mod(right: PSIDataType): PSIType {
-    throw new Error('Cannot execute operations with type type');
+  public mod(debugInfoProvider: DebugInfoProvider, right: PSIType): PSIType {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
-  public equals(right: PSIDataType): boolean {
-    throw new Error('Cannot execute operations with type type');
+  public equals(debugInfoProvider: DebugInfoProvider, right: PSIType): boolean {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
-  public lessThan(right: PSIDataType): boolean {
-    throw new Error('Cannot execute operations with type type');
+  public lessThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIType,
+  ): boolean {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
-  public greaterThan(right: PSIDataType): boolean {
-    throw new Error('Cannot execute operations with type type');
+  public greaterThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIType,
+  ): boolean {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
-  public lessEqualsThan(right: PSIDataType): boolean {
-    throw new Error('Cannot execute operations with type type');
+  public lessEqualsThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIType,
+  ): boolean {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
-  public greaterEqualsThan(right: PSIDataType): boolean {
-    throw new Error('Cannot execute operations with type type');
+  public greaterEqualsThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIType,
+  ): boolean {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
-  public unaryPlus(): PSIType {
-    throw new Error('Cannot execute operations with type type');
+  public unaryPlus(debugInfoProvider: DebugInfoProvider): PSIType {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
-  public unaryMinus(): PSIType {
-    throw new Error('Cannot execute operations with type type');
+  public unaryMinus(debugInfoProvider: DebugInfoProvider): PSIType {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot execute operation with type type',
+    );
   }
 }

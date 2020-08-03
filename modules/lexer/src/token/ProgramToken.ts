@@ -1,5 +1,5 @@
 import { Token } from '.';
 
-export default class ProgramToken implements Token {
+export default class ProgramToken extends Token {
   public readonly value: null = null;
 }

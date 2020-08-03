@@ -1,6 +1,7 @@
 import * as Lexer from 'lexer';
 import * as AST from 'ast';
 import * as Types from 'data-types';
+import PSIError from 'error';
 
 export class Parser implements AST.Runnable<AST.AST> {
   private currentToken: Lexer.Token;
@@ -15,8 +16,9 @@ export class Parser implements AST.Runnable<AST.AST> {
     if (this.currentToken instanceof type) {
       return this.lexer.getNextToken();
     } else {
-      throw new Error(
-        `Expected type ${this.currentToken.constructor.name} to be ${type}`,
+      throw new PSIError(
+        this.currentToken,
+        `Expected type ${this.currentToken.constructor.name} to be ${type.name}`,
       );
     }
   }
@@ -26,46 +28,66 @@ export class Parser implements AST.Runnable<AST.AST> {
   }
 
   private repeat() {
+    const repeatToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.RepeatToken);
     const statements = this.statementList();
     this.currentToken = this.eat(Lexer.UntilToken);
     const condition = this.expression();
-    return new AST.RepeatAST(condition, statements);
+    return new AST.RepeatAST(condition, statements).inheritPositionFrom(
+      repeatToken,
+    );
   }
 
   private while() {
+    const whileToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.WhileToken);
     const condition = this.expression();
     this.currentToken = this.eat(Lexer.DoToken);
     const statement = this.statement();
-    return new AST.WhileAST(condition, statement);
+    return new AST.WhileAST(condition, statement).inheritPositionFrom(
+      whileToken,
+    );
   }
 
   private for() {
+    const forToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.ForToken);
     const assignment = this.assignmentExpression();
     let increment: Types.PSIBoolean;
     if (this.currentToken instanceof Lexer.ToToken) {
-      increment = new Types.PSIBoolean(true);
+      increment = new Types.PSIBoolean(true).inheritPositionFrom(
+        this.currentToken,
+      );
       this.currentToken = this.eat(Lexer.ToToken);
     } else if (this.currentToken instanceof Lexer.DownToToken) {
-      increment = new Types.PSIBoolean(false);
+      increment = new Types.PSIBoolean(false).inheritPositionFrom(
+        this.currentToken,
+      );
       this.currentToken = this.eat(Lexer.DownToToken);
     } else {
-      throw new Error('Expected To/DownTo token after for');
+      throw new PSIError(
+        this.currentToken,
+        'Expected To/DownTo token after for',
+      );
     }
     const finalValue = this.expression();
     this.currentToken = this.eat(Lexer.DoToken);
     const statement = this.statement();
-    return new AST.ForAST(assignment, increment, finalValue, statement);
+    return new AST.ForAST(
+      assignment,
+      increment,
+      finalValue,
+      statement,
+    ).inheritPositionFrom(forToken);
   }
 
   private if() {
+    const ifToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.IfToken);
     const expr = this.expression();
     this.currentToken = this.eat(Lexer.ThenToken);
     const statement = this.statement();
-    return new AST.IfAST(expr, statement);
+    return new AST.IfAST(expr, statement).inheritPositionFrom(ifToken);
   }
 
   private ifStatement() {
@@ -95,8 +117,7 @@ export class Parser implements AST.Runnable<AST.AST> {
   private declarations() {
     const declarations: (
       | AST.VariableDeclarationAST
-      | AST.ProcedureDeclarationAST
-    )[] = [];
+      | AST.ProcedureDeclarationAST)[] = [];
 
     while (
       this.currentToken instanceof Lexer.VariableToken ||
@@ -129,10 +150,13 @@ export class Parser implements AST.Runnable<AST.AST> {
 
     const type = this.type();
 
-    return ids.map(id => new AST.VariableDeclarationAST(id, type));
+    return ids.map(id =>
+      new AST.VariableDeclarationAST(id, type).inheritPositionFrom(id),
+    );
   }
 
   private procedureDeclaration() {
+    const procedureToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.ProcedureToken);
     const name = this.variable().name;
     let args: AST.VariableDeclarationAST[] = [];
@@ -144,7 +168,11 @@ export class Parser implements AST.Runnable<AST.AST> {
     this.currentToken = this.eat(Lexer.SemiToken);
     const block = this.block();
     this.currentToken = this.eat(Lexer.SemiToken);
-    return new AST.ProcedureDeclarationAST(name, args, block);
+    return new AST.ProcedureDeclarationAST(
+      name,
+      args,
+      block,
+    ).inheritPositionFrom(procedureToken);
   }
 
   private procedureParameters() {
@@ -163,37 +191,45 @@ export class Parser implements AST.Runnable<AST.AST> {
   }
 
   private type() {
+    const savedToken = Object.assign({}, this.currentToken);
     if (this.currentToken instanceof Lexer.IntegerToken) {
       this.currentToken = this.eat(Lexer.IntegerToken);
-      return new AST.IntegerAST();
+      return new AST.IntegerAST().inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.RealToken) {
       this.currentToken = this.eat(Lexer.RealToken);
-      return new AST.RealAST();
+      return new AST.RealAST().inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.BooleanToken) {
       this.currentToken = this.eat(Lexer.BooleanToken);
-      return new AST.BooleanAST();
+      return new AST.BooleanAST().inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.CharToken) {
       this.currentToken = this.eat(Lexer.CharToken);
-      return new AST.CharAST();
+      return new AST.CharAST().inheritPositionFrom(savedToken);
     } else {
-      throw new Error(`Unknown data type ${this.currentToken}`);
+      throw new PSIError(
+        this.currentToken,
+        `Unknown data type ${this.currentToken.value}`,
+      );
     }
   }
 
   private program() {
+    const programToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.ProgramToken);
     const programName = this.variable().name;
     this.currentToken = this.eat(Lexer.SemiToken);
     const blockNode = this.block();
     this.currentToken = this.eat(Lexer.DotToken);
-    return new AST.ProgramAST(programName, blockNode);
+    return new AST.ProgramAST(programName, blockNode).inheritPositionFrom(
+      programToken,
+    );
   }
 
   private compoundStatement() {
+    const beginToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.BeginToken);
     const statements = this.statementList();
     this.currentToken = this.eat(Lexer.EndToken);
-    return new AST.CompoundAST(statements);
+    return new AST.CompoundAST(statements).inheritPositionFrom(beginToken);
   }
 
   private statementList() {
@@ -231,55 +267,74 @@ export class Parser implements AST.Runnable<AST.AST> {
 
   private assignmentExpression() {
     const left = this.variable();
+    const assignmentToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.AssignToken);
-    return new AST.AssignmentAST(left, this.expression());
+    return new AST.AssignmentAST(left, this.expression()).inheritPositionFrom(
+      assignmentToken,
+    );
   }
 
   private expression() {
     let node = this.term();
+    const savedToken = Object.assign({}, this.currentToken);
 
     if (this.currentToken instanceof Lexer.PlusToken) {
       this.currentToken = this.eat(Lexer.PlusToken);
-      node = new AST.PlusAST(node, this.expression());
+      node = new AST.PlusAST(node, this.expression()).inheritPositionFrom(
+        savedToken,
+      );
     } else if (this.currentToken instanceof Lexer.MinusToken) {
       this.currentToken = this.eat(Lexer.MinusToken);
-      node = new AST.MinusAST(node, this.expression());
+      node = new AST.MinusAST(node, this.expression()).inheritPositionFrom(
+        savedToken,
+      );
     } else if (this.currentToken instanceof Lexer.OrToken) {
       this.currentToken = this.eat(Lexer.OrToken);
-      node = new AST.OrAST(node, this.expression());
+      node = new AST.OrAST(node, this.expression()).inheritPositionFrom(
+        savedToken,
+      );
     }
 
     return node;
   }
 
   private variable() {
-    const node = new AST.VariableAST(this.currentToken.value);
+    const node = new AST.VariableAST(
+      this.currentToken.value,
+    ).inheritPositionFrom(this.currentToken);
     this.currentToken = this.eat(Lexer.IdToken);
     return node;
   }
 
   private empty() {
-    return new AST.EmptyAST();
+    return new AST.EmptyAST().inheritPositionFrom(this.currentToken);
   }
 
   private term() {
     let node = this.comparison();
+    const savedToken = Object.assign({}, this.currentToken);
 
     if (this.currentToken instanceof Lexer.MultiplicationToken) {
       this.currentToken = this.eat(Lexer.MultiplicationToken);
-      node = new AST.MultiplicationAST(node, this.term());
+      node = new AST.MultiplicationAST(node, this.term()).inheritPositionFrom(
+        savedToken,
+      );
     } else if (this.currentToken instanceof Lexer.IntegerDivisionToken) {
       this.currentToken = this.eat(Lexer.IntegerDivisionToken);
-      node = new AST.IntegerDivisionAST(node, this.term());
+      node = new AST.IntegerDivisionAST(node, this.term()).inheritPositionFrom(
+        savedToken,
+      );
     } else if (this.currentToken instanceof Lexer.RealDivisionToken) {
       this.currentToken = this.eat(Lexer.RealDivisionToken);
-      node = new AST.RealDivisionAST(node, this.term());
+      node = new AST.RealDivisionAST(node, this.term()).inheritPositionFrom(
+        savedToken,
+      );
     } else if (this.currentToken instanceof Lexer.ModToken) {
       this.currentToken = this.eat(Lexer.ModToken);
-      node = new AST.ModAST(node, this.term());
+      node = new AST.ModAST(node, this.term()).inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.AndToken) {
       this.currentToken = this.eat(Lexer.AndToken);
-      node = new AST.AndAST(node, this.term());
+      node = new AST.AndAST(node, this.term()).inheritPositionFrom(savedToken);
     }
 
     return node;
@@ -287,45 +342,66 @@ export class Parser implements AST.Runnable<AST.AST> {
 
   private comparison() {
     let node = this.factor();
+    const savedToken = Object.assign({}, this.currentToken);
 
     if (this.currentToken instanceof Lexer.EqualsToken) {
       this.currentToken = this.eat(Lexer.EqualsToken);
-      node = new AST.EqualsAST(node, this.comparison());
+      node = new AST.EqualsAST(node, this.comparison()).inheritPositionFrom(
+        savedToken,
+      );
     } else if (this.currentToken instanceof Lexer.NotEqualsToken) {
       this.currentToken = this.eat(Lexer.NotEqualsToken);
-      node = new AST.NotEqualsAST(node, this.comparison());
+      node = new AST.NotEqualsAST(node, this.comparison()).inheritPositionFrom(
+        savedToken,
+      );
     } else if (this.currentToken instanceof Lexer.GreaterThanToken) {
       this.currentToken = this.eat(Lexer.GreaterThanToken);
-      node = new AST.GreaterThanAST(node, this.comparison());
+      node = new AST.GreaterThanAST(
+        node,
+        this.comparison(),
+      ).inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.LessThanToken) {
       this.currentToken = this.eat(Lexer.LessThanToken);
-      node = new AST.LessThanAST(node, this.comparison());
+      node = new AST.LessThanAST(node, this.comparison()).inheritPositionFrom(
+        savedToken,
+      );
     } else if (this.currentToken instanceof Lexer.GreaterEqualsToken) {
       this.currentToken = this.eat(Lexer.GreaterEqualsToken);
-      node = new AST.GreaterEqualsAST(node, this.comparison());
+      node = new AST.GreaterEqualsAST(
+        node,
+        this.comparison(),
+      ).inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.LessEqualsToken) {
       this.currentToken = this.eat(Lexer.LessEqualsToken);
-      node = new AST.LessEqualsAST(node, this.comparison());
+      node = new AST.LessEqualsAST(node, this.comparison()).inheritPositionFrom(
+        savedToken,
+      );
     }
 
     return node;
   }
 
   private factor(): AST.AST {
+    const savedToken = Object.assign({}, this.currentToken);
+
     if (this.currentToken instanceof Lexer.PlusToken) {
       this.currentToken = this.eat(Lexer.PlusToken);
-      return new AST.UnaryPlusAST(this.factor());
+      return new AST.UnaryPlusAST(this.factor()).inheritPositionFrom(
+        savedToken,
+      );
     } else if (this.currentToken instanceof Lexer.MinusToken) {
       this.currentToken = this.eat(Lexer.MinusToken);
-      return new AST.UnaryMinusAST(this.factor());
+      return new AST.UnaryMinusAST(this.factor()).inheritPositionFrom(
+        savedToken,
+      );
     } else if (this.currentToken instanceof Lexer.IntegerConstToken) {
       const value = this.currentToken.value;
       this.currentToken = this.eat(Lexer.IntegerConstToken);
-      return new AST.IntegerConstantAST(value);
+      return new AST.IntegerConstantAST(value).inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.RealConstToken) {
       const value = this.currentToken.value;
       this.currentToken = this.eat(Lexer.RealConstToken);
-      return new AST.RealConstantAST(value);
+      return new AST.RealConstantAST(value).inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.OpeningParenthesisToken) {
       this.currentToken = this.eat(Lexer.OpeningParenthesisToken);
       const result = this.expression();
@@ -333,24 +409,25 @@ export class Parser implements AST.Runnable<AST.AST> {
       return result;
     } else if (this.currentToken instanceof Lexer.TrueToken) {
       this.currentToken = this.eat(Lexer.TrueToken);
-      return new AST.TrueAST();
+      return new AST.TrueAST().inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.FalseToken) {
       this.currentToken = this.eat(Lexer.FalseToken);
-      return new AST.FalseAST();
+      return new AST.FalseAST().inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.CharConstantToken) {
       const character = this.currentToken.value;
       this.currentToken = this.eat(Lexer.CharConstantToken);
-      return new AST.CharConstantAST(character);
+      return new AST.CharConstantAST(character).inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.NotToken) {
       this.currentToken = this.eat(Lexer.NotToken);
-      return new AST.NotAST(this.factor());
+      return new AST.NotAST(this.factor()).inheritPositionFrom(savedToken);
     } else {
       return this.variable();
     }
   }
 
   private call() {
-    const name = this.variable().name;
+    const nameAST = this.variable();
+    const name = nameAST.name;
     this.currentToken = this.eat(Lexer.OpeningParenthesisToken);
     const args: AST.AST[] = [];
     if (!(this.currentToken instanceof Lexer.ClosingParenthesisToken)) {
@@ -361,7 +438,7 @@ export class Parser implements AST.Runnable<AST.AST> {
       }
     }
     this.currentToken = this.eat(Lexer.ClosingParenthesisToken);
-    return new AST.CallAST(name, args);
+    return new AST.CallAST(name, args).inheritPositionFrom(nameAST);
   }
 
   public run() {

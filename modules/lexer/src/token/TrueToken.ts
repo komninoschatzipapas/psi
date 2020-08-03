@@ -1,5 +1,5 @@
 import { Token } from '.';
 
-export default class TrueToken implements Token {
+export default class TrueToken extends Token {
   public readonly value: boolean = true;
 }

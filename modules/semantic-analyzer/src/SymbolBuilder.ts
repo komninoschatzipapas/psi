@@ -7,6 +7,7 @@ import {
 } from 'symbol';
 import * as PSISymbol from 'symbol';
 import * as Types from 'data-types';
+import PSIError from 'error';
 
 export default class SymbolBuilder extends AST.ASTVisitor {
   private currentScope: SymbolScope;
@@ -30,7 +31,10 @@ export default class SymbolBuilder extends AST.ASTVisitor {
     );
 
     if (!variableValue) {
-      throw new Error(`Variable ${node.name} used without being declared`);
+      throw new PSIError(
+        node,
+        `Variable ${node.name} used without first being declared`,
+      );
     } else {
       return variableValue;
     }
@@ -67,7 +71,11 @@ export default class SymbolBuilder extends AST.ASTVisitor {
       );
     } else if (node.type instanceof AST.CharAST) {
       symbol = new PSISymbol.VariableSymbol(node.variable.name, Types.PSIChar);
-    } else throw new Error('Unknown data type');
+    } else
+      throw new PSIError(
+        node,
+        `Unknown data type ${node.type.constructor.name}`,
+      );
 
     this.currentScope.insert(symbol);
     return symbol;
@@ -91,9 +99,12 @@ export default class SymbolBuilder extends AST.ASTVisitor {
       PSISymbol.ProcedureSymbol,
     );
     if (!procedure) {
-      throw new Error('Could not find procedure');
+      throw new PSIError(node, `Could not find procedure ${node.name}`);
     } else if (node.args.length != procedure.args.length) {
-      throw new Error('Invalid procedure arguments length');
+      throw new PSIError(
+        node,
+        `Expected ${procedure.args.length} arguments but ${node.args.length} were provided`,
+      );
     }
   }
 

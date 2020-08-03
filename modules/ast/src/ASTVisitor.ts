@@ -1,6 +1,6 @@
 import * as AST from './AST';
 import Runnable from './Runnable';
-
+import PSIError from 'error';
 export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
   protected abstract readonly ast: AST.AST;
   public abstract visitAssignment(node: AST.AssignmentAST): T;
@@ -122,7 +122,7 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
     } else if (node instanceof AST.RepeatAST) {
       return this.visitRepeat(node);
     } else {
-      throw new Error('Unknown node type on visitor');
+      throw new PSIError(node, 'Unknown node type on visitor');
     }
   }
 

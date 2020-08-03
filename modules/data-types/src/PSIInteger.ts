@@ -1,44 +1,78 @@
 import PSIDataType from './PSIDataType';
+import PSIError, { DebugInfoProvider } from 'error';
 
 export default class PSIInteger extends PSIDataType {
   constructor(private value: number) {
     super();
-    if (!Number.isInteger(value)) {
-      throw new Error('Invalid integer');
-    }
   }
 
-  public add(right: PSIInteger): PSIInteger {
+  public add(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIInteger,
+  ): PSIInteger {
     return new PSIInteger(this.value + right.value);
   }
-  public subtract(right: PSIInteger): PSIInteger {
+  public subtract(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIInteger,
+  ): PSIInteger {
     return new PSIInteger(this.value - right.value);
   }
-  public multiply(right: PSIInteger): PSIInteger {
+  public multiply(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIInteger,
+  ): PSIInteger {
     return new PSIInteger(this.value * right.value);
   }
-  public divide(right: PSIInteger): PSIInteger {
-    throw new Error('Cannot use this operator with PSIInteger types');
+  public divide(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIInteger,
+  ): PSIInteger {
+    throw new PSIError(
+      debugInfoProvider,
+      'Cannot use this operator with PSIInteger types',
+    );
   }
-  public integerDivide(right: PSIInteger): PSIInteger {
+  public integerDivide(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIInteger,
+  ): PSIInteger {
     return new PSIInteger(Math.trunc(this.value / right.value));
   }
-  public mod(right: PSIInteger): PSIInteger {
+  public mod(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIInteger,
+  ): PSIInteger {
     return new PSIInteger(this.value % right.value);
   }
-  public equals(right: PSIInteger): boolean {
+  public equals(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIInteger,
+  ): boolean {
     return this.value == right.value;
   }
-  public lessThan(right: PSIInteger): boolean {
+  public lessThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIInteger,
+  ): boolean {
     return this.value < right.value;
   }
-  public greaterThan(right: PSIInteger): boolean {
+  public greaterThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIInteger,
+  ): boolean {
     return this.value > right.value;
   }
-  public lessEqualsThan(right: PSIInteger): boolean {
+  public lessEqualsThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIInteger,
+  ): boolean {
     return this.value <= right.value;
   }
-  public greaterEqualsThan(right: PSIInteger): boolean {
+  public greaterEqualsThan(
+    debugInfoProvider: DebugInfoProvider,
+    right: PSIInteger,
+  ): boolean {
     return this.value >= right.value;
   }
   public unaryPlus(): PSIInteger {
