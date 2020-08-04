@@ -8,6 +8,7 @@ import { BaseSymbolScope } from 'symbol';
 import { RunnableChain } from 'ast';
 import PSIError from 'error';
 import chalk from 'chalk';
+import cli from 'cli-ux';
 import { basename } from 'path';
 
 function formatError(sourceCode: string, fileName: string, error: PSIError) {
@@ -66,14 +67,30 @@ class Psi extends Command {
   static args = [
     {
       name: 'file',
-      required: true,
+      required: false,
       description: 'Input file path',
     },
   ];
 
   async run() {
     const { args, flags } = this.parse(Psi);
-    const sourceCode = readFileSync(args.file, 'utf8');
+
+    let file: string = args.file;
+
+    if (!file) {
+      file = await cli.prompt('Please specify the file to interpret:');
+    }
+
+    let sourceCode = '';
+    try {
+      sourceCode = readFileSync(file, 'utf8');
+    } catch (error) {
+      console.error(
+        'An error occured while attempting to read the source code file.\nPlease ensure the correct file path was provided and the appropriate permissions were set.\nError code: ' +
+          error.code,
+      );
+      process.exit(1);
+    }
     try {
       const lexer = new Lexer(sourceCode);
       const tree = new Parser(lexer).run();
@@ -88,7 +105,7 @@ class Psi extends Command {
         (interpreter.scope.children as any).values().next().value.value,
       );
     } catch (error) {
-      console.error(formatError(sourceCode, basename(args.file), error));
+      console.error(formatError(sourceCode, basename(file), error));
 
       console.error('Program execution halted with error(s).');
 
