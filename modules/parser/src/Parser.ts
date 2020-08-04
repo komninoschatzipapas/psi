@@ -4,7 +4,8 @@ import * as Types from 'data-types';
 import PSIError from 'error';
 
 export class Parser implements AST.Runnable<AST.AST> {
-  private currentToken: Lexer.Token;
+  private currentToken: Lexer.Token; // Only change through this.eat
+  private previousToken: Lexer.Token | null = null; // Needed for better errors
   private lexer: Lexer.Lexer;
 
   constructor(lexer: Lexer.Lexer) {
@@ -12,13 +13,30 @@ export class Parser implements AST.Runnable<AST.AST> {
     this.currentToken = this.lexer.getNextToken();
   }
 
-  private eat(type: any) {
+  get previousTokenEndLocationProvider() {
+    return {
+      start: {
+        linePosition: this.previousToken!.end.linePosition,
+        characterPosition: this.previousToken!.end.characterPosition,
+      },
+      end: {
+        linePosition: this.previousToken!.end.linePosition,
+        characterPosition: this.previousToken!.end.characterPosition,
+      },
+    };
+  }
+
+  private eat(type: any, message?: string, previousTokenThrow = false) {
     if (this.currentToken instanceof type) {
+      this.previousToken = this.currentToken;
       return this.lexer.getNextToken();
     } else {
       throw new PSIError(
-        this.currentToken,
-        `Expected type ${this.currentToken.constructor.name} to be ${type.name}`,
+        previousTokenThrow
+          ? this.previousTokenEndLocationProvider
+          : this.currentToken,
+        message ||
+          `Expected type ${this.currentToken.constructor.name} to be ${type.name}`,
       );
     }
   }
@@ -31,7 +49,11 @@ export class Parser implements AST.Runnable<AST.AST> {
     const repeatToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.RepeatToken);
     const statements = this.statementList();
-    this.currentToken = this.eat(Lexer.UntilToken);
+    this.currentToken = this.eat(
+      Lexer.UntilToken,
+      'Expected until at the end of a repeat loop',
+      true,
+    );
     const condition = this.expression();
     return new AST.RepeatAST(condition, statements).inheritPositionFrom(
       repeatToken,
@@ -42,7 +64,11 @@ export class Parser implements AST.Runnable<AST.AST> {
     const whileToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.WhileToken);
     const condition = this.expression();
-    this.currentToken = this.eat(Lexer.DoToken);
+    this.currentToken = this.eat(
+      Lexer.DoToken,
+      'Expected do after while condition',
+      true,
+    );
     const statement = this.statement();
     return new AST.WhileAST(condition, statement).inheritPositionFrom(
       whileToken,
@@ -66,12 +92,16 @@ export class Parser implements AST.Runnable<AST.AST> {
       this.currentToken = this.eat(Lexer.DownToToken);
     } else {
       throw new PSIError(
-        this.currentToken,
-        'Expected To/DownTo token after for',
+        this.previousTokenEndLocationProvider,
+        'Expected to/down to after for',
       );
     }
     const finalValue = this.expression();
-    this.currentToken = this.eat(Lexer.DoToken);
+    this.currentToken = this.eat(
+      Lexer.DoToken,
+      'Expected do after for header',
+      true,
+    );
     const statement = this.statement();
     return new AST.ForAST(
       assignment,
@@ -85,7 +115,11 @@ export class Parser implements AST.Runnable<AST.AST> {
     const ifToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.IfToken);
     const expr = this.expression();
-    this.currentToken = this.eat(Lexer.ThenToken);
+    this.currentToken = this.eat(
+      Lexer.ThenToken,
+      'Expected then after if condition',
+      true,
+    );
     const statement = this.statement();
     return new AST.IfAST(expr, statement).inheritPositionFrom(ifToken);
   }
@@ -128,7 +162,11 @@ export class Parser implements AST.Runnable<AST.AST> {
 
         do {
           this.variableDeclaration().forEach(d => declarations.push(d));
-          this.currentToken = this.eat(Lexer.SemiToken);
+          this.currentToken = this.eat(
+            Lexer.SemiToken,
+            'Expected semi color at the end of a variable declaration',
+            true,
+          );
         } while (this.currentToken instanceof Lexer.IdToken);
       } else if (this.currentToken instanceof Lexer.ProcedureToken) {
         declarations.push(this.procedureDeclaration());
@@ -146,7 +184,11 @@ export class Parser implements AST.Runnable<AST.AST> {
       ids.push(this.variable());
     }
 
-    this.currentToken = this.eat(Lexer.ColonToken);
+    this.currentToken = this.eat(
+      Lexer.ColonToken,
+      'Expected colon after variable name declaration',
+      true,
+    );
 
     const type = this.type();
 
@@ -161,13 +203,28 @@ export class Parser implements AST.Runnable<AST.AST> {
     const name = this.variable().name;
     let args: AST.VariableDeclarationAST[] = [];
     if (this.currentToken instanceof Lexer.OpeningParenthesisToken) {
-      this.currentToken = this.eat(Lexer.OpeningParenthesisToken);
+      this.currentToken = this.eat(
+        Lexer.OpeningParenthesisToken,
+        'Expected opening parenthesis after procedure name',
+      );
       args = this.procedureParameters();
-      this.currentToken = this.eat(Lexer.ClosingParenthesisToken);
+      this.currentToken = this.eat(
+        Lexer.ClosingParenthesisToken,
+        'Expected closing parenthesis after procedure arguments',
+        true,
+      );
     }
-    this.currentToken = this.eat(Lexer.SemiToken);
+    this.currentToken = this.eat(
+      Lexer.SemiToken,
+      'Expected semi colon after procedure type declaration',
+      true,
+    );
     const block = this.block();
-    this.currentToken = this.eat(Lexer.SemiToken);
+    this.currentToken = this.eat(
+      Lexer.SemiToken,
+      'Expected semi colon after procedure declaration',
+      true,
+    );
     return new AST.ProcedureDeclarationAST(
       name,
       args,
@@ -214,11 +271,22 @@ export class Parser implements AST.Runnable<AST.AST> {
 
   private program() {
     const programToken = Object.assign({}, this.currentToken);
-    this.currentToken = this.eat(Lexer.ProgramToken);
+    this.currentToken = this.eat(
+      Lexer.ProgramToken,
+      'Expected program to begin with a program statement',
+    );
     const programName = this.variable().name;
-    this.currentToken = this.eat(Lexer.SemiToken);
+    this.currentToken = this.eat(
+      Lexer.SemiToken,
+      'Expected semi colon after program name',
+      true,
+    );
     const blockNode = this.block();
-    this.currentToken = this.eat(Lexer.DotToken);
+    this.currentToken = this.eat(
+      Lexer.DotToken,
+      'Expected dot at the end of a program',
+      true,
+    );
     return new AST.ProgramAST(programName, blockNode).inheritPositionFrom(
       programToken,
     );
@@ -228,17 +296,30 @@ export class Parser implements AST.Runnable<AST.AST> {
     const beginToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.BeginToken);
     const statements = this.statementList();
-    this.currentToken = this.eat(Lexer.EndToken);
+    this.currentToken = this.eat(
+      Lexer.EndToken,
+      'Expected compound statement to end with end',
+    );
     return new AST.CompoundAST(statements).inheritPositionFrom(beginToken);
   }
 
   private statementList() {
+    const statementListTerminators: any[] = [Lexer.EndToken, Lexer.UntilToken];
+
     const statements = [this.statement()];
 
     while (this.currentToken instanceof Lexer.SemiToken) {
       this.currentToken = this.eat(Lexer.SemiToken);
       statements.push(this.statement());
     }
+
+    if (!statementListTerminators.includes(this.currentToken.constructor)) {
+      throw new PSIError(
+        this.previousTokenEndLocationProvider,
+        'Expected statement to end with a semi colon',
+      );
+    }
+
     return statements;
   }
 
@@ -437,7 +518,11 @@ export class Parser implements AST.Runnable<AST.AST> {
         args.push(this.expression());
       }
     }
-    this.currentToken = this.eat(Lexer.ClosingParenthesisToken);
+    this.currentToken = this.eat(
+      Lexer.ClosingParenthesisToken,
+      'Expected closing parenthesis after procedure/function call',
+      true,
+    );
     return new AST.CallAST(name, args).inheritPositionFrom(nameAST);
   }
 

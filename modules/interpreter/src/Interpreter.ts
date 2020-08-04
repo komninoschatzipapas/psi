@@ -118,7 +118,10 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
     const variableValue = this.scope.resolveValue(node.name);
 
     if (!variableValue) {
-      throw new PSIError(node, `Variable '${node.name}' is not in scope`);
+      throw new PSIError(
+        node,
+        `Variable '${node.name}' used without being initialized`,
+      );
     }
 
     return variableValue;

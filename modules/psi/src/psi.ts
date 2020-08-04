@@ -14,7 +14,9 @@ function formatError(sourceCode: string, fileName: string, error: PSIError) {
   const header =
     chalk.bold(
       fileName +
-        `:${error.start.linePosition}:${error.start.characterPosition}:` +
+        (error.start.linePosition !== -1 && error.start.characterPosition !== -1
+          ? `:${error.start.linePosition}:${error.start.characterPosition}:`
+          : ':') +
         ' ' +
         chalk.redBright('Error:') +
         ' ' +
@@ -23,11 +25,16 @@ function formatError(sourceCode: string, fileName: string, error: PSIError) {
 
   let codeLine = '';
 
-  const line = sourceCode.split('\n')[error.start.linePosition - 1];
-
-  if (error.start.linePosition === error.end.linePosition) {
+  if (
+    error.start.characterPosition === -1 ||
+    error.start.linePosition === -1 ||
+    error.end.characterPosition === -1 ||
+    error.end.linePosition === -1
+  ) {
+    codeLine = '<No line information was included>';
+  } else if (error.start.linePosition === error.end.linePosition) {
     codeLine =
-      line +
+      sourceCode.split('\n')[error.start.linePosition - 1] +
       '\n' +
       ' '.repeat(error.start.characterPosition) +
       chalk.bold(
@@ -36,18 +43,16 @@ function formatError(sourceCode: string, fileName: string, error: PSIError) {
             error.end.characterPosition - error.start.characterPosition || 1,
           ),
         ),
-      ) +
-      '\n';
+      );
   } else {
     codeLine =
-      line +
+      sourceCode.split('\n')[error.start.linePosition - 1] +
       '\n' +
       ' '.repeat(error.start.characterPosition) +
-      chalk.bold(chalk.blueBright(`^`)) +
-      '\n';
+      chalk.bold(chalk.blueBright(`^`));
   }
 
-  return header + codeLine;
+  return header + codeLine + '\n';
 }
 
 class Psi extends Command {

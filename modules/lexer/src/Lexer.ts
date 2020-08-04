@@ -2,7 +2,6 @@ import * as Token from './token';
 import CaseInsensitiveMap from 'case-insensitive-map';
 import * as Types from 'data-types';
 import PSIError, { DebugInfoProvider } from 'error';
-import { start } from 'repl';
 
 export class Lexer {
   protected readonly reservedKeywords = new CaseInsensitiveMap<
@@ -355,7 +354,10 @@ export class Lexer {
       }
     }
 
-    return new Token.EofToken().inheritEndPositionFrom(this);
+    return new Token.EofToken().inheritPositionFrom({
+      start: this,
+      end: this,
+    });
   }
 }
 
