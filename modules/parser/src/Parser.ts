@@ -17,11 +17,11 @@ export class Parser implements AST.Runnable<AST.AST> {
     return {
       start: {
         linePosition: this.previousToken!.end.linePosition,
-        characterPosition: this.previousToken!.end.characterPosition,
+        characterPosition: this.previousToken!.end.characterPosition - 1,
       },
       end: {
         linePosition: this.previousToken!.end.linePosition,
-        characterPosition: this.previousToken!.end.characterPosition,
+        characterPosition: this.previousToken!.end.characterPosition - 1,
       },
     };
   }
@@ -313,7 +313,10 @@ export class Parser implements AST.Runnable<AST.AST> {
       statements.push(this.statement());
     }
 
-    if (!statementListTerminators.includes(this.currentToken.constructor)) {
+    if (
+      !statementListTerminators.includes(this.currentToken.constructor) &&
+      !(this.previousToken instanceof Lexer.SemiToken)
+    ) {
       throw new PSIError(
         this.previousTokenEndLocationProvider,
         'Expected statement to end with a semi colon',
@@ -349,7 +352,7 @@ export class Parser implements AST.Runnable<AST.AST> {
   private assignmentExpression() {
     const left = this.variable();
     const assignmentToken = Object.assign({}, this.currentToken);
-    this.currentToken = this.eat(Lexer.AssignToken);
+    this.currentToken = this.eat(Lexer.AssignToken, 'Invalid statement', true); // Not enough information to determine whether user actually wanted an assignment statement
     return new AST.AssignmentAST(left, this.expression()).inheritPositionFrom(
       assignmentToken,
     );
