@@ -9,7 +9,8 @@
     "strict": true,
     "sourceMap": true,
     "experimentalDecorators": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "incremental": true
   },
   "include": ["modules/**/src/**/*.ts"]
 }
