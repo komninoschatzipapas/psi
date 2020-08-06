@@ -48,7 +48,7 @@ export class Parser implements AST.Runnable<AST.AST> {
   private repeat() {
     const repeatToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.RepeatToken);
-    const statements = this.statementList();
+    const statements = this.statementList(Lexer.UntilToken);
     this.currentToken = this.eat(
       Lexer.UntilToken,
       'Expected until at the end of a repeat loop',
@@ -295,7 +295,7 @@ export class Parser implements AST.Runnable<AST.AST> {
   private compoundStatement() {
     const beginToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.BeginToken);
-    const statements = this.statementList();
+    const statements = this.statementList(Lexer.EndToken);
     this.currentToken = this.eat(
       Lexer.EndToken,
       'Expected compound statement to end with end',
@@ -303,9 +303,7 @@ export class Parser implements AST.Runnable<AST.AST> {
     return new AST.CompoundAST(statements).inheritPositionFrom(beginToken);
   }
 
-  private statementList() {
-    const statementListTerminators: any[] = [Lexer.EndToken, Lexer.UntilToken];
-
+  private statementList(terminatorToken: any) {
     const statements = [this.statement()];
 
     while (this.currentToken instanceof Lexer.SemiToken) {
@@ -314,7 +312,7 @@ export class Parser implements AST.Runnable<AST.AST> {
     }
 
     if (
-      !statementListTerminators.includes(this.currentToken.constructor) &&
+      !(this.currentToken instanceof terminatorToken) &&
       !(this.previousToken instanceof Lexer.SemiToken)
     ) {
       throw new PSIError(
