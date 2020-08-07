@@ -291,7 +291,10 @@ export class Lexer {
           .inheritEndPositionFrom(this);
       } else if (this.currentCharacter == '.') {
         this.currentCharacter = this.advance();
-        return new Token.DotToken()
+        return (this.currentCharacter == '.'
+          ? new Token.DoubleDotToken()
+          : new Token.DotToken()
+        )
           .inheritStartPositionFrom(this.getPositionMinus(1))
           .inheritEndPositionFrom(this);
       } else if (this.currentCharacter == ':') {
