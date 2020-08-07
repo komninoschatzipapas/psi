@@ -41,6 +41,7 @@ type
   | "REAL"
   | "BOOLEAN"
   | "CHAR"
+  | type ".." type
   ;
 
 program
@@ -101,6 +102,15 @@ factor
 
 call
   : variable "(" (variable ("," variable)* )? ")"
+  ;
 
 character_constant
   : "'" UTF16_CHARACTER "'"
+  ;
+
+constant
+  : INTEGER
+  | character_constant
+  | "TRUE"
+  | "FALSE"
+  ;

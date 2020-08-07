@@ -47,6 +47,7 @@ import DoToken from './DoToken';
 import WhileToken from './WhileToken';
 import RepeatToken from './RepeatToken';
 import UntilToken from './UntilToken';
+import DoubleDotToken from './DoubleDotToken';
 
 export {
   Token,
@@ -98,4 +99,5 @@ export {
   WhileToken,
   RepeatToken,
   UntilToken,
+  DoubleDotToken,
 };

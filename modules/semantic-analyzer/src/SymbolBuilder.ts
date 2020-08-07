@@ -9,7 +9,7 @@ import * as PSISymbol from 'symbol';
 import * as Types from 'data-types';
 import PSIError from 'error';
 
-export default class SymbolBuilder extends AST.ASTVisitor {
+export default class SymbolBuilder extends AST.ASTVisitor<PSISymbol.PSISymbol | void> {
   private currentScope: SymbolScope;
 
   constructor(
@@ -71,6 +71,11 @@ export default class SymbolBuilder extends AST.ASTVisitor {
       );
     } else if (node.type instanceof AST.CharAST) {
       symbol = new PSISymbol.VariableSymbol(node.variable.name, Types.PSIChar);
+    } else if (node.type instanceof AST.SubrangeAST) {
+      symbol = new PSISymbol.VariableSymbol(
+        node.variable.name,
+        Types.createPSISubrange(node.type.left.value, node.type.right.value),
+      );
     } else
       throw new PSIError(
         node,
@@ -205,6 +210,9 @@ export default class SymbolBuilder extends AST.ASTVisitor {
     node.children.forEach(this.visit.bind(this));
   }
   public visitRepeat(node: AST.RepeatAST): void {
+    node.children.forEach(this.visit.bind(this));
+  }
+  public visitSubrange(node: AST.SubrangeAST): void {
     node.children.forEach(this.visit.bind(this));
   }
 }

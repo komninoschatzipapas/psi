@@ -105,6 +105,10 @@ class Psi extends Command {
         (interpreter.scope.children as any).values().next().value.value,
       );
     } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+
       console.error(formatError(sourceCode, basename(file), error));
 
       console.error('Program execution halted with error(s).');

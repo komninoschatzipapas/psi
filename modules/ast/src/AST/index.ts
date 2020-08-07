@@ -42,6 +42,7 @@ import CallAST from './CallAST';
 import ForAST from './ForAST';
 import WhileAST from './WhileAST';
 import RepeatAST from './RepeatAST';
+import SubrangeAST from './SubrangeAST';
 
 export {
   AST,
@@ -88,4 +89,5 @@ export {
   ForAST,
   WhileAST,
   RepeatAST,
+  SubrangeAST,
 };

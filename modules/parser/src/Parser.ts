@@ -249,6 +249,7 @@ export class Parser implements AST.Runnable<AST.AST> {
 
   private type() {
     const savedToken = Object.assign({}, this.currentToken);
+
     if (this.currentToken instanceof Lexer.IntegerToken) {
       this.currentToken = this.eat(Lexer.IntegerToken);
       return new AST.IntegerAST().inheritPositionFrom(savedToken);
@@ -262,10 +263,28 @@ export class Parser implements AST.Runnable<AST.AST> {
       this.currentToken = this.eat(Lexer.CharToken);
       return new AST.CharAST().inheritPositionFrom(savedToken);
     } else {
-      throw new PSIError(
-        this.currentToken,
-        `Unknown data type ${this.currentToken.value}`,
-      );
+      let start;
+      try {
+        start = this.constant();
+      } catch {
+        throw new PSIError(this.currentToken, `Unknown data type`);
+      }
+
+      this.currentToken = this.eat(Lexer.DoubleDotToken);
+
+      let end;
+      try {
+        end = this.constant();
+      } catch {
+        throw new PSIError(
+          this.currentToken,
+          `Right side of subrange must be a constant value`,
+        );
+      }
+
+      return new AST.SubrangeAST(start, end)
+        .inheritStartPositionFrom(start.start)
+        .inheritEndPositionFrom(end.end);
     }
   }
 
@@ -504,6 +523,28 @@ export class Parser implements AST.Runnable<AST.AST> {
       return new AST.NotAST(this.factor()).inheritPositionFrom(savedToken);
     } else {
       return this.variable();
+    }
+  }
+
+  private constant() {
+    const savedToken = Object.assign({}, this.currentToken);
+
+    if (this.currentToken instanceof Lexer.TrueToken) {
+      this.currentToken = this.eat(Lexer.TrueToken);
+      return new AST.TrueAST().inheritPositionFrom(savedToken);
+    } else if (this.currentToken instanceof Lexer.FalseToken) {
+      this.currentToken = this.eat(Lexer.FalseToken);
+      return new AST.FalseAST().inheritPositionFrom(savedToken);
+    } else if (this.currentToken instanceof Lexer.CharConstantToken) {
+      const character = this.currentToken.value;
+      this.currentToken = this.eat(Lexer.CharConstantToken);
+      return new AST.CharConstantAST(character).inheritPositionFrom(savedToken);
+    } else if (this.currentToken instanceof Lexer.IntegerConstToken) {
+      const value = this.currentToken.value;
+      this.currentToken = this.eat(Lexer.IntegerConstToken);
+      return new AST.IntegerConstantAST(value).inheritPositionFrom(savedToken);
+    } else {
+      throw new PSIError(savedToken, 'Invalid constant read');
     }
   }
 

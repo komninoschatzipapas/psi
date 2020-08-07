@@ -11,6 +11,7 @@ import PSIChar from './PSIChar';
 import PSICharType from './PSICharType';
 import PSIProcedure from './PSIProcedure';
 import PSIProcedureType from './PSIProcedureType';
+import createPSISubrange from './PSISubrange';
 
 export {
   PSIInteger,
@@ -26,4 +27,5 @@ export {
   PSICharType,
   PSIProcedure,
   PSIProcedureType,
+  createPSISubrange,
 };

@@ -195,6 +195,7 @@ export default class TypeChecker extends AST.ASTVisitor<
   }
   public visitBlock(node: AST.BlockAST) {
     this.visit(node.compoundStatement);
+    node.declarations.forEach(this.visit.bind(this));
     return Types.PSIVoid;
   }
   public visitCompound(node: AST.CompoundAST) {
@@ -227,6 +228,8 @@ export default class TypeChecker extends AST.ASTVisitor<
   }
 
   public visitVariableDeclaration(node: AST.VariableDeclarationAST) {
+    this.visit(node.variable);
+    this.visit(node.type);
     return Types.PSIVoid;
   }
 
@@ -253,6 +256,17 @@ export default class TypeChecker extends AST.ASTVisitor<
     return Types.PSIVoid;
   }
   public visitRepeat(node: AST.RepeatAST) {
+    return Types.PSIVoid;
+  }
+
+  public visitSubrange(node: AST.SubrangeAST) {
+    assertEquality(
+      node,
+      this.visit(node.left),
+      this.visit(node.right),
+      'Expected left and right constants of subrange to be of same type',
+    );
+
     return Types.PSIVoid;
   }
 }

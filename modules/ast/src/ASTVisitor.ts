@@ -43,6 +43,26 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
   public abstract visitFor(node: AST.ForAST): T;
   public abstract visitWhile(node: AST.WhileAST): T;
   public abstract visitRepeat(node: AST.RepeatAST): T;
+  public abstract visitSubrange(node: AST.SubrangeAST): T;
+
+  public visitConstant(node: AST.ConstantAST): T {
+    if (node instanceof AST.IntegerConstantAST) {
+      return this.visitIntegerConstant(node);
+    } else if (node instanceof AST.RealConstantAST) {
+      return this.visitRealConstant(node);
+    } else if (node instanceof AST.CharConstantAST) {
+      return this.visitCharConstant(node);
+    } else if (node instanceof AST.TrueAST) {
+      return this.visitTrue(node);
+    } else if (node instanceof AST.FalseAST) {
+      return this.visitFalse(node);
+    } else {
+      throw new PSIError(
+        node,
+        'Program error: Unknown constant AST node type on visitor',
+      );
+    }
+  }
 
   public visit(node: AST.AST): T {
     if (node instanceof AST.AssignmentAST) {
@@ -121,8 +141,13 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
       return this.visitWhile(node);
     } else if (node instanceof AST.RepeatAST) {
       return this.visitRepeat(node);
+    } else if (node instanceof AST.SubrangeAST) {
+      return this.visitSubrange(node);
     } else {
-      throw new PSIError(node, 'Unknown node type on visitor');
+      throw new PSIError(
+        node,
+        'Program error: Unknown AST node type on visitor',
+      );
     }
   }
 

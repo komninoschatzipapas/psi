@@ -22,6 +22,7 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
   public visitAssignment(node: AST.AssignmentAST) {
     const variableNode = node.left as AST.VariableAST;
     const variableValue = this.visit(node.right);
+
     this.scope.changeValue(variableNode.name, variableValue); // FIX: go to higher scopes
     return new Types.PSIVoid();
   }
@@ -266,5 +267,12 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
       node.statements.forEach(this.visit.bind(this));
     } while (this.visit(node.condition).equals(node, Types.PSIBoolean.false));
     return new Types.PSIVoid();
+  }
+
+  public visitSubrange(node: AST.SubrangeAST) {
+    return new (Types.createPSISubrange(
+      this.visitConstant(node.left),
+      this.visitConstant(node.right),
+    ))();
   }
 }

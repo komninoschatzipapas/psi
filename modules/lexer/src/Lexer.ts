@@ -140,7 +140,10 @@ export class Lexer {
       this.currentCharacter = this.advance();
     }
 
-    if (this.currentCharacter == '.') {
+    if (
+      this.currentCharacter == '.' &&
+      this.peek() != '.' // Fix conflicts with integer subrange type
+    ) {
       number += this.currentCharacter;
       this.currentCharacter = this.advance();
       while (
@@ -291,12 +294,16 @@ export class Lexer {
           .inheritEndPositionFrom(this);
       } else if (this.currentCharacter == '.') {
         this.currentCharacter = this.advance();
-        return (this.currentCharacter == '.'
-          ? new Token.DoubleDotToken()
-          : new Token.DotToken()
-        )
-          .inheritStartPositionFrom(this.getPositionMinus(1))
-          .inheritEndPositionFrom(this);
+        if (this.currentCharacter == '.') {
+          this.currentCharacter = this.advance();
+          return new Token.DoubleDotToken()
+            .inheritStartPositionFrom(this.getPositionMinus(2))
+            .inheritEndPositionFrom(this);
+        } else {
+          return new Token.DotToken()
+            .inheritStartPositionFrom(this.getPositionMinus(1))
+            .inheritEndPositionFrom(this);
+        }
       } else if (this.currentCharacter == ':') {
         this.currentCharacter = this.advance();
         return new Token.ColonToken()
