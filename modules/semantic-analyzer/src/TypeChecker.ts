@@ -30,11 +30,11 @@ export default class TypeChecker extends AST.ASTVisitor<
     return Types.PSIChar;
   }
 
-  public visitTrue(node: AST.TrueAST) {
+  public visitTrue(node: AST.TrueConstantAST) {
     return Types.PSIBoolean;
   }
 
-  public visitFalse(node: AST.FalseAST) {
+  public visitFalse(node: AST.FalseConstantAST) {
     return Types.PSIBoolean;
   }
 

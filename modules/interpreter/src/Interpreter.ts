@@ -94,11 +94,11 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
     return node.value;
   }
 
-  public visitTrue(node: AST.TrueAST) {
+  public visitTrue(node: AST.TrueConstantAST) {
     return new Types.PSIBoolean(true);
   }
 
-  public visitFalse(node: AST.FalseAST) {
+  public visitFalse(node: AST.FalseConstantAST) {
     return new Types.PSIBoolean(false);
   }
 

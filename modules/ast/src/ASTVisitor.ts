@@ -25,8 +25,8 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
   public abstract visitVariable(node: AST.VariableAST): T;
   public abstract visitVariableDeclaration(node: AST.VariableDeclarationAST): T;
   public abstract visitMod(node: AST.ModAST): T;
-  public abstract visitTrue(node: AST.TrueAST): T;
-  public abstract visitFalse(node: AST.FalseAST): T;
+  public abstract visitTrue(node: AST.TrueConstantAST): T;
+  public abstract visitFalse(node: AST.FalseConstantAST): T;
   public abstract visitEquals(node: AST.EqualsAST): T;
   public abstract visitNotEquals(node: AST.NotEqualsAST): T;
   public abstract visitGreaterThan(node: AST.GreaterThanAST): T;
@@ -52,9 +52,9 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
       return this.visitRealConstant(node);
     } else if (node instanceof AST.CharConstantAST) {
       return this.visitCharConstant(node);
-    } else if (node instanceof AST.TrueAST) {
+    } else if (node instanceof AST.TrueConstantAST) {
       return this.visitTrue(node);
-    } else if (node instanceof AST.FalseAST) {
+    } else if (node instanceof AST.FalseConstantAST) {
       return this.visitFalse(node);
     } else {
       throw new PSIError(
@@ -105,9 +105,9 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
       return this.visitVariableDeclaration(node);
     } else if (node instanceof AST.ModAST) {
       return this.visitMod(node);
-    } else if (node instanceof AST.TrueAST) {
+    } else if (node instanceof AST.TrueConstantAST) {
       return this.visitTrue(node);
-    } else if (node instanceof AST.FalseAST) {
+    } else if (node instanceof AST.FalseConstantAST) {
       return this.visitFalse(node);
     } else if (node instanceof AST.EqualsAST) {
       return this.visitEquals(node);

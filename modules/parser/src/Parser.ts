@@ -510,10 +510,10 @@ export class Parser implements AST.Runnable<AST.AST> {
       return result;
     } else if (this.currentToken instanceof Lexer.TrueToken) {
       this.currentToken = this.eat(Lexer.TrueToken);
-      return new AST.TrueAST().inheritPositionFrom(savedToken);
+      return new AST.TrueConstantAST().inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.FalseToken) {
       this.currentToken = this.eat(Lexer.FalseToken);
-      return new AST.FalseAST().inheritPositionFrom(savedToken);
+      return new AST.FalseConstantAST().inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.CharConstantToken) {
       const character = this.currentToken.value;
       this.currentToken = this.eat(Lexer.CharConstantToken);
@@ -531,10 +531,10 @@ export class Parser implements AST.Runnable<AST.AST> {
 
     if (this.currentToken instanceof Lexer.TrueToken) {
       this.currentToken = this.eat(Lexer.TrueToken);
-      return new AST.TrueAST().inheritPositionFrom(savedToken);
+      return new AST.TrueConstantAST().inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.FalseToken) {
       this.currentToken = this.eat(Lexer.FalseToken);
-      return new AST.FalseAST().inheritPositionFrom(savedToken);
+      return new AST.FalseConstantAST().inheritPositionFrom(savedToken);
     } else if (this.currentToken instanceof Lexer.CharConstantToken) {
       const character = this.currentToken.value;
       this.currentToken = this.eat(Lexer.CharConstantToken);

@@ -161,10 +161,10 @@ export default class SymbolBuilder extends AST.ASTVisitor<PSISymbol.PSISymbol | 
   public visitBoolean(node: AST.BooleanAST): void {
     node.children.forEach(this.visit.bind(this));
   }
-  public visitTrue(node: AST.TrueAST): void {
+  public visitTrue(node: AST.TrueConstantAST): void {
     node.children.forEach(this.visit.bind(this));
   }
-  public visitFalse(node: AST.FalseAST): void {
+  public visitFalse(node: AST.FalseConstantAST): void {
     node.children.forEach(this.visit.bind(this));
   }
   public visitEquals(node: AST.EqualsAST): void {

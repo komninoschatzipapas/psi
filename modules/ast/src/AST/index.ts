@@ -23,8 +23,8 @@ import IntegerConstantAST from './IntegerConstantAST';
 import RealConstantAST from './RealConstantAST';
 import ConstantAST from './ConstantAST';
 import ModAST from './ModAST';
-import TrueAST from './TrueAST';
-import FalseAST from './FalseAST';
+import TrueConstantAST from './TrueConstantAST';
+import FalseConstantAST from './FalseConstantAST';
 import BooleanAST from './BooleanAST';
 import EqualsAST from './EqualsAST';
 import NotEqualsAST from './NotEqualsAST';
@@ -70,8 +70,8 @@ export {
   RealConstantAST,
   ConstantAST,
   ModAST,
-  TrueAST,
-  FalseAST,
+  TrueConstantAST,
+  FalseConstantAST,
   BooleanAST,
   EqualsAST,
   NotEqualsAST,
