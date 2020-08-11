@@ -27,7 +27,8 @@
   },
   "dependencies": {
     "case-insensitive-map": "*",
-    "data-types": "*"
+    "data-types": "*",
+    "error": "*"
   },
   "devDependencies": {
     "@types/chai": "^4.2.0",

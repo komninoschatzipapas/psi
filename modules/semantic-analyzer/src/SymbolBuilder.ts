@@ -61,21 +61,27 @@ export default class SymbolBuilder extends AST.ASTVisitor<PSISymbol.PSISymbol | 
       symbol = new PSISymbol.VariableSymbol(
         node.variable.name,
         Types.PSIInteger,
-      );
+      ).inheritPositionFrom(node);
     } else if (node.type instanceof AST.RealAST) {
-      symbol = new PSISymbol.VariableSymbol(node.variable.name, Types.PSIReal);
+      symbol = new PSISymbol.VariableSymbol(
+        node.variable.name,
+        Types.PSIReal,
+      ).inheritPositionFrom(node);
     } else if (node.type instanceof AST.BooleanAST) {
       symbol = new PSISymbol.VariableSymbol(
         node.variable.name,
         Types.PSIBoolean,
-      );
+      ).inheritPositionFrom(node);
     } else if (node.type instanceof AST.CharAST) {
-      symbol = new PSISymbol.VariableSymbol(node.variable.name, Types.PSIChar);
+      symbol = new PSISymbol.VariableSymbol(
+        node.variable.name,
+        Types.PSIChar,
+      ).inheritPositionFrom(node);
     } else if (node.type instanceof AST.SubrangeAST) {
       symbol = new PSISymbol.VariableSymbol(
         node.variable.name,
         Types.createPSISubrange(node.type.left.value, node.type.right.value),
-      );
+      ).inheritPositionFrom(node);
     } else
       throw new PSIError(
         node,
@@ -92,7 +98,12 @@ export default class SymbolBuilder extends AST.ASTVisitor<PSISymbol.PSISymbol | 
 
     this.currentScope
       .getParent()!
-      .insert(new PSISymbol.ProcedureSymbol(node.name, argSymbols));
+      .insert(
+        new PSISymbol.ProcedureSymbol(
+          node.name,
+          argSymbols,
+        ).inheritPositionFrom(node),
+      );
 
     this.visit(node.block);
     this.currentScope = this.currentScope.getParent()!;

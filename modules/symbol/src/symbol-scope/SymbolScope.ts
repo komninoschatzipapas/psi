@@ -2,6 +2,7 @@ import PSISymbol from '../symbol/PSISymbol';
 import CaseInsensitiveMap from 'case-insensitive-map';
 import LocalSymbolScope from './LocalSymbolScope';
 import { PSIDataType } from 'data-types';
+import PSIError from 'error';
 
 class ScopeChildren extends CaseInsensitiveMap<string, LocalSymbolScope> {
   public add(scope: LocalSymbolScope) {
@@ -67,7 +68,7 @@ export default abstract class SymbolScope {
 
   public insert(symbol: PSISymbol) {
     if (this.has(symbol)) {
-      throw new Error(`Cannot reinitialize symbol ${symbol.name}`);
+      throw new PSIError(symbol, `Symbol ${symbol.name} is being redeclared`);
     }
 
     this.scope.set(symbol.name, symbol);

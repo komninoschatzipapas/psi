@@ -121,7 +121,7 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
     if (!variableValue) {
       throw new PSIError(
         node,
-        `Variable '${node.name}' used without being initialized`,
+        `Variable '${node.name}' used without first being initialized`,
       );
     }
 
