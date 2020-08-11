@@ -44,6 +44,7 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
   public abstract visitWhile(node: AST.WhileAST): T;
   public abstract visitRepeat(node: AST.RepeatAST): T;
   public abstract visitSubrange(node: AST.SubrangeAST): T;
+  public abstract visitBoolean(node: AST.BooleanAST): T;
 
   public visitConstant(node: AST.ConstantAST): T {
     if (node instanceof AST.IntegerConstantAST) {
@@ -69,6 +70,8 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
       return this.visitAssignment(node);
     } else if (node instanceof AST.BlockAST) {
       return this.visitBlock(node);
+    } else if (node instanceof AST.BooleanAST) {
+      return this.visitBoolean(node);
     } else if (node instanceof AST.CompoundAST) {
       return this.visitCompound(node);
     } else if (node instanceof AST.EmptyAST) {
@@ -146,7 +149,7 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
     } else {
       throw new PSIError(
         node,
-        'Program error: Unknown AST node type on visitor',
+        `Program error: Unknown AST node type on visitor ${node}`,
       );
     }
   }
