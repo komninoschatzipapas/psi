@@ -1,11 +1,12 @@
 import TypeAST from './TypeAST';
 import { ConstantAST } from '.';
+import { BinaryAST } from '.';
 
-export default class SubrangeAST extends TypeAST {
+export default class SubrangeAST extends BinaryAST {
   constructor(
     public readonly left: ConstantAST,
     public readonly right: ConstantAST,
   ) {
-    super();
+    super(left, right);
   }
 }
