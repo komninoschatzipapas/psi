@@ -6,7 +6,23 @@ import {
   VariableSymbol,
   ProcedureSymbol,
 } from 'symbol';
-import { assert, assertEquality } from 'error';
+import { assert, assertEquality, DebugInfoProvider } from 'error';
+
+function assertTypeEquality(
+  node: DebugInfoProvider,
+  left: typeof Types.PSIDataType,
+  right: typeof Types.PSIDataType,
+) {
+  if (left.treatAs) {
+    left = left.treatAs;
+  }
+
+  if (right.treatAs) {
+    right = right.treatAs;
+  }
+
+  assertEquality(node, left, right, 'Expected operands to be of same type');
+}
 
 export default class TypeChecker extends AST.ASTVisitor<
   new (..._: any[]) => Types.PSIDataType
@@ -46,7 +62,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
     return left;
   }
 
@@ -54,7 +70,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return Types.PSIInteger;
   }
@@ -63,7 +79,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return Types.PSIReal;
   }
@@ -72,7 +88,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return left;
   }
@@ -81,7 +97,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return left;
   }
@@ -90,7 +106,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return left;
   }
@@ -99,7 +115,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return left;
   }
@@ -108,7 +124,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return Types.PSIBoolean;
   }
@@ -116,7 +132,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return Types.PSIBoolean;
   }
@@ -124,7 +140,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return Types.PSIBoolean;
   }
@@ -132,7 +148,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return Types.PSIBoolean;
   }
@@ -140,7 +156,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return Types.PSIBoolean;
   }
@@ -148,7 +164,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return Types.PSIBoolean;
   }
@@ -156,7 +172,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return Types.PSIBoolean;
   }
@@ -164,7 +180,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertEquality(node, left, right, 'Expected operands to be of same type');
+    assertTypeEquality(node, left, right);
 
     return Types.PSIBoolean;
   }

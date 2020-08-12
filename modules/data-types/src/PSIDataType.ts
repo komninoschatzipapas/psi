@@ -57,4 +57,6 @@ export default abstract class PSIDataType extends DebugInfoProvider {
   public abstract unaryMinus(
     debugInfoProvider: DebugInfoProviderLike,
   ): PSIDataType;
+
+  public static treatAs?: typeof PSIDataType;
 }

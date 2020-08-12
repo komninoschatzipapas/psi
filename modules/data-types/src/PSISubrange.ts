@@ -6,9 +6,9 @@ export default function createPSISubrange(
   right: PSIDataType,
 ) {
   return class PSISubrange extends PSIDataType {
-    public static get subtype() {
-      if (PSISubrange.left === PSISubrange.right) {
-        return PSISubrange.left;
+    public static get treatAs() {
+      if (PSISubrange.left.constructor === PSISubrange.right.constructor) {
+        return PSISubrange.left.constructor as typeof PSIDataType;
       } else {
         throw new Error(
           'Program error: PSISubrange subtype tried to be accessed when left and right types mismatch',
