@@ -6,7 +6,7 @@ import {
   VariableSymbol,
   ProcedureSymbol,
 } from 'symbol';
-import { assertEquality } from 'error';
+import { assert, assertEquality } from 'error';
 
 export default class TypeChecker extends AST.ASTVisitor<
   new (..._: any[]) => Types.PSIDataType
@@ -267,6 +267,12 @@ export default class TypeChecker extends AST.ASTVisitor<
       'Expected left and right constants of subrange to be of same type',
     );
 
-    return Types.PSIVoid;
+    assert(
+      node,
+      node.left.value.lessEqualsThan(node, node.right.value),
+      'Expected subrange lower bound to be less or equal to subrange upper bound',
+    );
+
+    return Types.createPSISubrange(node.left.value, node.right.value);
   }
 }
