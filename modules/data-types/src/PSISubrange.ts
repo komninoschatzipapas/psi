@@ -16,6 +16,8 @@ export default function createPSISubrange(
       }
     }
 
+    public static isSubrangeType = true;
+
     public static left = left;
     public static right = right;
 

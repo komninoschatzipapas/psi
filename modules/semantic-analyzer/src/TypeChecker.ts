@@ -10,9 +10,12 @@ import { assert, assertEquality, DebugInfoProvider } from 'error';
 
 function assertTypeEquality(
   node: DebugInfoProvider,
-  left: typeof Types.PSIDataType,
-  right: typeof Types.PSIDataType,
+  originalLeft: new (..._: any[]) => Types.PSIDataType,
+  originalRight: new (..._: any[]) => Types.PSIDataType,
 ) {
+  let left = (originalLeft as unknown) as typeof Types.PSIDataType;
+  let right = (originalRight as unknown) as typeof Types.PSIDataType;
+
   if (left.treatAs) {
     left = left.treatAs;
   }
@@ -21,7 +24,14 @@ function assertTypeEquality(
     right = right.treatAs;
   }
 
-  assertEquality(node, left, right, 'Expected operands to be of same type');
+  assertEquality(
+    node,
+    left,
+    right,
+    `Expected operands to be of same type but instead got mismatching types ${Types.printType(
+      originalLeft,
+    )} and ${Types.printType(originalRight)}`,
+  );
 }
 
 export default class TypeChecker extends AST.ASTVisitor<

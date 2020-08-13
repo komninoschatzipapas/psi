@@ -59,4 +59,5 @@ export default abstract class PSIDataType extends DebugInfoProvider {
   ): PSIDataType;
 
   public static treatAs?: typeof PSIDataType;
+  public static isSubrangeType = false;
 }
