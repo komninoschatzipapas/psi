@@ -6,6 +6,10 @@ export default class PSIInteger extends PSIDataType {
     super();
   }
 
+  public serialize() {
+    return this.value;
+  }
+
   public add(
     debugInfoProvider: DebugInfoProviderLike,
     right: PSIInteger,

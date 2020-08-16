@@ -12,6 +12,7 @@ function assertTypeEquality(
   node: DebugInfoProvider,
   originalLeft: new (..._: any[]) => Types.PSIDataType,
   originalRight: new (..._: any[]) => Types.PSIDataType,
+  message?: string, // Replaces LEFT_TYPE and RIGHT_TYPE with types
 ) {
   let left = (originalLeft as unknown) as typeof Types.PSIDataType;
   let right = (originalRight as unknown) as typeof Types.PSIDataType;
@@ -28,9 +29,13 @@ function assertTypeEquality(
     node,
     left,
     right,
-    `Expected operands to be of same type but instead got mismatching types ${Types.printType(
-      originalLeft,
-    )} and ${Types.printType(originalRight)}`,
+    message
+      ? message
+          .replace(/LEFT_TYPE/g, Types.printType(originalLeft))
+          .replace(/RIGHT_TYPE/g, Types.printType(originalRight))
+      : `Expected operands to be of same type but instead got mismatching types ${Types.printType(
+          originalLeft,
+        )} and ${Types.printType(originalRight)}`,
   );
 }
 
@@ -300,5 +305,44 @@ export default class TypeChecker extends AST.ASTVisitor<
     );
 
     return Types.createPSISubrange(node.left.value, node.right.value);
+  }
+
+  public visitArray(node: AST.ArrayAST) {
+    return Types.PSIVoid;
+  }
+
+  public visitArrayAccess(node: AST.ArrayAccessAST) {
+    // TODO: check array parameters
+
+    const array = (this.currentScope.resolve(node.array.name, VariableSymbol)!
+      .type as unknown) as {
+      componentType: new (..._: any[]) => Types.PSIDataType;
+      indexTypes: (new (..._: any[]) => Types.PSIType)[];
+    };
+
+    assertEquality(
+      node,
+      node.accessors.length,
+      array.indexTypes.length,
+      `Array is ${array.indexTypes.length}-dimensional but ${
+        node.accessors.length
+      } ${
+        node.accessors.length > 1 ? 'index values were' : 'index value was'
+      } provided instead`,
+    );
+
+    for (let i = 0; i < node.accessors.length; i++) {
+      const indexType = array.indexTypes[i];
+      const accessor = node.accessors[i];
+
+      assertTypeEquality(
+        accessor,
+        indexType,
+        this.visit(accessor),
+        `Expected index value to be of type LEFT_TYPE but instead got incompatible type RIGHT_TYPE`,
+      );
+    }
+
+    return array.componentType;
   }
 }

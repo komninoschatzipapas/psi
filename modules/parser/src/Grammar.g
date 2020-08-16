@@ -36,12 +36,34 @@ procedure_parameters
   : (variable_declaration (";" variable_declaration)*)?
   ;
 
-type
+primitive_type
   : "INTEGER"
   | "REAL"
   | "BOOLEAN"
   | "CHAR"
-  | type ".." type
+  ;
+
+subrange
+  : constant ".." constant
+  ;
+
+index_type
+  : primitive_type
+  | subrange
+  ;
+
+array
+  : "ARRAY" "[" index_type "]" of type
+  ;
+
+array_access
+  : variable "[" expression "]"
+  ;
+
+type
+  : primitive_type
+  | array
+  | subrange
   ;
 
 program
@@ -66,11 +88,11 @@ statement
   ;
 
 assignment_expression
-  : variable ":=" expression
+  : (variable | array_access) ":=" expression
   ;
 
 variable:
-  [a-zA-Z_][a-zA-Z0-9_]*
+  [a-zA-Z_][a-zA-Z0-9_]* ("[" expression ("," expression)* "]")?
   ;
 
 empty
@@ -94,6 +116,7 @@ factor
   | "-" factor
   | "(" expression ")"
   | variable
+  | array_access
   | "TRUE"
   | "FALSE"
   | character_constant

@@ -247,7 +247,94 @@ export class Parser implements AST.Runnable<AST.AST> {
     return args;
   }
 
-  private type() {
+  private array(): AST.ArrayAST {
+    const arrayToken = Object.assign({}, this.currentToken);
+    this.currentToken = this.eat(Lexer.ArrayToken);
+
+    this.currentToken = this.eat(
+      Lexer.OpeningBracketToken,
+      'Expected opening bracket after array',
+    );
+
+    const indexTypes: ReturnType<Parser['indexType']>[] = [];
+
+    try {
+      indexTypes.push(this.indexType());
+    } catch {
+      throw new PSIError(this.previousToken!, 'Invalid array index type');
+    }
+
+    while (this.currentToken instanceof Lexer.CommaToken) {
+      this.currentToken = this.eat(Lexer.CommaToken);
+      try {
+        indexTypes.push(this.indexType());
+      } catch {
+        throw new PSIError(
+          this.currentToken,
+          'Expected index type after comma',
+        );
+      }
+    }
+
+    this.currentToken = this.eat(
+      Lexer.ClosingBracketToken,
+      'Expected closing bracket after array index type',
+      true,
+    );
+
+    this.currentToken = this.eat(
+      Lexer.OfToken,
+      'Expected of after array index type',
+    );
+
+    const componentType = this.type();
+
+    const ast = new AST.ArrayAST(indexTypes, componentType)
+      .inheritStartPositionFrom(arrayToken.start)
+      .inheritEndPositionFrom(componentType.end);
+
+    while (ast.componentType instanceof AST.ArrayAST) {
+      ast.indexTypes.push(...ast.componentType.indexTypes);
+      ast.componentType = ast.componentType.componentType;
+    }
+
+    return ast;
+  }
+
+  private indexType() {
+    try {
+      return this.primitiveType();
+    } catch {
+      return this.subrange();
+    }
+  }
+
+  private subrange() {
+    let start;
+    try {
+      start = this.constant();
+    } catch {
+      throw new PSIError(this.currentToken, `Unknown data type`);
+    }
+
+    this.currentToken = this.eat(Lexer.DoubleDotToken);
+
+    let end;
+    try {
+      end = this.constant();
+    } catch {
+      throw new PSIError(
+        this.currentToken,
+        `Right side of subrange must be a constant value`,
+      );
+    }
+
+    return new AST.SubrangeAST(start, end)
+      .inheritStartPositionFrom(start.start)
+      .inheritEndPositionFrom(end.end);
+  }
+
+  private primitiveType() {
     const savedToken = Object.assign({}, this.currentToken);
 
     if (this.currentToken instanceof Lexer.IntegerToken) {
@@ -263,28 +350,19 @@ export class Parser implements AST.Runnable<AST.AST> {
       this.currentToken = this.eat(Lexer.CharToken);
       return new AST.CharAST().inheritPositionFrom(savedToken);
     } else {
-      let start;
-      try {
-        start = this.constant();
-      } catch {
-        throw new PSIError(this.currentToken, `Unknown data type`);
+      throw new PSIError(this.currentToken, 'Invalid primitive type');
+    }
+  }
+
+  private type() {
+    try {
+      return this.primitiveType();
+    } catch {
+      if (this.currentToken instanceof Lexer.ArrayToken) {
+        return this.array();
+      } else {
+        return this.subrange();
       }
-
-      this.currentToken = this.eat(Lexer.DoubleDotToken);
-
-      let end;
-      try {
-        end = this.constant();
-      } catch {
-        throw new PSIError(
-          this.currentToken,
-          `Right side of subrange must be a constant value`,
-        );
-      }
-
-      return new AST.SubrangeAST(start, end)
-        .inheritStartPositionFrom(start.start)
-        .inheritEndPositionFrom(end.end);
     }
   }
 
@@ -367,7 +445,13 @@ export class Parser implements AST.Runnable<AST.AST> {
   }
 
   private assignmentExpression() {
-    const left = this.variable();
+    let left: AST.VariableAST | AST.ArrayAccessAST;
+    if (this.peek() instanceof Lexer.OpeningBracketToken) {
+      left = this.arrayAccess();
+    } else {
+      left = this.variable();
+    }
+
     const assignmentToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.AssignToken, 'Invalid statement', true); // Not enough information to determine whether user actually wanted an assignment statement
     return new AST.AssignmentAST(left, this.expression()).inheritPositionFrom(
@@ -404,7 +488,31 @@ export class Parser implements AST.Runnable<AST.AST> {
       this.currentToken.value,
     ).inheritPositionFrom(this.currentToken);
     this.currentToken = this.eat(Lexer.IdToken);
+
     return node;
+  }
+
+  private arrayAccess() {
+    const array = this.variable();
+
+    this.currentToken = this.eat(Lexer.OpeningBracketToken);
+
+    const accessors = [this.expression()];
+
+    while (this.currentToken instanceof Lexer.CommaToken) {
+      this.currentToken = this.eat(Lexer.CommaToken);
+      accessors.push(this.expression());
+    }
+
+    this.currentToken = this.eat(
+      Lexer.ClosingBracketToken,
+      'Expected closing bracket after array accessor(s)',
+      true,
+    );
+
+    return new AST.ArrayAccessAST(array, accessors)
+      .inheritStartPositionFrom(array.start)
+      .inheritEndPositionFrom(accessors[accessors.length - 1].end);
   }
 
   private empty() {
@@ -521,8 +629,15 @@ export class Parser implements AST.Runnable<AST.AST> {
     } else if (this.currentToken instanceof Lexer.NotToken) {
       this.currentToken = this.eat(Lexer.NotToken);
       return new AST.NotAST(this.factor()).inheritPositionFrom(savedToken);
-    } else {
+    } else if (
+      this.currentToken instanceof Lexer.IdToken &&
+      this.peek() instanceof Lexer.OpeningBracketToken
+    ) {
+      return this.arrayAccess();
+    } else if (this.currentToken instanceof Lexer.IdToken) {
       return this.variable();
+    } else {
+      throw new Error('Program error: Invalid factor');
     }
   }
 

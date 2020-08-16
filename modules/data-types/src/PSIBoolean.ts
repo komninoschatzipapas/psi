@@ -14,6 +14,10 @@ export default class PSIBoolean extends PSIDataType {
     }
   }
 
+  public serialize() {
+    return this.value;
+  }
+
   public add(
     debugInfoProvider: DebugInfoProviderLike,
     right: PSIDataType,

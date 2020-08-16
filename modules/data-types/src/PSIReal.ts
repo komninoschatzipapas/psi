@@ -7,6 +7,10 @@ export default class PSIReal extends PSIDataType {
     super();
   }
 
+  public serialize() {
+    return this.value;
+  }
+
   public add(
     debugInfoProvider: DebugInfoProviderLike,
     right: PSIReal,

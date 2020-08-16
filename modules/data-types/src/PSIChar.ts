@@ -2,11 +2,18 @@ import { PSIDataType } from './PSIDataTypes';
 import PSIError, { DebugInfoProviderLike } from 'error';
 
 export default class PSIChar extends PSIDataType {
-  private value: number;
-  constructor(value: string) {
-    super();
-    this.value = value.charCodeAt(0);
+  private get valueInteger() {
+    return this.value.charCodeAt(0);
   }
+
+  constructor(private value: string) {
+    super();
+  }
+
+  public serialize() {
+    return this.value;
+  }
+
   public add(
     debugInfoProvider: DebugInfoProviderLike,
     right: PSIChar,
@@ -71,25 +78,25 @@ export default class PSIChar extends PSIDataType {
     debugInfoProvider: DebugInfoProviderLike,
     right: PSIChar,
   ): boolean {
-    return this.value < right.value;
+    return this.valueInteger < right.valueInteger;
   }
   public greaterThan(
     debugInfoProvider: DebugInfoProviderLike,
     right: PSIChar,
   ): boolean {
-    return this.value > right.value;
+    return this.valueInteger > right.valueInteger;
   }
   public lessEqualsThan(
     debugInfoProvider: DebugInfoProviderLike,
     right: PSIChar,
   ): boolean {
-    return this.value <= right.value;
+    return this.valueInteger <= right.valueInteger;
   }
   public greaterEqualsThan(
     debugInfoProvider: DebugInfoProviderLike,
     right: PSIChar,
   ): boolean {
-    return this.value >= right.value;
+    return this.valueInteger >= right.valueInteger;
   }
   public unaryPlus(debugInfoProvider: DebugInfoProviderLike): PSIDataType {
     throw new PSIError(

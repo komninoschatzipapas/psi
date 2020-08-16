@@ -20,10 +20,18 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
   }
 
   public visitAssignment(node: AST.AssignmentAST) {
-    const variableNode = node.left as AST.VariableAST;
-    const variableValue = this.visit(node.right);
+    const left = node.left;
+    const newValue = this.visit(node.right);
 
-    this.scope.changeValue(variableNode.name, variableValue); // FIX: go to higher scopes
+    if (left instanceof AST.VariableAST) {
+      this.scope.changeValue(left.name, newValue);
+    } else if (left instanceof AST.ArrayAccessAST) {
+      this.scope.changeArrayValue(
+        left.array.name,
+        left.accessors.map(accessor => this.visit(accessor)),
+        newValue,
+      );
+    }
     return new Types.PSIVoid();
   }
 
@@ -274,5 +282,42 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
       this.visitConstant(node.left),
       this.visitConstant(node.right),
     ))();
+  }
+
+  public visitArray(node: AST.ArrayAST) {
+    return new (Types.createPSIArray(
+      node.indexTypes.map(
+        node =>
+          (this.visit(node).constructor as unknown) as new (
+            ..._: any[]
+          ) => Types.PSIType,
+      ),
+      (this.visit(node.componentType).constructor as unknown) as new (
+        ..._: any[]
+      ) => Types.PSIType,
+    ))();
+  }
+
+  public visitArrayAccess(node: AST.ArrayAccessAST) {
+    const variableValue = this.scope.resolveValue(node.array.name);
+
+    if (!variableValue) {
+      throw new PSIError(
+        node,
+        `Program error: Array accessed without being initialized`,
+      );
+    }
+
+    if (!Types.isPSIArray(variableValue)) {
+      throw new PSIError(
+        node,
+        `Program error: Expected array access variable to be array`,
+      );
+    }
+    const value = variableValue.getValue(
+      node.accessors.map(node => this.visit(node)),
+    );
+
+    return value!;
   }
 }

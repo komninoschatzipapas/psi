@@ -33,6 +33,8 @@ export class Lexer {
     ['WHILE', () => new Token.WhileToken()],
     ['REPEAT', () => new Token.RepeatToken()],
     ['UNTIL', () => new Token.UntilToken()],
+    ['ARRAY', () => new Token.ArrayToken()],
+    ['OF', () => new Token.OfToken()],
   ]);
 
   private readonly numberRegex = /^\d$/;
@@ -342,6 +344,16 @@ export class Lexer {
       } else if (this.currentCharacter == '<') {
         this.currentCharacter = this.advance();
         return new Token.LessThanToken()
+          .inheritStartPositionFrom(this.getPositionMinus(1))
+          .inheritEndPositionFrom(this);
+      } else if (this.currentCharacter == '[') {
+        this.currentCharacter = this.advance();
+        return new Token.OpeningBracketToken()
+          .inheritStartPositionFrom(this.getPositionMinus(1))
+          .inheritEndPositionFrom(this);
+      } else if (this.currentCharacter == ']') {
+        this.currentCharacter = this.advance();
+        return new Token.ClosingBracketToken()
           .inheritStartPositionFrom(this.getPositionMinus(1))
           .inheritEndPositionFrom(this);
       } else if (this.currentCharacter == "'") {

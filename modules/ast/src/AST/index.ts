@@ -43,6 +43,8 @@ import ForAST from './ForAST';
 import WhileAST from './WhileAST';
 import RepeatAST from './RepeatAST';
 import SubrangeAST from './SubrangeAST';
+import ArrayAST from './ArrayAST';
+import ArrayAccessAST from './ArrayAccessAST';
 
 export {
   AST,
@@ -90,4 +92,6 @@ export {
   WhileAST,
   RepeatAST,
   SubrangeAST,
+  ArrayAST,
+  ArrayAccessAST,
 };

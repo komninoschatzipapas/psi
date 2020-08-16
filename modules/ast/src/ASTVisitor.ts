@@ -45,6 +45,8 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
   public abstract visitRepeat(node: AST.RepeatAST): T;
   public abstract visitSubrange(node: AST.SubrangeAST): T;
   public abstract visitBoolean(node: AST.BooleanAST): T;
+  public abstract visitArray(node: AST.ArrayAST): T;
+  public abstract visitArrayAccess(node: AST.ArrayAccessAST): T;
 
   public visitConstant(node: AST.ConstantAST): T {
     if (node instanceof AST.IntegerConstantAST) {
@@ -146,6 +148,10 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
       return this.visitRepeat(node);
     } else if (node instanceof AST.SubrangeAST) {
       return this.visitSubrange(node);
+    } else if (node instanceof AST.ArrayAST) {
+      return this.visitArray(node);
+    } else if (node instanceof AST.ArrayAccessAST) {
+      return this.visitArrayAccess(node);
     } else {
       throw new PSIError(
         node,

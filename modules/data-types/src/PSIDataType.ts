@@ -60,4 +60,9 @@ export default abstract class PSIDataType extends DebugInfoProvider {
 
   public static treatAs?: typeof PSIDataType;
   public static isSubrangeType = false;
+  public static isArrayType = false;
+  public isArray = false;
+  public isSubrange = false;
+
+  public static defaultValue?: PSIDataType;
 }

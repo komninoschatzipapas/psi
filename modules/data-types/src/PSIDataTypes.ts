@@ -13,6 +13,7 @@ import PSIProcedure from './PSIProcedure';
 import PSIProcedureType from './PSIProcedureType';
 import createPSISubrange from './PSISubrange';
 import printType from './printType';
+import createPSIArray, { isPSIArray, PSIArrayLike } from './PSIArray';
 
 export {
   PSIInteger,
@@ -30,4 +31,7 @@ export {
   PSIProcedureType,
   createPSISubrange,
   printType,
+  createPSIArray,
+  isPSIArray,
+  PSIArrayLike,
 };

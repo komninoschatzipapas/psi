@@ -1,4 +1,5 @@
 import { DebugInfoProvider } from 'error';
+import { PSIDataType } from 'data-types';
 
 export default abstract class AST extends DebugInfoProvider {
   private readonly _children: AST[] = [];

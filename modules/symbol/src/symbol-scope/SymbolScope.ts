@@ -1,8 +1,9 @@
 import PSISymbol from '../symbol/PSISymbol';
 import CaseInsensitiveMap from 'case-insensitive-map';
 import LocalSymbolScope from './LocalSymbolScope';
-import { PSIDataType } from 'data-types';
+import { PSIDataType, PSIArrayLike } from 'data-types';
 import PSIError from 'error';
+import { VariableSymbol } from '../symbol';
 
 class ScopeChildren extends CaseInsensitiveMap<string, LocalSymbolScope> {
   public add(scope: LocalSymbolScope) {
@@ -47,6 +48,25 @@ export default abstract class SymbolScope {
     }
   }
 
+  public resolveValueThisScopeOnly<T extends PSIDataType>(
+    name: string,
+  ): T | null {
+    const result = this.value.get(name);
+    return result || null;
+  }
+
+  public changeArrayValue(
+    arrayName: string,
+    accessors: PSIDataType[],
+    value: PSIDataType,
+  ) {
+    const scope = this.findScope(arrayName)!;
+    const array = scope.resolveValueThisScopeOnly(arrayName)! as PSIDataType &
+      PSIArrayLike;
+
+    array.changeValue(accessors, value);
+  }
+
   public changeValue(name: string, value: PSIDataType) {
     this.findScope(name)!.value.set(name, value);
   }
@@ -72,6 +92,15 @@ export default abstract class SymbolScope {
     }
 
     this.scope.set(symbol.name, symbol);
+    if (
+      symbol instanceof VariableSymbol &&
+      ((symbol.type as unknown) as typeof PSIDataType).defaultValue
+    ) {
+      this.value.set(
+        symbol.name,
+        ((symbol.type as unknown) as typeof PSIDataType).defaultValue!,
+      );
+    }
   }
 
   public has(symbol: PSISymbol) {

@@ -48,6 +48,10 @@ import WhileToken from './WhileToken';
 import RepeatToken from './RepeatToken';
 import UntilToken from './UntilToken';
 import DoubleDotToken from './DoubleDotToken';
+import ArrayToken from './ArrayToken';
+import OfToken from './OfToken';
+import OpeningBracketToken from './OpeningBracketToken';
+import ClosingBracketToken from './ClosingBracketToken';
 
 export {
   Token,
@@ -100,4 +104,8 @@ export {
   RepeatToken,
   UntilToken,
   DoubleDotToken,
+  ArrayToken,
+  OfToken,
+  OpeningBracketToken,
+  ClosingBracketToken,
 };
