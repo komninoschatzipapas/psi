@@ -8,14 +8,23 @@ import {
 } from 'symbol';
 import { assert, assertEquality, DebugInfoProvider } from 'error';
 
-function assertTypeEquality(
-  node: DebugInfoProvider,
-  originalLeft: new (..._: any[]) => Types.PSIDataType,
-  originalRight: new (..._: any[]) => Types.PSIDataType,
-  message?: string, // Replaces LEFT_TYPE and RIGHT_TYPE with types
-) {
-  let left = (originalLeft as unknown) as typeof Types.PSIDataType;
-  let right = (originalRight as unknown) as typeof Types.PSIDataType;
+function assertTypeEquality({
+  node,
+  left,
+  right,
+  allowPromoteLeft = true,
+  allowPromoteRight = true,
+  message, // Replaces LEFT_TYPE and RIGHT_TYPE with types
+}: {
+  node: DebugInfoProvider;
+  left: typeof Types.PSIDataType;
+  right: typeof Types.PSIDataType;
+  allowPromoteLeft?: boolean;
+  allowPromoteRight?: boolean;
+  message?: string;
+}) {
+  const leftPrint = Types.printType(left);
+  const rightPrint = Types.printType(right);
 
   if (left.treatAs) {
     left = left.treatAs;
@@ -25,22 +34,49 @@ function assertTypeEquality(
     right = right.treatAs;
   }
 
+  let promoteLeft: typeof Types.PSIDataType | null = null;
+  let promoteRight: typeof Types.PSIDataType | null = null;
+
+  if (allowPromoteLeft && left.promotable && left.promotable.includes(right)) {
+    promoteLeft = left = right;
+  } else if (
+    allowPromoteRight &&
+    right.promotable &&
+    right.promotable.includes(left)
+  ) {
+    promoteRight = right = left;
+  } else if (
+    allowPromoteLeft &&
+    allowPromoteRight &&
+    left.promotable &&
+    right.promotable
+  ) {
+    for (const sharedPromotableCandidate of left.promotable!) {
+      if (right.promotable!.includes(sharedPromotableCandidate)) {
+        promoteLeft = promoteRight = left = right = sharedPromotableCandidate;
+      }
+    }
+  }
+
   assertEquality(
     node,
     left,
     right,
     message
       ? message
-          .replace(/LEFT_TYPE/g, Types.printType(originalLeft))
-          .replace(/RIGHT_TYPE/g, Types.printType(originalRight))
-      : `Expected operands to be of same type but instead got mismatching types ${Types.printType(
-          originalLeft,
-        )} and ${Types.printType(originalRight)}`,
+          .replace(/LEFT_TYPE/g, leftPrint)
+          .replace(/RIGHT_TYPE/g, rightPrint)
+      : `Expected operands to be of same type but instead got incompatible types ${leftPrint} and ${rightPrint}`,
   );
+
+  return {
+    promoteLeft,
+    promoteRight,
+  };
 }
 
 export default class TypeChecker extends AST.ASTVisitor<
-  new (..._: any[]) => Types.PSIDataType
+  typeof Types.PSIDataType
 > {
   private currentScope: SymbolScope;
 
@@ -70,116 +106,356 @@ export default class TypeChecker extends AST.ASTVisitor<
   }
 
   public visitVariable(node: AST.VariableAST) {
-    return this.currentScope.resolve(node.name, VariableSymbol)!.type;
+    return this.currentScope.resolve<VariableSymbol>(node.name)!.type;
   }
 
   public visitAssignment(node: AST.AssignmentAST) {
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    assertTypeEquality({ node, left, right, allowPromoteLeft: false });
     return left;
   }
 
   public visitIntegerDivision(node: AST.IntegerDivisionAST) {
-    const left = this.visit(node.left);
-    const right = this.visit(node.right);
+    let left = this.visit(node.left);
+    let right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    const { promoteLeft, promoteRight } = assertTypeEquality({
+      node,
+      left,
+      right,
+    });
+
+    if (promoteLeft && left !== promoteLeft) {
+      left = promoteLeft;
+      node.left = node.left.promote!.get(promoteLeft)!();
+    }
+
+    if (promoteRight && right !== promoteRight) {
+      right = promoteRight;
+      node.right = node.right.promote!.get(promoteRight)!();
+    }
+
+    assert(
+      node,
+      left.prototype.integerDivide,
+      `Cannot perform operation with type ${Types.printType(left)}`,
+    );
 
     return Types.PSIInteger;
   }
 
   public visitRealDivision(node: AST.RealDivisionAST) {
-    const left = this.visit(node.left);
-    const right = this.visit(node.right);
+    let left = this.visit(node.left);
+    let right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    const { promoteLeft, promoteRight } = assertTypeEquality({
+      node,
+      left,
+      right,
+    });
+
+    if (promoteLeft && left !== promoteLeft) {
+      left = promoteLeft;
+      node.left = node.left.promote!.get(promoteLeft)!();
+    }
+
+    if (promoteRight && right !== promoteRight) {
+      right = promoteRight;
+      node.right = node.right.promote!.get(promoteRight)!();
+    }
+
+    assert(
+      node,
+      left.prototype.divide,
+      `Cannot perform operation with type ${Types.printType(left)}`,
+    );
 
     return Types.PSIReal;
   }
 
   public visitMinus(node: AST.MinusAST) {
-    const left = this.visit(node.left);
-    const right = this.visit(node.right);
+    let left = this.visit(node.left);
+    let right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    const { promoteLeft, promoteRight } = assertTypeEquality({
+      node,
+      left,
+      right,
+    });
+
+    if (promoteLeft && left !== promoteLeft) {
+      left = promoteLeft;
+      node.left = node.left.promote!.get(promoteLeft)!();
+    }
+
+    if (promoteRight && right !== promoteRight) {
+      right = promoteRight;
+      node.right = node.right.promote!.get(promoteRight)!();
+    }
+
+    assert(
+      node,
+      left.prototype.subtract,
+      `Cannot perform operation with type ${Types.printType(left)}`,
+    );
 
     return left;
   }
 
   public visitMultiplication(node: AST.MultiplicationAST) {
-    const left = this.visit(node.left);
-    const right = this.visit(node.right);
+    let left = this.visit(node.left);
+    let right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    const { promoteLeft, promoteRight } = assertTypeEquality({
+      node,
+      left,
+      right,
+    });
+
+    if (promoteLeft && left !== promoteLeft) {
+      left = promoteLeft;
+      node.left = node.left.promote!.get(promoteLeft)!();
+    }
+
+    if (promoteRight && right !== promoteRight) {
+      right = promoteRight;
+      node.right = node.right.promote!.get(promoteRight)!();
+    }
+
+    assert(
+      node,
+      left.prototype.multiply,
+      `Cannot perform operation with type ${Types.printType(left)}`,
+    );
 
     return left;
   }
 
   public visitMod(node: AST.ModAST) {
-    const left = this.visit(node.left);
-    const right = this.visit(node.right);
+    let left = this.visit(node.left);
+    let right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    const { promoteLeft, promoteRight } = assertTypeEquality({
+      node,
+      left,
+      right,
+    });
+
+    if (promoteLeft && left !== promoteLeft) {
+      left = promoteLeft;
+      node.left = node.left.promote!.get(promoteLeft)!();
+    }
+
+    if (promoteRight && right !== promoteRight) {
+      right = promoteRight;
+      node.right = node.right.promote!.get(promoteRight)!();
+    }
+
+    assert(
+      node,
+      left.prototype.mod,
+      `Cannot perform operation with type ${Types.printType(left)}`,
+    );
 
     return left;
   }
 
   public visitPlus(node: AST.PlusAST) {
-    const left = this.visit(node.left);
-    const right = this.visit(node.right);
+    let left = this.visit(node.left);
+    let right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    const { promoteLeft, promoteRight } = assertTypeEquality({
+      node,
+      left,
+      right,
+    });
+
+    if (promoteLeft && left !== promoteLeft) {
+      left = promoteLeft;
+      node.left = node.left.promote!.get(promoteLeft)!();
+    }
+
+    if (promoteRight && right !== promoteRight) {
+      right = promoteRight;
+      node.right = node.right.promote!.get(promoteRight)!();
+    }
+
+    assert(
+      node,
+      left.prototype.add,
+      `Cannot perform operation with type ${Types.printType(left)}`,
+    );
 
     return left;
   }
 
   public visitEquals(node: AST.EqualsAST) {
-    const left = this.visit(node.left);
-    const right = this.visit(node.right);
+    let left = this.visit(node.left);
+    let right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    const { promoteLeft, promoteRight } = assertTypeEquality({
+      node,
+      left,
+      right,
+    });
+
+    if (promoteLeft && left !== promoteLeft) {
+      left = promoteLeft;
+      node.left = node.left.promote!.get(promoteLeft)!();
+    }
+
+    if (promoteRight && right !== promoteRight) {
+      right = promoteRight;
+      node.right = node.right.promote!.get(promoteRight)!();
+    }
+
+    assert(
+      node,
+      left.prototype.equals,
+      `Cannot perform operation with type ${Types.printType(left)}`,
+    );
 
     return Types.PSIBoolean;
   }
   public visitNotEquals(node: AST.NotEqualsAST) {
-    const left = this.visit(node.left);
-    const right = this.visit(node.right);
+    let left = this.visit(node.left);
+    let right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    const { promoteLeft, promoteRight } = assertTypeEquality({
+      node,
+      left,
+      right,
+    });
+
+    if (promoteLeft && left !== promoteLeft) {
+      left = promoteLeft;
+      node.left = node.left.promote!.get(promoteLeft)!();
+    }
+
+    if (promoteRight && right !== promoteRight) {
+      right = promoteRight;
+      node.right = node.right.promote!.get(promoteRight)!();
+    }
+
+    assert(
+      node,
+      left.prototype.notEquals,
+      `Cannot perform operation with type ${Types.printType(left)}`,
+    );
 
     return Types.PSIBoolean;
   }
   public visitGreaterThan(node: AST.GreaterThanAST) {
-    const left = this.visit(node.left);
-    const right = this.visit(node.right);
+    let left = this.visit(node.left);
+    let right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    const { promoteLeft, promoteRight } = assertTypeEquality({
+      node,
+      left,
+      right,
+    });
+
+    if (promoteLeft && left !== promoteLeft) {
+      left = promoteLeft;
+      node.left = node.left.promote!.get(promoteLeft)!();
+    }
+
+    if (promoteRight && right !== promoteRight) {
+      right = promoteRight;
+      node.right = node.right.promote!.get(promoteRight)!();
+    }
+
+    assert(
+      node,
+      left.prototype.greaterThan,
+      `Cannot perform operation with type ${Types.printType(left)}`,
+    );
 
     return Types.PSIBoolean;
   }
   public visitLessThan(node: AST.LessThanAST) {
-    const left = this.visit(node.left);
-    const right = this.visit(node.right);
+    let left = this.visit(node.left);
+    let right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    const { promoteLeft, promoteRight } = assertTypeEquality({
+      node,
+      left,
+      right,
+    });
+
+    if (promoteLeft && left !== promoteLeft) {
+      left = promoteLeft;
+      node.left = node.left.promote!.get(promoteLeft)!();
+    }
+
+    if (promoteRight && right !== promoteRight) {
+      right = promoteRight;
+      node.right = node.right.promote!.get(promoteRight)!();
+    }
+
+    assert(
+      node,
+      left.prototype.lessThan,
+      `Cannot perform operation with type ${Types.printType(left)}`,
+    );
 
     return Types.PSIBoolean;
   }
   public visitGreaterEquals(node: AST.GreaterEqualsAST) {
-    const left = this.visit(node.left);
-    const right = this.visit(node.right);
+    let left = this.visit(node.left);
+    let right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    const { promoteLeft, promoteRight } = assertTypeEquality({
+      node,
+      left,
+      right,
+    });
+
+    if (promoteLeft && left !== promoteLeft) {
+      left = promoteLeft;
+      node.left = node.left.promote!.get(promoteLeft)!();
+    }
+
+    if (promoteRight && right !== promoteRight) {
+      right = promoteRight;
+      node.right = node.right.promote!.get(promoteRight)!();
+    }
+
+    assert(
+      node,
+      left.prototype.greaterEqualsThan,
+      `Cannot perform operation with type ${Types.printType(left)}`,
+    );
 
     return Types.PSIBoolean;
   }
   public visitLessEquals(node: AST.LessEqualsAST) {
-    const left = this.visit(node.left);
-    const right = this.visit(node.right);
+    let left = this.visit(node.left);
+    let right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    const { promoteLeft, promoteRight } = assertTypeEquality({
+      node,
+      left,
+      right,
+    });
+
+    if (promoteLeft && left !== promoteLeft) {
+      left = promoteLeft;
+      node.left = node.left.promote!.get(promoteLeft)!();
+    }
+
+    if (promoteRight && right !== promoteRight) {
+      right = promoteRight;
+      node.right = node.right.promote!.get(promoteRight)!();
+    }
+
+    assert(
+      node,
+      left.prototype.lessEqualsThan,
+      `Cannot perform operation with type ${Types.printType(left)}`,
+    );
 
     return Types.PSIBoolean;
   }
@@ -187,7 +463,22 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    assertEquality(
+      node,
+      left,
+      Types.PSIBoolean,
+      `Expected left side of operation to be of type ${Types.printType(
+        Types.PSIBoolean,
+      )} but instead got incompatible type ${Types.printType(left)}`,
+    );
+    assertEquality(
+      node,
+      right,
+      Types.PSIBoolean,
+      `Expected right side of operation to be of type ${Types.printType(
+        Types.PSIBoolean,
+      )} but instead got incompatible type ${Types.printType(right)}`,
+    );
 
     return Types.PSIBoolean;
   }
@@ -195,20 +486,62 @@ export default class TypeChecker extends AST.ASTVisitor<
     const left = this.visit(node.left);
     const right = this.visit(node.right);
 
-    assertTypeEquality(node, left, right);
+    assertEquality(
+      node,
+      left,
+      Types.PSIBoolean,
+      `Expected left side of operation to be of type ${Types.printType(
+        Types.PSIBoolean,
+      )} but instead got incompatible type ${Types.printType(left)}`,
+    );
+    assertEquality(
+      node,
+      right,
+      Types.PSIBoolean,
+      `Expected right side of operation to be of type ${Types.printType(
+        Types.PSIBoolean,
+      )} but instead got incompatible type ${Types.printType(right)}`,
+    );
 
     return Types.PSIBoolean;
   }
 
   public visitNot(node: AST.NotAST) {
+    const target = this.visit(node);
+
+    assertEquality(
+      node,
+      target,
+      Types.PSIBoolean,
+      `Expected operand to be of type ${Types.printType(
+        Types.PSIBoolean,
+      )} but instead got incompatible type ${Types.printType(target)}`,
+    );
+
     return Types.PSIBoolean;
   }
 
   public visitUnaryMinus(node: AST.UnaryMinusAST) {
+    const target = this.visit(node);
+
+    assert(
+      node,
+      target.prototype.unaryMinus,
+      `Cannot perform operation with type ${Types.printType(target)}`,
+    );
+
     return this.visit(node.target);
   }
 
   public visitUnaryPlus(node: AST.UnaryPlusAST) {
+    const target = this.visit(node);
+
+    assert(
+      node,
+      target.prototype.unaryPlus(),
+      `Cannot perform operation with type ${Types.printType(target)}`,
+    );
+
     return this.visit(node.target);
   }
 
@@ -266,17 +599,21 @@ export default class TypeChecker extends AST.ASTVisitor<
 
   public visitCall(node: AST.CallAST) {
     this.currentScope
-      .resolve(node.name, ProcedureSymbol)!
-      .args.forEach((arg, i) => {
-        const declarationType = this.visit(node.args[i]);
+      .resolve<ProcedureSymbol>(node.name)!
+      .args.forEach(
+        ({ type: declarationType, name: argDeclarationName }, i) => {
+          const argAST = node.args[i];
+          const arg = this.visit(argAST);
 
-        assertEquality(
-          node,
-          arg.type,
-          declarationType,
-          `Expected argument ${arg.name} to be of type ${declarationType.constructor.name}`,
-        );
-      });
+          assertTypeEquality({
+            node: argAST,
+            left: declarationType,
+            right: arg,
+            allowPromoteLeft: false,
+            message: `Expected argument ${argDeclarationName} to be of type LEFT_TYPE but instead got incompatible type RIGHT_TYPE`,
+          });
+        },
+      );
     return Types.PSIVoid;
   }
 
@@ -300,7 +637,7 @@ export default class TypeChecker extends AST.ASTVisitor<
 
     assert(
       node,
-      node.left.value.lessEqualsThan(node, node.right.value),
+      node.left.value.lessEqualsThan(node.right.value),
       'Expected subrange lower bound to be less or equal to subrange upper bound',
     );
 
@@ -312,12 +649,10 @@ export default class TypeChecker extends AST.ASTVisitor<
   }
 
   public visitArrayAccess(node: AST.ArrayAccessAST) {
-    // TODO: check array parameters
-
-    const array = (this.currentScope.resolve(node.array.name, VariableSymbol)!
+    const array = (this.currentScope.resolve<VariableSymbol>(node.array.name)!
       .type as unknown) as {
-      componentType: new (..._: any[]) => Types.PSIDataType;
-      indexTypes: (new (..._: any[]) => Types.PSIType)[];
+      componentType: typeof Types.PSIDataType;
+      indexTypes: (typeof Types.PSIType)[];
     };
 
     assertEquality(
@@ -335,12 +670,12 @@ export default class TypeChecker extends AST.ASTVisitor<
       const indexType = array.indexTypes[i];
       const accessor = node.accessors[i];
 
-      assertTypeEquality(
-        accessor,
-        indexType,
-        this.visit(accessor),
-        `Expected index value to be of type LEFT_TYPE but instead got incompatible type RIGHT_TYPE`,
-      );
+      assertTypeEquality({
+        node: accessor,
+        left: indexType,
+        right: this.visit(accessor),
+        message: `Expected index value to be of type LEFT_TYPE but instead got incompatible type RIGHT_TYPE`,
+      });
     }
 
     return array.componentType;

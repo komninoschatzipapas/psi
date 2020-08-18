@@ -5,7 +5,6 @@ import {
   PSIInteger,
   PSIReal,
 } from './PSIDataTypes';
-import PSIError, { DebugInfoProviderLike } from 'error';
 import PSIType from './PSIType';
 
 export function isPSIArray(
@@ -34,8 +33,8 @@ function serializeDataType(dataType: PSIDataType): any {
 }
 
 export default function createPSIArray(
-  indexTypes: (new (..._: any[]) => PSIType)[],
-  componentType: new (..._: any[]) => PSIType,
+  indexTypes: (typeof PSIType)[],
+  componentType: typeof PSIType,
 ) {
   return class PSIArray extends PSIDataType implements PSIArrayLike {
     public static isArrayType = true;
@@ -80,118 +79,6 @@ export default function createPSIArray(
       }
 
       return current[serializeDataType(keys[keys.length - 1])];
-    }
-
-    public add(
-      debugInfoProvider: DebugInfoProviderLike,
-      right: PSIArray,
-    ): PSIArray {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
-    }
-    public subtract(
-      debugInfoProvider: DebugInfoProviderLike,
-      right: PSIArray,
-    ): PSIArray {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
-    }
-    public multiply(
-      debugInfoProvider: DebugInfoProviderLike,
-      right: PSIArray,
-    ): PSIArray {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
-    }
-    public divide(
-      debugInfoProvider: DebugInfoProviderLike,
-      right: PSIArray,
-    ): PSIArray {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
-    }
-    public integerDivide(
-      debugInfoProvider: DebugInfoProviderLike,
-      right: PSIArray,
-    ): PSIArray {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
-    }
-    public mod(
-      debugInfoProvider: DebugInfoProviderLike,
-      right: PSIArray,
-    ): PSIArray {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
-    }
-    public equals(
-      debugInfoProvider: DebugInfoProviderLike,
-      right: PSIArray,
-    ): boolean {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
-    }
-    public lessThan(
-      debugInfoProvider: DebugInfoProviderLike,
-      right: PSIArray,
-    ): boolean {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
-    }
-    public greaterThan(
-      debugInfoProvider: DebugInfoProviderLike,
-      right: PSIArray,
-    ): boolean {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
-    }
-    public lessEqualsThan(
-      debugInfoProvider: DebugInfoProviderLike,
-      right: PSIArray,
-    ): boolean {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
-    }
-    public greaterEqualsThan(
-      debugInfoProvider: DebugInfoProviderLike,
-      right: PSIArray,
-    ): boolean {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
-    }
-    public unaryPlus(debugInfoProvider: DebugInfoProviderLike): PSIDataType {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
-    }
-    public unaryMinus(debugInfoProvider: DebugInfoProviderLike): PSIDataType {
-      throw new PSIError(
-        debugInfoProvider,
-        'Cannot execute this operator with the PSIArray type',
-      );
     }
   };
 }

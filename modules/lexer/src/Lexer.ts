@@ -156,19 +156,11 @@ export class Lexer {
         this.currentCharacter = this.advance();
       }
 
-      return new Token.RealConstToken(
-        new Types.PSIReal(parseFloat(number))
-          .inheritStartPositionFrom(startPosition)
-          .inheritEndPositionFrom(this),
-      )
+      return new Token.RealConstToken(new Types.PSIReal(parseFloat(number)))
         .inheritStartPositionFrom(startPosition)
         .inheritEndPositionFrom(this);
     } else {
-      return new Token.IntegerConstToken(
-        new Types.PSIInteger(parseInt(number))
-          .inheritStartPositionFrom(startPosition)
-          .inheritEndPositionFrom(this),
-      )
+      return new Token.IntegerConstToken(new Types.PSIInteger(parseInt(number)))
         .inheritStartPositionFrom(startPosition)
         .inheritEndPositionFrom(this);
     }
@@ -220,11 +212,7 @@ export class Lexer {
       );
     }
     this.currentCharacter = this.advance();
-    return new Token.CharConstantToken(
-      new Types.PSIChar(character)
-        .inheritStartPositionFrom(this)
-        .inheritEndPositionFrom(this),
-    )
+    return new Token.CharConstantToken(new Types.PSIChar(character))
       .inheritStartPositionFrom(this)
       .inheritEndPositionFrom(this);
   }

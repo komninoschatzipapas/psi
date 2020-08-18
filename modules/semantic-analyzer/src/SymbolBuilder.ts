@@ -25,9 +25,8 @@ export default class SymbolBuilder extends AST.ASTVisitor<PSISymbol.PSISymbol | 
   }
 
   public visitVariable(node: AST.VariableAST): PSISymbol.PSISymbol {
-    const variableValue = this.currentScope.resolve(
+    const variableValue = this.currentScope.resolve<PSISymbol.VariableSymbol>(
       node.name,
-      PSISymbol.VariableSymbol,
     );
 
     if (!variableValue) {
@@ -90,16 +89,17 @@ export default class SymbolBuilder extends AST.ASTVisitor<PSISymbol.PSISymbol | 
   }
 
   public visitCall(node: AST.CallAST) {
-    const procedure = this.currentScope.resolve(
+    const procedure = this.currentScope.resolve<PSISymbol.ProcedureSymbol>(
       node.name,
-      PSISymbol.ProcedureSymbol,
     );
     if (!procedure) {
       throw new PSIError(node, `Could not find procedure ${node.name}`);
     } else if (node.args.length != procedure.args.length) {
       throw new PSIError(
         node,
-        `Expected ${procedure.args.length} arguments but ${node.args.length} were provided`,
+        `Expected ${procedure.args.length} procedure argument${
+          procedure.args.length > 1 ? 's' : ''
+        } but ${node.args.length} were provided`,
       );
     }
   }

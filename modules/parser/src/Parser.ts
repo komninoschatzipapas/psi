@@ -81,14 +81,10 @@ export class Parser implements AST.Runnable<AST.AST> {
     const assignment = this.assignmentExpression();
     let increment: Types.PSIBoolean;
     if (this.currentToken instanceof Lexer.ToToken) {
-      increment = new Types.PSIBoolean(true).inheritPositionFrom(
-        this.currentToken,
-      );
+      increment = new Types.PSIBoolean(true);
       this.currentToken = this.eat(Lexer.ToToken);
     } else if (this.currentToken instanceof Lexer.DownToToken) {
-      increment = new Types.PSIBoolean(false).inheritPositionFrom(
-        this.currentToken,
-      );
+      increment = new Types.PSIBoolean(false);
       this.currentToken = this.eat(Lexer.DownToToken);
     } else {
       throw new PSIError(
@@ -637,7 +633,7 @@ export class Parser implements AST.Runnable<AST.AST> {
     } else if (this.currentToken instanceof Lexer.IdToken) {
       return this.variable();
     } else {
-      throw new Error('Program error: Invalid factor');
+      throw new PSIError(savedToken, 'Invalid expression factor');
     }
   }
 

@@ -4,7 +4,10 @@ import { ArrayAccessAST } from '.';
 import { AST } from '.';
 
 export default class AssignmentAST extends BinaryAST {
-  constructor(public left: VariableAST | ArrayAccessAST, public right: AST) {
+  constructor(
+    public readonly left: VariableAST | ArrayAccessAST,
+    public readonly right: AST,
+  ) {
     super(left, right);
   }
 }

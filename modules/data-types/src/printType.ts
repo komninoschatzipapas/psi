@@ -13,10 +13,8 @@ import {
   PSIVoid,
 } from './PSIDataTypes';
 
-export default function printType(
-  type: new (..._: any[]) => PSIDataType,
-): string {
-  if (((type as unknown) as typeof PSIDataType).isArrayType) return `Array`;
+export default function printType(type: typeof PSIDataType): string {
+  if (type.isArrayType) return `Array`;
   else if (type === PSIBoolean) return 'Boolean';
   else if (type === PSIBooleanType) return 'Boolean Type';
   else if (type === PSIChar) return 'Char';
@@ -27,8 +25,8 @@ export default function printType(
   else if (type === PSIProcedureType) return 'Procedure Type';
   else if (type === PSIReal) return 'Real';
   else if (type === PSIRealType) return 'Real Type';
-  else if (((type as unknown) as typeof PSIDataType).isSubrangeType)
-    return `Subrange Of ${printType((type as any).treatAs)}`;
+  else if (type.isSubrangeType)
+    return `Subrange Of ${printType(type.treatAs!)}`;
   else if (type === PSIVoid) return 'Void';
   else throw new Error('Attempted to print unknown type');
 }

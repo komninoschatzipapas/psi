@@ -36,57 +36,57 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
   }
 
   public visitPlus(node: AST.PlusAST) {
-    return this.visit(node.left).add(node, this.visit(node.right));
+    return this.visit(node.left).add(this.visit(node.right));
   }
 
   public visitMinus(node: AST.MinusAST) {
-    return this.visit(node.left).subtract(node, this.visit(node.right));
+    return this.visit(node.left).subtract(this.visit(node.right));
   }
 
   public visitIntegerDivision(node: AST.IntegerDivisionAST) {
-    return this.visit(node.left).integerDivide(node, this.visit(node.right));
+    return this.visit(node.left).integerDivide(this.visit(node.right));
   }
 
   public visitRealDivision(node: AST.RealDivisionAST) {
-    return this.visit(node.left).divide(node, this.visit(node.right));
+    return this.visit(node.left).divide(this.visit(node.right));
   }
 
   public visitMultiplication(node: AST.MultiplicationAST) {
-    return this.visit(node.left).multiply(node, this.visit(node.right));
+    return this.visit(node.left).multiply(this.visit(node.right));
   }
 
   public visitMod(node: AST.ModAST) {
-    return this.visit(node.left).mod(node, this.visit(node.right));
+    return this.visit(node.left).mod(this.visit(node.right));
   }
 
   public visitEquals(node: AST.EqualsAST) {
     return new Types.PSIBoolean(
-      this.visit(node.left).equals(node, this.visit(node.right)),
+      this.visit(node.left).equals(this.visit(node.right)),
     );
   }
   public visitNotEquals(node: AST.NotEqualsAST) {
     return new Types.PSIBoolean(
-      this.visit(node.left).notEquals(node, this.visit(node.right)),
+      this.visit(node.left).notEquals(this.visit(node.right)),
     );
   }
   public visitGreaterThan(node: AST.GreaterThanAST) {
     return new Types.PSIBoolean(
-      this.visit(node.left).greaterThan(node, this.visit(node.right)),
+      this.visit(node.left).greaterThan(this.visit(node.right)),
     );
   }
   public visitLessThan(node: AST.LessThanAST) {
     return new Types.PSIBoolean(
-      this.visit(node.left).lessThan(node, this.visit(node.right)),
+      this.visit(node.left).lessThan(this.visit(node.right)),
     );
   }
   public visitGreaterEquals(node: AST.GreaterEqualsAST) {
     return new Types.PSIBoolean(
-      this.visit(node.left).greaterEqualsThan(node, this.visit(node.right)),
+      this.visit(node.left).greaterEqualsThan(this.visit(node.right)),
     );
   }
   public visitLessEquals(node: AST.LessEqualsAST) {
     return new Types.PSIBoolean(
-      this.visit(node.left).lessEqualsThan(node, this.visit(node.right)),
+      this.visit(node.left).lessEqualsThan(this.visit(node.right)),
     );
   }
 
@@ -111,11 +111,11 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
   }
 
   public visitUnaryPlus(node: AST.UnaryPlusAST) {
-    return this.visit(node.target).unaryPlus(node);
+    return this.visit(node.target).unaryPlus();
   }
 
   public visitUnaryMinus(node: AST.UnaryMinusAST) {
-    return this.visit(node.target).unaryMinus(node);
+    return this.visit(node.target).unaryMinus();
   }
 
   public visitCompound(node: AST.CompoundAST) {
@@ -191,7 +191,7 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
 
   public visitIf(node: AST.IfAST) {
     const condition = this.visit(node.condition);
-    if (condition.equals(node, Types.PSIBoolean.true)) {
+    if (condition.equals(Types.PSIBoolean.true)) {
       this.visit(node.statement);
     } else {
       if (node.next) {
@@ -203,26 +203,26 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
 
   public visitAnd(node: AST.AndAST) {
     return new Types.PSIBoolean(
-      this.visit(node.left).equals(node, Types.PSIBoolean.true) &&
-        this.visit(node.right).equals(node, Types.PSIBoolean.true),
+      this.visit(node.left).equals(Types.PSIBoolean.true) &&
+        this.visit(node.right).equals(Types.PSIBoolean.true),
     );
   }
   public visitOr(node: AST.OrAST) {
     return new Types.PSIBoolean(
-      this.visit(node.left).equals(node, Types.PSIBoolean.true) ||
-        this.visit(node.right).equals(node, Types.PSIBoolean.true),
+      this.visit(node.left).equals(Types.PSIBoolean.true) ||
+        this.visit(node.right).equals(Types.PSIBoolean.true),
     );
   }
   public visitNot(node: AST.NotAST) {
     const target = this.visit(node.target);
-    return target.equals(node, Types.PSIBoolean.true)
+    return target.equals(Types.PSIBoolean.true)
       ? Types.PSIBoolean.false
       : Types.PSIBoolean.true;
   }
 
   public visitCall(node: AST.CallAST) {
     const args = node.args.map(arg => this.visit(arg));
-    this.scope.resolveValue(node.name, Types.PSIProcedure)!.call(args);
+    this.scope.resolveValue<Types.PSIProcedure>(node.name)!.call(args);
 
     return new Types.PSIVoid();
   }
@@ -232,7 +232,7 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
     this.visitAssignment(node.assignment);
     this.visit(node.statement);
     if (node.increment) {
-      while (this.visit(variable).lessThan(node, this.visit(node.finalValue))) {
+      while (this.visit(variable).lessThan(this.visit(node.finalValue))) {
         this.visit(
           new AST.AssignmentAST(
             variable,
@@ -245,9 +245,7 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
         this.visit(node.statement);
       }
     } else {
-      while (
-        this.visit(variable).greaterThan(node, this.visit(node.finalValue))
-      ) {
+      while (this.visit(variable).greaterThan(this.visit(node.finalValue))) {
         this.visit(
           new AST.AssignmentAST(
             variable,
@@ -264,7 +262,7 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
   }
 
   public visitWhile(node: AST.WhileAST) {
-    while (this.visit(node.condition).equals(node, Types.PSIBoolean.true)) {
+    while (this.visit(node.condition).equals(Types.PSIBoolean.true)) {
       this.visit(node.statement);
     }
     return new Types.PSIVoid();
@@ -273,7 +271,7 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
   public visitRepeat(node: AST.RepeatAST) {
     do {
       node.statements.forEach(this.visit.bind(this));
-    } while (this.visit(node.condition).equals(node, Types.PSIBoolean.false));
+    } while (this.visit(node.condition).equals(Types.PSIBoolean.false));
     return new Types.PSIVoid();
   }
 
@@ -288,13 +286,10 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
     return new (Types.createPSIArray(
       node.indexTypes.map(
         node =>
-          (this.visit(node).constructor as unknown) as new (
-            ..._: any[]
-          ) => Types.PSIType,
+          (this.visit(node).constructor as unknown) as typeof Types.PSIType,
       ),
-      (this.visit(node.componentType).constructor as unknown) as new (
-        ..._: any[]
-      ) => Types.PSIType,
+      (this.visit(node.componentType)
+        .constructor as unknown) as typeof Types.PSIDataType,
     ))();
   }
 

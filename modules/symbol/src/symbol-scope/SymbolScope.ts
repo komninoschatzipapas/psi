@@ -34,15 +34,12 @@ export default abstract class SymbolScope {
     this.name = name;
   }
 
-  public resolveValue<T extends PSIDataType>(
-    name: string,
-    type?: new (...a: any[]) => T,
-  ): T | null {
+  public resolveValue<T extends PSIDataType>(name: string): T | null {
     const result = this.value.get(name);
-    if (result && type ? result instanceof type : true) {
+    if (result) {
       return result;
     } else if (this.parent) {
-      return this.parent.resolveValue(name, type);
+      return this.parent.resolveValue(name);
     } else {
       return null;
     }
@@ -92,14 +89,8 @@ export default abstract class SymbolScope {
     }
 
     this.scope.set(symbol.name, symbol);
-    if (
-      symbol instanceof VariableSymbol &&
-      ((symbol.type as unknown) as typeof PSIDataType).defaultValue
-    ) {
-      this.value.set(
-        symbol.name,
-        ((symbol.type as unknown) as typeof PSIDataType).defaultValue!,
-      );
+    if (symbol instanceof VariableSymbol && symbol.type.defaultValue) {
+      this.value.set(symbol.name, symbol.type.defaultValue!);
     }
   }
 
@@ -107,15 +98,12 @@ export default abstract class SymbolScope {
     return this.scope.has(symbol.name);
   }
 
-  public resolve<T extends PSISymbol>(
-    name: string,
-    symbolType?: new (...a: any[]) => T,
-  ): T | null {
+  public resolve<T extends PSISymbol>(name: string): T | null {
     const result = this.scope.get(name);
-    if (result && (symbolType ? result instanceof symbolType : true)) {
+    if (result) {
       return result;
     } else if (this.parent) {
-      return this.parent.resolve(name, symbolType);
+      return this.parent.resolve(name);
     } else {
       return null;
     }

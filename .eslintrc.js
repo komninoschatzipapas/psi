@@ -18,6 +18,7 @@ module.exports =  {
       'vars': 'all',
       'args': 'none',
     }],
-    '@typescript-eslint/no-non-null-assertion': 'off'
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/no-empty-function': 'warn',
   }
 };

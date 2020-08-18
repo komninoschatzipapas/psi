@@ -35,8 +35,5 @@
     "nyc": "^14.1.1",
     "ts-node": "^8.3.0",
     "typescript": "^3.7.0-beta"
-  },
-  "dependencies": {
-    "error": "*"
   }
 }
