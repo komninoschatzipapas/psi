@@ -1,6 +1,6 @@
 {
   "name": "@pascal-psi/library",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "PSI library",
   "author": "komninoschat <komninoschat@gmail.com>",
   "homepage": "https://github.com/komninoschat/psi#readme",
@@ -37,7 +37,7 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "@pascal-psi/data-types": "^0.0.1",
-    "@pascal-psi/symbol": "^0.0.1"
+    "@pascal-psi/data-types": "^0.0.0",
+    "@pascal-psi/symbol": "^0.0.0"
   }
 }

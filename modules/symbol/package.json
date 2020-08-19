@@ -1,6 +1,6 @@
 {
   "name": "@pascal-psi/symbol",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "PSI symbols",
   "author": "komninoschat <komninoschat@gmail.com>",
   "homepage": "https://github.com/komninoschat/psi#readme",
@@ -26,9 +26,9 @@
     "url": "https://github.com/komninoschat/psi/issues"
   },
   "dependencies": {
-    "@pascal-psi/case-insensitive-map": "^0.0.1",
-    "@pascal-psi/data-types": "^0.0.1",
-    "@pascal-psi/error": "^0.0.1"
+    "@pascal-psi/case-insensitive-map": "^0.0.0",
+    "@pascal-psi/data-types": "^0.0.0",
+    "@pascal-psi/error": "^0.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.0",
