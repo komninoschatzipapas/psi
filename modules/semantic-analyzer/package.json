@@ -1,6 +1,6 @@
 {
   "name": "semantic-analyzer",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "PSI semantic analyzer",
   "author": "komninoschat <komninoschat@gmail.com>",
   "homepage": "https://github.com/komninoschat/psi#readme",
@@ -26,11 +26,11 @@
     "url": "https://github.com/komninoschat/psi/issues"
   },
   "dependencies": {
-    "ast": "*",
-    "case-insensitive-map": "*",
-    "data-types": "*",
-    "symbol": "*",
-    "error": "*"
+    "ast": "^0.0.1",
+    "case-insensitive-map": "^0.0.1",
+    "data-types": "^0.0.1",
+    "error": "^0.0.1",
+    "symbol": "^0.0.1"
   },
   "devDependencies": {
     "@types/chai": "^4.2.0",
