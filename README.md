@@ -15,6 +15,9 @@ yarn global add @pascal-psi/cli
 ## Usage
 `psi <file to interpret>`
 
+## Samples
+There are sample programs you can try running in the [samples](samples) directory
+
 ## Support:
 
 - Data types
