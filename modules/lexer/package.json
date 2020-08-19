@@ -1,6 +1,6 @@
 {
   "name": "@pascal-psi/lexer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "PSI lexer",
   "author": "komninoschat <komninoschat@gmail.com>",
   "homepage": "https://github.com/komninoschat/psi#readme",
@@ -29,9 +29,9 @@
     "url": "https://github.com/komninoschat/psi/issues"
   },
   "dependencies": {
-    "@pascal-psi/case-insensitive-map": "^0.0.1",
-    "@pascal-psi/data-types": "^0.0.1",
-    "@pascal-psi/error": "^0.0.1"
+    "@pascal-psi/case-insensitive-map": "^0.0.2",
+    "@pascal-psi/data-types": "^0.0.2",
+    "@pascal-psi/error": "^0.0.2"
   },
   "devDependencies": {
     "@types/chai": "^4.2.0",
