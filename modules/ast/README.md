@@ -1,2 +1,0 @@
-# `ast`
-This module contains classes that comprise the [Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) of PSI. The AST is built by the parser, manipulated by semantic analyzer modules and finally interpreted by the interpreter. This module contains different AST nodes as well as an `ASTVisitor` class that implements the [visitor pattern](https://refactoring.guru/design-patterns/visitor) and allows the separation of the code the algorithms that operate on the AST from the AST itself.
