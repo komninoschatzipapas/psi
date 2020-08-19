@@ -37,23 +37,29 @@ function assertTypeEquality({
   let promoteLeft: typeof Types.PSIDataType | null = null;
   let promoteRight: typeof Types.PSIDataType | null = null;
 
-  if (allowPromoteLeft && left.promotable && left.promotable.includes(right)) {
-    promoteLeft = left = right;
-  } else if (
-    allowPromoteRight &&
-    right.promotable &&
-    right.promotable.includes(left)
-  ) {
-    promoteRight = right = left;
-  } else if (
-    allowPromoteLeft &&
-    allowPromoteRight &&
-    left.promotable &&
-    right.promotable
-  ) {
-    for (const sharedPromotableCandidate of left.promotable!) {
-      if (right.promotable!.includes(sharedPromotableCandidate)) {
-        promoteLeft = promoteRight = left = right = sharedPromotableCandidate;
+  if (left !== right) {
+    if (
+      allowPromoteLeft &&
+      left.promotable &&
+      left.promotable.includes(right)
+    ) {
+      promoteLeft = left = right;
+    } else if (
+      allowPromoteRight &&
+      right.promotable &&
+      right.promotable.includes(left)
+    ) {
+      promoteRight = right = left;
+    } else if (
+      allowPromoteLeft &&
+      allowPromoteRight &&
+      left.promotable &&
+      right.promotable
+    ) {
+      for (const sharedPromotableCandidate of left.promotable!) {
+        if (right.promotable!.includes(sharedPromotableCandidate)) {
+          promoteLeft = promoteRight = left = right = sharedPromotableCandidate;
+        }
       }
     }
   }
