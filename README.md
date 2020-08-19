@@ -2,7 +2,20 @@
 
 This is a Work-in-Progress ISO 7185 Pascal interpreter I am building in order to get confident with lexers, parsers, interpreters and all that good stuff. All PRs are welcomed and for any question you can join our [gitter chat](https://gitter.im/pascal-psi/community)!
 
-### Currently supports:
+## Installation
+To install the CLI, execute the following command:
+```
+npm install -g @pascal-psi/cli
+```
+or for Yarn:
+```
+yarn global add @pascal-psi/cli
+```
+
+## Usage
+`psi <file to interpret>`
+
+## Support:
 
 - Data types
   - Integer (Does not support scientific notation)
@@ -41,3 +54,7 @@ This is a Work-in-Progress ISO 7185 Pascal interpreter I am building in order to
 - Library
   - Write
   - WrtiteLn
+
+## Contributing
+
+Please join the [gitter chat](https://gitter.im/pascal-psi/community) if you are interested in contributing to this project.
