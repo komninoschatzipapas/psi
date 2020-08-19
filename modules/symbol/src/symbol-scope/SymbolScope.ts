@@ -1,8 +1,8 @@
 import PSISymbol from '../symbol/PSISymbol';
-import CaseInsensitiveMap from 'case-insensitive-map';
+import CaseInsensitiveMap from '@pascal-psi/case-insensitive-map';
 import LocalSymbolScope from './LocalSymbolScope';
-import { PSIDataType, PSIArrayLike } from 'data-types';
-import PSIError from 'error';
+import { PSIDataType, PSIArrayLike } from '@pascal-psi/data-types';
+import PSIError from '@pascal-psi/error';
 import { VariableSymbol } from '../symbol';
 
 class ScopeChildren extends CaseInsensitiveMap<string, LocalSymbolScope> {

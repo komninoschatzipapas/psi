@@ -7,8 +7,8 @@ import {
   PSIChar,
   PSIInteger,
   PSIReal,
-} from 'data-types';
-import { ProcedureSymbol, VariableSymbol } from 'symbol';
+} from '@pascal-psi/data-types';
+import { ProcedureSymbol, VariableSymbol } from '@pascal-psi/symbol';
 
 const dataType = new PSIProcedure((args: PSIDataType[]) => {
   process.stdout.write(serializeDataType(args[0]).toString());

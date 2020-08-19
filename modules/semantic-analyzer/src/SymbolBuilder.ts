@@ -1,13 +1,13 @@
-import * as AST from 'ast';
+import * as AST from '@pascal-psi/ast';
 import {
   BaseSymbolScope,
   LocalSymbolScope,
   SymbolScope,
   ProgramSymbol,
-} from 'symbol';
-import * as PSISymbol from 'symbol';
-import * as Types from 'data-types';
-import PSIError from 'error';
+} from '@pascal-psi/symbol';
+import * as PSISymbol from '@pascal-psi/symbol';
+import * as Types from '@pascal-psi/data-types';
+import PSIError from '@pascal-psi/error';
 
 export default class SymbolBuilder extends AST.ASTVisitor<PSISymbol.PSISymbol | void> {
   private currentScope: SymbolScope;

@@ -1,6 +1,6 @@
 import { AST } from '.';
 import { AssignmentAST } from '.';
-import * as Types from 'data-types';
+import * as Types from '@pascal-psi/data-types';
 
 export default class ForAST extends AST {
   constructor(

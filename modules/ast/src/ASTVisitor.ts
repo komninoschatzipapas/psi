@@ -1,6 +1,6 @@
 import * as AST from './AST';
 import Runnable from './Runnable';
-import PSIError from 'error';
+import PSIError from '@pascal-psi/error';
 export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
   protected abstract readonly ast: AST.AST;
   public abstract visitAssignment(node: AST.AssignmentAST): T;

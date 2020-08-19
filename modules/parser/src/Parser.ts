@@ -1,7 +1,7 @@
-import * as Lexer from 'lexer';
-import * as AST from 'ast';
-import * as Types from 'data-types';
-import PSIError from 'error';
+import * as Lexer from '@pascal-psi/lexer';
+import * as AST from '@pascal-psi/ast';
+import * as Types from '@pascal-psi/data-types';
+import PSIError from '@pascal-psi/error';
 
 export class Parser implements AST.Runnable<AST.AST> {
   private currentToken: Lexer.Token; // Only change through this.eat

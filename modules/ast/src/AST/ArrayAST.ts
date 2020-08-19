@@ -1,5 +1,5 @@
 import { TypeAST } from '.';
-import { createPSIArray } from 'data-types';
+import { createPSIArray } from '@pascal-psi/data-types';
 
 export default class ArrayAST extends TypeAST {
   get dataType() {

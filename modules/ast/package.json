@@ -1,5 +1,5 @@
 {
-  "name": "ast",
+  "name": "@pascal-psi/ast",
   "version": "0.0.1",
   "description": "PSI AST",
   "author": "komninoschat <komninoschat@gmail.com>",
@@ -26,8 +26,8 @@
     "url": "https://github.com/komninoschat/psi/issues"
   },
   "dependencies": {
-    "data-types": "^0.0.1",
-    "error": "^0.0.1"
+    "@pascal-psi/data-types": "^0.0.1",
+    "@pascal-psi/error": "^0.0.1"
   },
   "devDependencies": {
     "@types/chai": "^4.2.0",

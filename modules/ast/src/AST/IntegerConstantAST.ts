@@ -1,5 +1,5 @@
 import ConstantAST from './ConstantAST';
-import * as Types from 'data-types';
+import * as Types from '@pascal-psi/data-types';
 import { AST, RealConstantAST } from '.';
 
 export default class IntegerConstantAST extends ConstantAST {

@@ -1,5 +1,5 @@
 import { ConstantAST } from '.';
-import { PSIBoolean } from 'data-types';
+import { PSIBoolean } from '@pascal-psi/data-types';
 
 export default class TrueConstantAST extends ConstantAST {
   dataType = PSIBoolean;

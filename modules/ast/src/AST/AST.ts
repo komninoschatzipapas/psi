@@ -1,5 +1,5 @@
-import { DebugInfoProvider } from 'error';
-import { PSIDataType } from 'data-types';
+import { DebugInfoProvider } from '@pascal-psi/error';
+import { PSIDataType } from '@pascal-psi/data-types';
 
 export default abstract class AST extends DebugInfoProvider {
   constructor(..._: any[]) {

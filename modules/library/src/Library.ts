@@ -1,4 +1,4 @@
-import { SymbolScope } from 'symbol';
+import { SymbolScope } from '@pascal-psi/symbol';
 import * as Write from './Write';
 import * as WriteLn from './WriteLn';
 

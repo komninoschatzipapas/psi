@@ -2,6 +2,6 @@
 
 const parser = require('..');
 
-describe('parser', () => {
+describe('@pascal-psi/parser', () => {
     it('needs tests');
 });

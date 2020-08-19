@@ -1,4 +1,4 @@
-import { DebugInfoProvider } from 'error';
+import { DebugInfoProvider } from '@pascal-psi/error';
 
 export default class PSISymbol extends DebugInfoProvider {
   public readonly name: string;

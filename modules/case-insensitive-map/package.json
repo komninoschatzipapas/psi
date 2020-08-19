@@ -1,5 +1,5 @@
 {
-  "name": "case-insensitive-map",
+  "name": "@pascal-psi/case-insensitive-map",
   "version": "0.0.1",
   "description": "PSI case insensitive map",
   "author": "komninoschat <komninoschat@gmail.com>",

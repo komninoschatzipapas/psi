@@ -1,12 +1,12 @@
-import * as AST from 'ast';
-import * as Types from 'data-types';
+import * as AST from '@pascal-psi/ast';
+import * as Types from '@pascal-psi/data-types';
 import {
   BaseSymbolScope,
   SymbolScope,
   VariableSymbol,
   ProcedureSymbol,
-} from 'symbol';
-import { assert, assertEquality, DebugInfoProvider } from 'error';
+} from '@pascal-psi/symbol';
+import { assert, assertEquality, DebugInfoProvider } from '@pascal-psi/error';
 
 function assertTypeEquality({
   node,

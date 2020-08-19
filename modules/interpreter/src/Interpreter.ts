@@ -1,8 +1,12 @@
-import * as Types from 'data-types';
-import * as AST from 'ast';
-import { SymbolScope, BaseSymbolScope, LocalSymbolScope } from 'symbol';
-import { IntegerConstantAST } from 'ast';
-import PSIError from 'error';
+import * as Types from '@pascal-psi/data-types';
+import * as AST from '@pascal-psi/ast';
+import {
+  SymbolScope,
+  BaseSymbolScope,
+  LocalSymbolScope,
+} from '@pascal-psi/symbol';
+import { IntegerConstantAST } from '@pascal-psi/ast';
+import PSIError from '@pascal-psi/error';
 
 export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
   public scope: SymbolScope;

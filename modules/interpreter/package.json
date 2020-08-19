@@ -1,5 +1,5 @@
 {
-  "name": "interpreter",
+  "name": "@pascal-psi/interpreter",
   "version": "0.0.1",
   "description": "PSI interpreter",
   "author": "komninoschat <komninoschat@gmail.com>",
@@ -26,11 +26,11 @@
     "url": "https://github.com/komninoschat/psi/issues"
   },
   "dependencies": {
-    "ast": "^0.0.1",
-    "case-insensitive-map": "^0.0.1",
-    "data-types": "^0.0.1",
-    "error": "^0.0.1",
-    "symbol": "^0.0.1"
+    "@pascal-psi/ast": "^0.0.1",
+    "@pascal-psi/case-insensitive-map": "^0.0.1",
+    "@pascal-psi/data-types": "^0.0.1",
+    "@pascal-psi/error": "^0.0.1",
+    "@pascal-psi/symbol": "^0.0.1"
   },
   "devDependencies": {
     "@types/chai": "^4.2.0",

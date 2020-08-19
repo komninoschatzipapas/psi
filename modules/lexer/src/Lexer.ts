@@ -1,7 +1,7 @@
 import * as Token from './token';
-import CaseInsensitiveMap from 'case-insensitive-map';
-import * as Types from 'data-types';
-import PSIError, { DebugInfoProvider } from 'error';
+import CaseInsensitiveMap from '@pascal-psi/case-insensitive-map';
+import * as Types from '@pascal-psi/data-types';
+import PSIError, { DebugInfoProvider } from '@pascal-psi/error';
 
 export class Lexer {
   protected readonly reservedKeywords = new CaseInsensitiveMap<
