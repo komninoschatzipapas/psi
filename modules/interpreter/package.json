@@ -4,6 +4,9 @@
   "description": "PSI interpreter",
   "author": "komninoschat <komninoschat@gmail.com>",
   "homepage": "https://github.com/komninoschat/psi#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "MIT",
   "main": "lib/Interpreter.js",
   "directories": {
