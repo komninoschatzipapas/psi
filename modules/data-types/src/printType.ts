@@ -14,7 +14,8 @@ import {
 } from './PSIDataTypes';
 
 export default function printType(type: typeof PSIDataType): string {
-  if (type.isArrayType) return `Array`;
+  if (type.multitype) return type.multitype.map(printType).join(' or ');
+  else if (type.isArrayType) return `Array`;
   else if (type === PSIBoolean) return 'Boolean';
   else if (type === PSIBooleanType) return 'Boolean Type';
   else if (type === PSIChar) return 'Char';

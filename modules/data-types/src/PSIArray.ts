@@ -1,11 +1,6 @@
-import {
-  PSIDataType,
-  PSIBoolean,
-  PSIChar,
-  PSIInteger,
-  PSIReal,
-} from './PSIDataTypes';
+import { PSIDataType } from './PSIDataTypes';
 import PSIType from './PSIType';
+import serializeDataType from './serializeDataType';
 
 export function isPSIArray(
   dataType: PSIDataType,
@@ -17,19 +12,6 @@ export interface PSIArrayLike {
   value: any;
   changeValue(keys: PSIDataType[], value: PSIDataType): void;
   getValue(keys: PSIDataType[]): PSIDataType | undefined;
-}
-
-function serializeDataType(dataType: PSIDataType): any {
-  if (
-    dataType instanceof PSIBoolean ||
-    dataType instanceof PSIChar ||
-    dataType instanceof PSIInteger ||
-    dataType instanceof PSIReal
-  ) {
-    return dataType.serialize();
-  } else {
-    throw new Error(`Could not serialize data type ${dataType}`);
-  }
 }
 
 export default function createPSIArray(

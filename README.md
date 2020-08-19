@@ -38,3 +38,6 @@ This is a Work-in-Progress ISO 7185 Pascal interpreter I am building in order to
   - Less or Equal than (<=)
   - Greater than (>)
   - Greater or Equal than (>=)
+- Library
+  - Write
+  - WrtiteLn

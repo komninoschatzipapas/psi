@@ -1,11 +1,11 @@
 {
-  "name": "psi",
+  "name": "library",
   "version": "1.0.0",
-  "description": "PSI cli",
+  "description": "PSI library",
   "author": "komninoschat <komninoschat@gmail.com>",
   "homepage": "https://github.com/komninoschat/psi#readme",
   "license": "MIT",
-  "main": "lib/cli.js",
+  "main": "lib/Library.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -25,27 +25,8 @@
   "bugs": {
     "url": "https://github.com/komninoschat/psi/issues"
   },
-  "dependencies": {
-    "@oclif/command": "^1.5.18",
-    "@oclif/config": "^1.13.3",
-    "@oclif/plugin-help": "^2.2.1",
-    "@oclif/test": "^1.2.5",
-    "@oclif/tslint": "^3.1.1",
-    "ast": "*",
-    "chalk": "^4.1.0",
-    "cli-ux": "^5.4.9",
-    "error": "*",
-    "interpreter": "*",
-    "lexer": "*",
-    "parser": "*",
-    "semantic-analyzer": "*",
-    "symbol": "*",
-    "library": "*",
-    "tslib": "^1.10.0"
-  },
   "devDependencies": {
     "@types/chai": "^4.2.0",
-    "@types/chalk": "^2.2.0",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.7.2",
     "chai": "^4.2.0",
@@ -53,6 +34,10 @@
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
     "ts-node": "^8.3.0",
-    "typescript": "^3.9.7"
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "symbol": "*",
+    "data-types": "*"
   }
 }

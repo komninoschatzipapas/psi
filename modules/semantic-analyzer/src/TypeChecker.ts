@@ -58,6 +58,18 @@ function assertTypeEquality({
     }
   }
 
+  if (left.multitype && left.multitype.includes(right)) {
+    left = right;
+  } else if (right.multitype && right.multitype.includes(left)) {
+    right = left;
+  } else if (left.multitype && right.multitype) {
+    for (const sharedMultitypeCandidate of left.multitype!) {
+      if (right.multitype!.includes(sharedMultitypeCandidate)) {
+        left = right = sharedMultitypeCandidate;
+      }
+    }
+  }
+
   assertEquality(
     node,
     left,
@@ -106,7 +118,7 @@ export default class TypeChecker extends AST.ASTVisitor<
   }
 
   public visitVariable(node: AST.VariableAST) {
-    return this.currentScope.resolve<VariableSymbol>(node.name)!.type;
+    return this.currentScope.resolve(node.name, VariableSymbol)!.type;
   }
 
   public visitAssignment(node: AST.AssignmentAST) {
@@ -272,14 +284,14 @@ export default class TypeChecker extends AST.ASTVisitor<
       right,
     });
 
-    if (promoteLeft && left !== promoteLeft) {
+    if (node.left.promote && promoteLeft && left !== promoteLeft) {
       left = promoteLeft;
-      node.left = node.left.promote!.get(promoteLeft)!();
+      node.left = node.left.promote.get(promoteLeft)!();
     }
 
-    if (promoteRight && right !== promoteRight) {
+    if (node.right.promote && promoteRight && right !== promoteRight) {
       right = promoteRight;
-      node.right = node.right.promote!.get(promoteRight)!();
+      node.right = node.right.promote.get(promoteRight)!();
     }
 
     assert(
@@ -599,7 +611,7 @@ export default class TypeChecker extends AST.ASTVisitor<
 
   public visitCall(node: AST.CallAST) {
     this.currentScope
-      .resolve<ProcedureSymbol>(node.name)!
+      .resolve(node.name, ProcedureSymbol)!
       .args.forEach(
         ({ type: declarationType, name: argDeclarationName }, i) => {
           const argAST = node.args[i];
@@ -649,7 +661,7 @@ export default class TypeChecker extends AST.ASTVisitor<
   }
 
   public visitArrayAccess(node: AST.ArrayAccessAST) {
-    const array = (this.currentScope.resolve<VariableSymbol>(node.array.name)!
+    const array = (this.currentScope.resolve(node.array.name, VariableSymbol)!
       .type as unknown) as {
       componentType: typeof Types.PSIDataType;
       indexTypes: (typeof Types.PSIType)[];

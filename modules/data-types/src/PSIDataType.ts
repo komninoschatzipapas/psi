@@ -21,6 +21,7 @@ abstract class PSIDataType {
   public static defaultValue?: PSIDataType;
 
   public static treatAs?: typeof PSIDataType;
+  public static multitype?: (typeof PSIDataType)[];
 
   public static isSubrangeType = false;
   public static isArrayType = false;

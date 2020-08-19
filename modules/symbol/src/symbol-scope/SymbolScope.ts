@@ -98,9 +98,12 @@ export default abstract class SymbolScope {
     return this.scope.has(symbol.name);
   }
 
-  public resolve<T extends PSISymbol>(name: string): T | null {
+  public resolve<T extends typeof PSISymbol>(
+    name: string,
+    type?: T,
+  ): InstanceType<T> | null {
     const result = this.scope.get(name);
-    if (result) {
+    if (result && (type ? result instanceof type : true)) {
       return result;
     } else if (this.parent) {
       return this.parent.resolve(name);

@@ -6,6 +6,7 @@ import { Interpreter } from 'interpreter';
 import { SymbolBuilder, TypeChecker } from 'semantic-analyzer';
 import { BaseSymbolScope } from 'symbol';
 import { RunnableChain } from 'ast';
+import injectLibraryToScope from 'library';
 import PSIError from 'error';
 import chalk from 'chalk';
 import cli from 'cli-ux';
@@ -95,15 +96,16 @@ class Psi extends Command {
       const lexer = new Lexer(sourceCode);
       const tree = new Parser(lexer).run();
       const baseScope = new BaseSymbolScope('root');
+      injectLibraryToScope(baseScope);
       new RunnableChain(
         new SymbolBuilder(tree, baseScope),
         new TypeChecker(tree, baseScope),
       ).run();
       const interpreter = new Interpreter(tree, baseScope);
       interpreter.run();
-      console.log(
-        (interpreter.scope.children as any).values().next().value.value,
-      );
+      // console.log(
+      //   (interpreter.scope.children as any).values().next().value.value,
+      // );
     } catch (error) {
       if (error instanceof Error) {
         throw error;
