@@ -313,6 +313,13 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
       node.accessors.map(node => this.visit(node)),
     );
 
+    if (!value) {
+      throw new PSIError(
+        node,
+        `Array '${node.array.name}' index used without first being initialized`,
+      );
+    }
+
     return value!;
   }
 }
