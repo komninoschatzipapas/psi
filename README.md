@@ -7,7 +7,7 @@ To install the CLI, execute the following command:
 ```
 npm install -g @pascal-psi/cli
 ```
-or for Yarn:
+or with Yarn
 ```
 yarn global add @pascal-psi/cli
 ```
@@ -17,6 +17,21 @@ yarn global add @pascal-psi/cli
 
 ## Samples
 There are sample programs you can try running in the [samples](samples) directory
+
+## Build
+This project is structured as a monorepo using [Lerna](https://github.com/lerna/lerna).
+
+In order to build the project, first install lerna
+```
+npm install -g lerna
+```
+or with Yarn:
+```
+yarn global add lerna
+```
+And then run `lerna bootstrap` on the root directory. This will install all the dependencies for all the modules and link them together.
+
+If you want to run the CLI, run the `/modules/cli/bin/run` file
 
 ## Support:
 
