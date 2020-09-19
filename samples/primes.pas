@@ -22,14 +22,14 @@ begin
       while j <= 100 do
       begin
         p[j] := false;
-        j = j + i;
+        j := j + i;
       end;
     end;
   end;
 
   for i := 1 to 100 do
   begin
-    if p[i] then writeln[i];
+    if p[i] then writeln(i);
   end;
 
 end.
