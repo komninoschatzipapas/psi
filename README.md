@@ -3,32 +3,43 @@
 This is a Work-in-Progress ISO 7185 Pascal interpreter I am building in order to get confident with lexers, parsers, interpreters and all that good stuff. All PRs are welcomed and for any question you can join our [gitter chat](https://gitter.im/pascal-psi/community)!
 
 ## Installation
+
 To install the CLI, execute the following command:
+
 ```
 npm install -g @pascal-psi/cli
 ```
+
 or with Yarn
+
 ```
 yarn global add @pascal-psi/cli
 ```
 
 ## Usage
+
 `psi <file to interpret>`
 
-## Samples
-There are sample programs you can try running in the [samples](samples) directory
+## Demos
+
+There are demo programs you can try running in the [demos](demos) directory
 
 ## Build
+
 This project is structured as a monorepo using [Lerna](https://github.com/lerna/lerna).
 
 In order to build the project, first install lerna
+
 ```
 npm install -g lerna
 ```
+
 or with Yarn:
+
 ```
 yarn global add lerna
 ```
+
 And then run `lerna bootstrap` on the root directory. This will install all the dependencies for all the modules and link them together.
 
 If you want to run the CLI, run the `/modules/cli/bin/run` file
