@@ -636,12 +636,15 @@ export default class TypeChecker extends AST.ASTVisitor<
   }
 
   public visitFor(node: AST.ForAST) {
+    node.children.forEach(node => this.visit(node).bind(this));
     return Types.PSIVoid;
   }
   public visitWhile(node: AST.WhileAST) {
+    node.children.forEach(node => this.visit(node).bind(this));
     return Types.PSIVoid;
   }
   public visitRepeat(node: AST.RepeatAST) {
+    node.children.forEach(node => this.visit(node).bind(this));
     return Types.PSIVoid;
   }
 
@@ -670,7 +673,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     const array = (this.currentScope.resolve(node.array.name, VariableSymbol)!
       .type as unknown) as {
       componentType: typeof Types.PSIDataType;
-      indexTypes: (typeof Types.PSIType)[];
+      indexTypes: typeof Types.PSIType[];
     };
 
     assertEquality(
