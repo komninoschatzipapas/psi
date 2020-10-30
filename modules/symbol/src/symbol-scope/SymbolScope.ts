@@ -1,37 +1,24 @@
 import PSISymbol from '../symbol/PSISymbol';
 import CaseInsensitiveMap from '@pascal-psi/case-insensitive-map';
-import LocalSymbolScope from './LocalSymbolScope';
-import { PSIDataType, PSIArrayLike } from '@pascal-psi/data-types';
+import ScopeChildren from './ScopeChildren';
+import { PSIDataType, PSIArrayLike, PSIFunction } from '@pascal-psi/data-types';
 import PSIError from '@pascal-psi/error';
-import { VariableSymbol } from '../symbol';
-
-class ScopeChildren extends CaseInsensitiveMap<string, LocalSymbolScope> {
-  public add(scope: LocalSymbolScope) {
-    this.set(scope.name, scope);
-  }
-
-  public get(scopeName: string): LocalSymbolScope | null {
-    const childScope = CaseInsensitiveMap.prototype.get.call(this, scopeName);
-    if (childScope) {
-      return childScope;
-    } else {
-      return null;
-    }
-  }
-}
+import { FunctionSymbol, VariableSymbol } from '../symbol';
+import { SymbolScopeType } from './SymbolScopeType';
 
 export default abstract class SymbolScope {
   private scope: CaseInsensitiveMap<string, PSISymbol>;
   private value: CaseInsensitiveMap<string, PSIDataType>;
   public readonly children: ScopeChildren;
   protected abstract readonly parent: SymbolScope | null;
-  public readonly name: string;
 
-  constructor(name: string) {
+  constructor(
+    public readonly name: string,
+    public readonly type: SymbolScopeType,
+  ) {
     this.scope = new CaseInsensitiveMap();
     this.value = new CaseInsensitiveMap();
     this.children = new ScopeChildren();
-    this.name = name;
   }
 
   public resolveValue<T extends PSIDataType>(name: string): T | null {
@@ -64,8 +51,17 @@ export default abstract class SymbolScope {
     array.changeValue(accessors, value);
   }
 
+  public changeFunctionReturnType(name: string, value: PSIDataType) {
+    const scope = this.findScope(name)!;
+
+    const fn = scope.resolveValueThisScopeOnly<PSIFunction>(name)!;
+
+    fn.returnValue = value;
+    scope.value.set(name, fn);
+  }
+
   public changeValue(name: string, value: PSIDataType) {
-    this.findScope(name)!.value.set(name, value);
+    return this.findScope(name)!.value.set(name, value);
   }
 
   private findScope(name: string): SymbolScope | null {
@@ -106,7 +102,7 @@ export default abstract class SymbolScope {
     if (result && (type ? result instanceof type : true)) {
       return result;
     } else if (this.parent) {
-      return this.parent.resolve(name);
+      return this.parent.resolve(name, type);
     } else {
       return null;
     }

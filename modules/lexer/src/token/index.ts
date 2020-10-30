@@ -52,6 +52,7 @@ import ArrayToken from './ArrayToken';
 import OfToken from './OfToken';
 import OpeningBracketToken from './OpeningBracketToken';
 import ClosingBracketToken from './ClosingBracketToken';
+import FunctionToken from './FunctionToken';
 
 export {
   Token,
@@ -108,4 +109,5 @@ export {
   OfToken,
   OpeningBracketToken,
   ClosingBracketToken,
+  FunctionToken,
 };

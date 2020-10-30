@@ -47,6 +47,7 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
   public abstract visitBoolean(node: AST.BooleanAST): T;
   public abstract visitArray(node: AST.ArrayAST): T;
   public abstract visitArrayAccess(node: AST.ArrayAccessAST): T;
+  public abstract visitFunctionDeclaration(node: AST.FunctionDeclarationAST): T;
 
   public visitConstant(node: AST.ConstantAST): T {
     if (node instanceof AST.IntegerConstantAST) {
@@ -152,10 +153,12 @@ export default abstract class ASTVisitor<T = unknown> implements Runnable<T> {
       return this.visitArray(node);
     } else if (node instanceof AST.ArrayAccessAST) {
       return this.visitArrayAccess(node);
+    } else if (node instanceof AST.FunctionDeclarationAST) {
+      return this.visitFunctionDeclaration(node);
     } else {
       throw new PSIError(
         node,
-        `Program error: Unknown AST node type on visitor ${node}`,
+        `Program error: Unknown AST node type on visitor ${node.constructor.name}`,
       );
     }
   }

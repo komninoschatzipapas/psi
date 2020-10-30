@@ -54,6 +54,7 @@ If you want to run the CLI, run the `/modules/cli/bin/run` file
   - Arrays
 - Variables
 - Procedures
+- Functions
 - Flow Control
   - If
   - Else If

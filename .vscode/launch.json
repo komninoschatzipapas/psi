@@ -8,7 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "test.pas",
-      "program": "${workspaceFolder}/modules/psi/bin/run",
+      "program": "${workspaceFolder}/modules/cli/bin/run",
       // "preLaunchTask": "lerna bootstrap",
       "args": [
         "test.pas"

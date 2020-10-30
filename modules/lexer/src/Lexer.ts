@@ -35,6 +35,7 @@ export class Lexer {
     ['UNTIL', () => new Token.UntilToken()],
     ['ARRAY', () => new Token.ArrayToken()],
     ['OF', () => new Token.OfToken()],
+    ['FUNCTION', () => new Token.FunctionToken()],
   ]);
 
   private readonly numberRegex = /^\d$/;

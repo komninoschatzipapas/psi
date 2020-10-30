@@ -4,6 +4,7 @@ import {
   SymbolScope,
   BaseSymbolScope,
   LocalSymbolScope,
+  SymbolScopeType,
 } from '@pascal-psi/symbol';
 import { IntegerConstantAST } from '@pascal-psi/ast';
 import PSIError from '@pascal-psi/error';
@@ -28,7 +29,12 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
     const newValue = this.visit(node.right);
 
     if (left instanceof AST.VariableAST) {
-      this.scope.changeValue(left.name, newValue);
+      if (
+        this.scope.type === SymbolScopeType.Function && // Is in function
+        left.name === this.scope.name // Variable name matches function name
+      ) {
+        this.scope.changeFunctionReturnType(left.name, newValue);
+      } else this.scope.changeValue(left.name, newValue);
     } else if (left instanceof AST.ArrayAccessAST) {
       this.scope.changeArrayValue(
         left.array.name,
@@ -36,6 +42,7 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
         newValue,
       );
     }
+
     return new Types.PSIVoid();
   }
 
@@ -226,9 +233,24 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
 
   public visitCall(node: AST.CallAST) {
     const args = node.args.map(arg => this.visit(arg));
-    this.scope.resolveValue<Types.PSIProcedure>(node.name)!.call(args);
+    const procedureOrFunction = this.scope.resolveValue<
+      Types.PSIProcedure | Types.PSIFunction
+    >(node.name)!;
 
-    return new Types.PSIVoid();
+    procedureOrFunction.call(args);
+
+    if (procedureOrFunction instanceof Types.PSIFunction) {
+      const returnValue = this.scope.resolveValue<Types.PSIFunction>(node.name)!
+        .returnValue;
+
+      if (!returnValue) {
+        throw new PSIError(node, 'Function does not return any value');
+      }
+
+      return returnValue;
+    } else {
+      return new Types.PSIVoid();
+    }
   }
 
   public visitFor(node: AST.ForAST) {
@@ -325,5 +347,23 @@ export class Interpreter extends AST.ASTVisitor<Types.PSIDataType> {
     }
 
     return value!;
+  }
+
+  public visitFunctionDeclaration(node: AST.FunctionDeclarationAST) {
+    this.scope.changeValue(
+      node.name,
+      new Types.PSIFunction(args => {
+        this.withNewScope(node.name, scope => {
+          node.args
+            .map(arg => arg.variable.name)
+            .forEach((argName, i) => {
+              scope.changeValue(argName, args[i]);
+            });
+          this.visit(node.block);
+        });
+      }),
+    );
+
+    return new Types.PSIFunctionType();
   }
 }

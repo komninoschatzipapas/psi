@@ -45,6 +45,7 @@ import RepeatAST from './RepeatAST';
 import SubrangeAST from './SubrangeAST';
 import ArrayAST from './ArrayAST';
 import ArrayAccessAST from './ArrayAccessAST';
+import FunctionDeclarationAST from './FunctionDeclarationAST';
 
 export {
   AST,
@@ -94,4 +95,5 @@ export {
   SubrangeAST,
   ArrayAST,
   ArrayAccessAST,
+  FunctionDeclarationAST,
 };

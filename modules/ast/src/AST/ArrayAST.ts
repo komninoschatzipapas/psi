@@ -18,7 +18,7 @@ export default class ArrayAST extends TypeAST {
     }
 
     return createPSIArray(
-      this.indexTypes.map(indexType => indexType.dataType!),
+      this.indexTypes.map(indexType => indexType.dataType),
       this.componentType.dataType,
     );
   }

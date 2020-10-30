@@ -29,10 +29,14 @@ variable_declaration
   ;
 
 procedure_declaration
-  : "PROCEDURE" ("(" procedure_parameters ")") ";" block ";"
+  : "PROCEDURE" ("(" procedure_or_function_parameters ")") ";" block ";"
   ;
 
-procedure_parameters
+function_declaration
+  : "FUNCTION" ("(" procedure_or_function_parameters ")") ":" type ";" block ";"
+  ;
+
+procedure_or_function_parameters
   : (variable_declaration (";" variable_declaration)*)?
   ;
 
@@ -116,6 +120,7 @@ factor
   | "-" factor
   | "(" expression ")"
   | variable
+  | call
   | array_access
   | "TRUE"
   | "FALSE"

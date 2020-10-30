@@ -147,11 +147,13 @@ export class Parser implements AST.Runnable<AST.AST> {
     const declarations: (
       | AST.VariableDeclarationAST
       | AST.ProcedureDeclarationAST
+      | AST.FunctionDeclarationAST
     )[] = [];
 
     while (
       this.currentToken instanceof Lexer.VariableToken ||
-      this.currentToken instanceof Lexer.ProcedureToken
+      this.currentToken instanceof Lexer.ProcedureToken ||
+      this.currentToken instanceof Lexer.FunctionToken
     ) {
       if (this.currentToken instanceof Lexer.VariableToken) {
         this.currentToken = this.eat(Lexer.VariableToken);
@@ -166,6 +168,8 @@ export class Parser implements AST.Runnable<AST.AST> {
         } while (this.currentToken instanceof Lexer.IdToken);
       } else if (this.currentToken instanceof Lexer.ProcedureToken) {
         declarations.push(this.procedureDeclaration());
+      } else if (this.currentToken instanceof Lexer.FunctionToken) {
+        declarations.push(this.functionDeclaration());
       }
     }
 
@@ -203,7 +207,7 @@ export class Parser implements AST.Runnable<AST.AST> {
         Lexer.OpeningParenthesisToken,
         'Expected opening parenthesis after procedure name',
       );
-      args = this.procedureParameters();
+      args = this.procedureOrFunctionParameters();
       this.currentToken = this.eat(
         Lexer.ClosingParenthesisToken,
         'Expected closing parenthesis after procedure arguments',
@@ -228,7 +232,53 @@ export class Parser implements AST.Runnable<AST.AST> {
     ).inheritPositionFrom(procedureToken);
   }
 
-  private procedureParameters() {
+  private functionDeclaration() {
+    const functionToken = Object.assign({}, this.currentToken);
+    this.currentToken = this.eat(Lexer.FunctionToken);
+    const name = this.variable().name;
+    let args: AST.VariableDeclarationAST[] = [];
+    if (this.currentToken instanceof Lexer.OpeningParenthesisToken) {
+      this.currentToken = this.eat(
+        Lexer.OpeningParenthesisToken,
+        'Expected opening parenthesis after function name',
+      );
+      args = this.procedureOrFunctionParameters();
+      this.currentToken = this.eat(
+        Lexer.ClosingParenthesisToken,
+        'Expected closing parenthesis after function arguments',
+        true,
+      );
+    }
+
+    this.currentToken = this.eat(
+      Lexer.ColonToken,
+      'Expected colon after function arguments',
+      true,
+    );
+
+    const returnType = this.type();
+
+    this.currentToken = this.eat(
+      Lexer.SemiToken,
+      'Expected semi colon after function type declaration',
+      true,
+    );
+    const block = this.block();
+    this.currentToken = this.eat(
+      Lexer.SemiToken,
+      'Expected semi colon after function declaration',
+      true,
+    );
+
+    return new AST.FunctionDeclarationAST(
+      name,
+      args,
+      returnType,
+      block,
+    ).inheritPositionFrom(functionToken);
+  }
+
+  private procedureOrFunctionParameters() {
     if (!(this.currentToken instanceof Lexer.IdToken)) {
       return []; // no arguments
     }
@@ -301,7 +351,11 @@ export class Parser implements AST.Runnable<AST.AST> {
     try {
       return this.primitiveType();
     } catch {
-      return this.subrange();
+      try {
+        return this.subrange();
+      } catch {
+        throw new PSIError(this.currentToken, `Unknown data type`);
+      }
     }
   }
 
@@ -310,7 +364,7 @@ export class Parser implements AST.Runnable<AST.AST> {
     try {
       start = this.constant();
     } catch {
-      throw new PSIError(this.currentToken, `Unknown data type`);
+      throw new PSIError(this.currentToken, `Invalid subrange`);
     }
 
     this.currentToken = this.eat(Lexer.DoubleDotToken);
@@ -357,7 +411,11 @@ export class Parser implements AST.Runnable<AST.AST> {
       if (this.currentToken instanceof Lexer.ArrayToken) {
         return this.array();
       } else {
-        return this.subrange();
+        try {
+          return this.subrange();
+        } catch {
+          throw new PSIError(this.currentToken, `Unknown data type`);
+        }
       }
     }
   }
@@ -630,6 +688,11 @@ export class Parser implements AST.Runnable<AST.AST> {
       this.peek() instanceof Lexer.OpeningBracketToken
     ) {
       return this.arrayAccess();
+    } else if (
+      this.currentToken instanceof Lexer.IdToken &&
+      this.peek() instanceof Lexer.OpeningParenthesisToken
+    ) {
+      return this.call();
     } else if (this.currentToken instanceof Lexer.IdToken) {
       return this.variable();
     } else {

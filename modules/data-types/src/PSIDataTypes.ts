@@ -16,6 +16,8 @@ import printType from './printType';
 import createPSIArray, { isPSIArray, PSIArrayLike } from './PSIArray';
 import createPSIMultitype from './PSIMultitype';
 import serializeDataType from './serializeDataType';
+import PSIFunction from './PSIFunction';
+import PSIFunctionType from './PSIFunctionType';
 
 export {
   PSIInteger,
@@ -38,4 +40,6 @@ export {
   PSIArrayLike,
   createPSIMultitype,
   serializeDataType,
+  PSIFunction,
+  PSIFunctionType,
 };

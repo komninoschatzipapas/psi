@@ -4,6 +4,7 @@ import {
   LocalSymbolScope,
   SymbolScope,
   ProgramSymbol,
+  SymbolScopeType,
 } from '@pascal-psi/symbol';
 import * as PSISymbol from '@pascal-psi/symbol';
 import * as Types from '@pascal-psi/data-types';
@@ -25,23 +26,30 @@ export default class SymbolBuilder extends AST.ASTVisitor<PSISymbol.PSISymbol | 
   }
 
   public visitVariable(node: AST.VariableAST): PSISymbol.PSISymbol {
-    const variableValue = this.currentScope.resolve(
-      node.name,
-      PSISymbol.VariableSymbol,
-    );
+    const variableValue = this.currentScope.resolve(node.name);
 
-    if (!variableValue) {
+    if (variableValue instanceof PSISymbol.VariableSymbol) {
+      return variableValue;
+    } else if (
+      variableValue instanceof PSISymbol.FunctionSymbol &&
+      this.currentScope.type === SymbolScopeType.Function && // Is inside function
+      this.currentScope.name === node.name // Variable name matches function name
+    ) {
+      return variableValue;
+    } else {
       throw new PSIError(
         node,
         `Variable ${node.name} used without first being declared`,
       );
-    } else {
-      return variableValue;
     }
   }
 
   public visitProgram(node: AST.ProgramAST): void {
-    this.currentScope = new LocalSymbolScope(node.name, this.currentScope);
+    this.currentScope = new LocalSymbolScope(
+      node.name,
+      SymbolScopeType.Program,
+      this.currentScope,
+    );
     this.currentScope.insert(new ProgramSymbol(node.name));
     this.visit(node.block);
     this.currentScope = this.currentScope.getParent()!;
@@ -73,7 +81,11 @@ export default class SymbolBuilder extends AST.ASTVisitor<PSISymbol.PSISymbol | 
   }
 
   public visitProcedureDeclaration(node: AST.ProcedureDeclarationAST): void {
-    this.currentScope = new LocalSymbolScope(node.name, this.currentScope);
+    this.currentScope = new LocalSymbolScope(
+      node.name,
+      SymbolScopeType.Procedure,
+      this.currentScope,
+    );
     const argSymbols = node.args.map(arg => this.visitVariableDeclaration(arg));
 
     this.currentScope
@@ -89,21 +101,50 @@ export default class SymbolBuilder extends AST.ASTVisitor<PSISymbol.PSISymbol | 
     this.currentScope = this.currentScope.getParent()!;
   }
 
+  public visitFunctionDeclaration(node: AST.FunctionDeclarationAST): void {
+    this.currentScope = new LocalSymbolScope(
+      node.name,
+      SymbolScopeType.Function,
+      this.currentScope,
+    );
+    const argSymbols = node.args.map(arg => this.visitVariableDeclaration(arg));
+
+    this.currentScope
+      .getParent()!
+      .insert(
+        new PSISymbol.FunctionSymbol(
+          node.name,
+          argSymbols,
+          node.returnType.dataType,
+        ).inheritPositionFrom(node),
+      );
+
+    this.visit(node.block);
+    this.currentScope = this.currentScope.getParent()!;
+  }
+
   public visitCall(node: AST.CallAST) {
     node.args.forEach(this.visit.bind(this));
 
-    const procedure = this.currentScope.resolve(
-      node.name,
-      PSISymbol.ProcedureSymbol,
-    );
-    if (!procedure) {
-      throw new PSIError(node, `Could not find procedure ${node.name}`);
-    } else if (node.args.length != procedure.args.length) {
+    const procedureOrFunction = this.currentScope.resolve(node.name);
+
+    if (
+      !procedureOrFunction ||
+      (!(procedureOrFunction instanceof PSISymbol.ProcedureSymbol) &&
+        !(procedureOrFunction instanceof PSISymbol.FunctionSymbol))
+    ) {
       throw new PSIError(
         node,
-        `Expected ${procedure.args.length} procedure argument${
-          procedure.args.length > 1 ? 's' : ''
-        } but ${node.args.length} were provided`,
+        `Could not find procedure or function ${node.name}`,
+      );
+    } else if (node.args.length != procedureOrFunction.args.length) {
+      throw new PSIError(
+        node,
+        `Expected ${procedureOrFunction.args.length} procedure argument${
+          procedureOrFunction.args.length > 1 ? 's' : ''
+        } but ${node.args.length} ${
+          node.args.length === 1 ? 'was' : 'were'
+        } provided`,
       );
     }
   }

@@ -13,6 +13,8 @@ export default function serializeDataType(dataType: PSIDataType): any {
   ) {
     return dataType.serialize();
   } else {
-    throw new Error(`Could not serialize data type ${dataType}`);
+    throw new Error(
+      `Could not serialize data type ${dataType.constructor.name}`,
+    );
   }
 }

@@ -5,8 +5,15 @@ import {
   SymbolScope,
   VariableSymbol,
   ProcedureSymbol,
+  PSISymbol,
+  FunctionSymbol,
+  SymbolScopeType,
 } from '@pascal-psi/symbol';
-import { assert, assertEquality, DebugInfoProvider } from '@pascal-psi/error';
+import PSIError, {
+  assert,
+  assertEquality,
+  DebugInfoProvider,
+} from '@pascal-psi/error';
 
 function assertTypeEquality({
   node,
@@ -124,7 +131,20 @@ export default class TypeChecker extends AST.ASTVisitor<
   }
 
   public visitVariable(node: AST.VariableAST) {
-    return this.currentScope.resolve(node.name, VariableSymbol)!.type;
+    const symbol = this.currentScope.resolve(node.name)!;
+    if (symbol instanceof VariableSymbol) {
+      return symbol.type;
+    } else if (
+      symbol instanceof FunctionSymbol &&
+      this.currentScope.type === SymbolScopeType.Function && // Is inside function
+      this.currentScope.name === node.name // Variable name matches function name
+    ) {
+      return symbol.returnType;
+    } else
+      throw new PSIError(
+        node,
+        'Attempted to type check non variable or function',
+      );
   }
 
   public visitAssignment(node: AST.AssignmentAST) {
@@ -573,7 +593,7 @@ export default class TypeChecker extends AST.ASTVisitor<
     this.currentScope = this.currentScope.children.get(node.name)!;
     this.visit(node.block);
     this.currentScope = this.currentScope.getParent()!;
-    return Types.PSIVoid;
+    return Types.PSIProcedureType;
   }
   public visitBlock(node: AST.BlockAST) {
     this.visit(node.compoundStatement);
@@ -616,23 +636,34 @@ export default class TypeChecker extends AST.ASTVisitor<
   }
 
   public visitCall(node: AST.CallAST) {
-    this.currentScope
-      .resolve(node.name, ProcedureSymbol)!
-      .args.forEach(
-        ({ type: declarationType, name: argDeclarationName }, i) => {
-          const argAST = node.args[i];
-          const arg = this.visit(argAST);
+    const symbol = this.currentScope.resolve<
+      typeof ProcedureSymbol | typeof FunctionSymbol
+    >(node.name)!;
 
-          assertTypeEquality({
-            node: argAST,
-            left: declarationType,
-            right: arg,
-            allowPromoteLeft: false,
-            message: `Expected argument ${argDeclarationName} to be of type LEFT_TYPE but instead got incompatible type RIGHT_TYPE`,
-          });
-        },
+    symbol.args.forEach(
+      ({ type: declarationType, name: argDeclarationName }, i) => {
+        const argAST = node.args[i];
+        const arg = this.visit(argAST);
+
+        assertTypeEquality({
+          node: argAST,
+          left: declarationType,
+          right: arg,
+          allowPromoteLeft: false,
+          message: `Expected argument ${argDeclarationName} to be of type LEFT_TYPE but instead got incompatible type RIGHT_TYPE`,
+        });
+      },
+    );
+    if (symbol instanceof ProcedureSymbol) {
+      return Types.PSIVoid;
+    } else if (symbol instanceof FunctionSymbol) {
+      return symbol.returnType;
+    } else {
+      throw new PSIError(
+        node,
+        'Program error: Received type checker call of non procedure or function symbol',
       );
-    return Types.PSIVoid;
+    }
   }
 
   public visitFor(node: AST.ForAST) {
@@ -700,5 +731,12 @@ export default class TypeChecker extends AST.ASTVisitor<
     }
 
     return array.componentType;
+  }
+
+  public visitFunctionDeclaration(node: AST.FunctionDeclarationAST) {
+    this.currentScope = this.currentScope.children.get(node.name)!;
+    this.visit(node.block);
+    this.currentScope = this.currentScope.getParent()!;
+    return Types.PSIFunctionType;
   }
 }
