@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "@pascal-psi/ast": "^0.0.2",
-    "@pascal-psi/data-types": "^0.0.2",
     "@pascal-psi/error": "^0.0.2",
     "@pascal-psi/lexer": "^0.0.2"
   },

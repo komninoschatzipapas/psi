@@ -1,6 +1,5 @@
 import * as Lexer from '@pascal-psi/lexer';
 import * as AST from '@pascal-psi/ast';
-import * as Types from '@pascal-psi/data-types';
 import PSIError from '@pascal-psi/error';
 
 export class Parser implements AST.Runnable<AST.AST> {
@@ -79,12 +78,12 @@ export class Parser implements AST.Runnable<AST.AST> {
     const forToken = Object.assign({}, this.currentToken);
     this.currentToken = this.eat(Lexer.ForToken);
     const assignment = this.assignmentExpression();
-    let increment: Types.PSIBoolean;
+    let increment: boolean;
     if (this.currentToken instanceof Lexer.ToToken) {
-      increment = new Types.PSIBoolean(true);
+      increment = true;
       this.currentToken = this.eat(Lexer.ToToken);
     } else if (this.currentToken instanceof Lexer.DownToToken) {
-      increment = new Types.PSIBoolean(false);
+      increment = false;
       this.currentToken = this.eat(Lexer.DownToToken);
     } else {
       throw new PSIError(
@@ -147,7 +146,8 @@ export class Parser implements AST.Runnable<AST.AST> {
   private declarations() {
     const declarations: (
       | AST.VariableDeclarationAST
-      | AST.ProcedureDeclarationAST)[] = [];
+      | AST.ProcedureDeclarationAST
+    )[] = [];
 
     while (
       this.currentToken instanceof Lexer.VariableToken ||
