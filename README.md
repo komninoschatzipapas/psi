@@ -1,5 +1,10 @@
 # PSI [![Gitter](https://badges.gitter.im/pascal-psi/community.svg)](https://gitter.im/pascal-psi/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
+---
+This project evolved into [GLO](https://github.com/komninoschat/glo). I do not intent to continue maintaining this and would like to point out that it still contains many unfixed bugs
+---
+
+
 This is a Work-in-Progress ISO 7185 Pascal interpreter I am building in order to get confident with lexers, parsers, interpreters and all that good stuff. All PRs are welcomed and for any question you can join our [gitter chat](https://gitter.im/pascal-psi/community)!
 
 ## Installation
